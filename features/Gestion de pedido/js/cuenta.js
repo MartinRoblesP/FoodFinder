@@ -1,6 +1,7 @@
 const pantallaLogin = document.getElementById("pantallaLogin");
 const pantallaRol = document.getElementById("pantallaRol");
 const pantallaRegistro = document.getElementById("pantallaRegistro");
+const pantallaBienvenido = document.getElementById("pantallaBienvenido");
 
 const btnCrearCuenta = document.getElementById("btnCrearCuenta");
 const btnConsumidor = document.getElementById("btnConsumidor");
@@ -42,6 +43,7 @@ function mostrarPantalla(pantalla) {
     pantallaLogin.classList.remove("activa");
     pantallaRol.classList.remove("activa");
     pantallaRegistro.classList.remove("activa");
+    pantallaBienvenido.classList.remove("activa");
 
     pantalla.classList.add("activa");
 }
@@ -124,10 +126,10 @@ function configurarRegistroPorRol(rol) {
     limpiarFormularioRegistro();
     mostrarPantalla(pantallaRegistro);
 }
-
+/*tomar en cuenta el window*/
 function redirigirSegunRol(usuario) {
     if (usuario.rol === "cliente") {
-        window.location.href = "detalles-cliente.html";
+        window.location.href = "../../Navegación/pages/home.html";
         return;
     }
 
@@ -136,7 +138,7 @@ function redirigirSegunRol(usuario) {
         return;
     }
 }
-
+/*tomar en cuenta el window*/
 btnCrearCuenta.addEventListener("click", function () {
     limpiarMensajes();
     mostrarPantalla(pantallaRol);
@@ -237,13 +239,13 @@ btnGuardarCuenta.addEventListener("click", function () {
     guardarUsuarioActivo(nuevoUsuario);
     inicializarPlatosSiNoExisten();
 
-    mensajeExito.textContent = "Cuenta creada correctamente. Tus datos se guardaron correctamente.";
-
     limpiarFormularioRegistro();
+
+    mostrarPantalla(pantallaBienvenido);
 
     setTimeout(function () {
         redirigirSegunRol(nuevoUsuario);
-    }, 1200);
+    }, 1800);
 });
 
 btnIniciarSesionLogin.addEventListener("click", function () {

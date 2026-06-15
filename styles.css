@@ -14,13 +14,14 @@ html {
 }
 
 #encabezado{
-    display: flex;         
+    display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    margin-bottom: auto;
-    padding: 23px 37px 35px 43px;              
-    flex-wrap:wrap;
-    align-items:center;   
+    align-items: center;
+    justify-content: space-between; 
+    width: 1440px;
+    height: 120px;
+    padding: 0 40px;
+    box-sizing: border-box;
 }
 
 .btnLanding{
@@ -580,14 +581,21 @@ body {
     font-family: Arial, sans-serif;
     background-color: #E9E7E7;
 }
-
+/*agregue este cambio - Lieserl Ayala*/
 .contenedor-registro {
+    width: 100%;
+    max-width: none;
     min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: #E9E7E7;
+
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: row;
 }
-
+/*agregue este cambio - Lieserl Ayala*/
 .pantalla {
     display: none;
     width: 100%;
@@ -873,6 +881,23 @@ button {
         flex-direction: column;
         gap: 30px;
     }
+    /* PANTALLA BIENVENIDA */
+    .tarjeta-bienvenida {
+        width: 100%;
+        min-height: 100vh;
+        background-color: #E9E7E7;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+}
+
+    #logoBienvenido {
+        width: 280px;
+        height: auto;
+        object-fit: contain;
+}
+
+    
 }
 /*segumiento de pedido cliente -2*/
 
@@ -2603,7 +2628,6 @@ body{
     color: rgba(255, 255, 255, 0.7);
     max-width: 500px;
 }
-
 /* --- Filtros --- */
 .filters-section {
     display: flex;
