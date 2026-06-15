@@ -2243,7 +2243,7 @@ button {
         flex-direction:row;
         justify-content: space-between;
     }
-    main{
+    .Contenido_Misplatos{
         max-width: 1221px;
         width: 100%;
         min-height: 960px;
@@ -2254,7 +2254,7 @@ button {
         flex-direction: column; /* Cambiado a column para que la tabla vaya abajo */
         gap: 24px;  
     }
-    main h1{
+    .Contenido_Misplatos h1{
         margin:0;
         color:#1C2B39;
         font-family: sans-serif;
@@ -2346,7 +2346,7 @@ button {
 
 /*Aqui empieza el modal de creafr plato */
 
-body{
+#body-LandingPage{
     background-color: #F0F2F5;
 }
 
@@ -2551,7 +2551,7 @@ body{
         padding-left: 4px;
     }
 
-    main {
+    .Contenido_Misplatos {
         max-width: 100%;
         width: 100%;
         min-height: auto;
@@ -2637,7 +2637,7 @@ body{
         flex-direction: column;
     }
 
-    main {
+    .Contenido_Misplatos {
         padding: 12px;
     }
 
@@ -3931,6 +3931,7 @@ body{
     font-weight: 600;
     color: #0F0F0F;
     font-family: 'DM Sans', sans-serif;
+
 }
 
 /*==================================================================================
@@ -6237,4 +6238,233 @@ textarea:focus{
 
 /*==================================================
                 FIN ÉPICA 4
-==================================================*/
+
+/* Resposive del lading page- Robles*/
+body {
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+}
+
+.navbar_LANDING {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+button {
+    border: none;
+}
+
+.BeneficiosProducto,
+.FlujoOperaciones_producto,
+.Seccion_Testimonios {
+    padding: 50px 40px;
+    text-align: center;
+}
+
+.TarjetaB {
+    gap: 40px;
+    margin-top: 35px;
+}
+
+#tarjeta_Bconsumidores,
+#tarjeta_Bemprendedores {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 35px;
+    width: 420px;
+    text-align: left;
+}
+
+#tarjeta_Bconsumidores ul,
+#tarjeta_Bemprendedores ul {
+    padding-left: 20px;
+    margin-top: 18px;
+}
+
+.TarjetaF {
+    gap: 80px;
+    margin-top: 40px;
+}
+
+#funciones_consumidores,
+#funciones_emprendedores {
+    width: 420px;
+    text-align: left;
+}
+
+#grupo_testimonios {
+    gap: 30px;
+    margin-top: 35px;
+}
+
+#grupo_testimonios #testimonioOne,
+#grupo_testimonios #testimonioDos,
+#grupo_testimonios #testimonioTres {
+    width: 370px;
+    height: auto;
+    min-height: 132px;
+    margin: 0;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: left;
+}
+
+.Closer_CTA {
+    padding: 45px 20px;
+    text-align: center;
+}
+
+.Closer_CTA > h2,
+.Closer_CTA > p,
+.Closer_CTA > button {
+    margin: 0;
+}
+
+.Closer_CTA > p {
+    margin-top: 12px;
+}
+
+.Closer_CTA > button {
+    margin-top: 35px;
+    cursor: pointer;
+}
+
+/* TABLET */
+@media (max-width: 1024px) {
+    .navbar_LANDING {
+        height: auto;
+        padding: 25px;
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .navbar_LANDING .navbar_botones {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .navbar_LANDING .navbar_botones button {
+        font-size: 16px;
+        height: 42px;
+        padding: 0 18px;
+    }
+
+    .ElProducto {
+        flex-direction: column;
+        text-align: center;
+        padding: 60px 25px;
+        gap: 35px;
+    }
+
+    .TarjetaB,
+    .TarjetaF,
+    #grupo_testimonios {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #tarjeta_Bconsumidores,
+    #tarjeta_Bemprendedores,
+    #funciones_consumidores,
+    #funciones_emprendedores {
+        width: 100%;
+        max-width: 520px;
+    }
+
+    #pie_Landing {
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 25px;
+        text-align: center;
+    }
+}
+
+/* CELULAR */
+@media (max-width: 600px) {
+    .navbar_LANDING {
+        padding: 20px 15px;
+    }
+
+    .navbar_LANDING img {
+        max-width: 150px;
+    }
+
+    .navbar_LANDING .navbar_botones {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .navbar_LANDING .navbar_botones button {
+        width: 100%;
+        max-width: 280px;
+        font-size: 15px;
+    }
+
+    .ElProducto {
+        min-height: auto;
+        padding: 55px 20px;
+    }
+
+    .ElProducto #CTA h1 {
+        font-size: 28px;
+    }
+
+    .ElProducto #CTA p {
+        font-size: 16px;
+    }
+
+    .CTA_CARDS {
+        width: 100%;
+    }
+
+    .cartaCTA1,
+    .cartaCTA2,
+    .cartaCTA3 {
+        width: 100%;
+        max-width: 340px;
+        margin: 0 auto;
+    }
+
+    .BeneficiosProducto,
+    .FlujoOperaciones_producto,
+    .Seccion_Testimonios {
+        padding: 40px 20px;
+    }
+
+    #TituloBeneficios,
+    .FlujoOperaciones_producto .TituloFunciones,
+    .Seccion_Testimonios .TituloTestimonios {
+        font-size: 28px;
+    }
+
+    #tarjeta_Bconsumidores,
+    #tarjeta_Bemprendedores {
+        padding: 25px;
+    }
+
+    .contenido-paso h3 {
+        font-size: 17px;
+    }
+
+    .contenido-paso p {
+        font-size: 14px;
+    }
+
+    #grupo_testimonios #testimonioOne,
+    #grupo_testimonios #testimonioDos,
+    #grupo_testimonios #testimonioTres {
+        width: 100%;
+    }
+
+    .Closer_CTA > h2 {
+        font-size: 28px;
+    }
+
+    #pie_Landing {
+        flex-direction: column;
+        font-size: 16px;
+    }
+
+}
