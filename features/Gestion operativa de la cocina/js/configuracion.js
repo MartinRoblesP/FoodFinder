@@ -1,16 +1,14 @@
 // ==========================================
-// configuracion.js
-// Épica 4
-// Gestión de configuración del restaurante
+// configuracion.js (MEJORADO)
+// Épica 4 - Configuración del restaurante
+// UX mejorado + localStorage + validaciones
 // ==========================================
 
-// Esperamos que toda la página cargue
 document.addEventListener("DOMContentLoaded", function () {
 
     // ============================
-    // OBTENER ELEMENTOS DEL HTML
+    // ELEMENTOS
     // ============================
-
     var nombre = document.querySelector("#nombre_restaurante");
     var descripcion = document.querySelector("#descripcion");
     var telefono = document.querySelector("#telefono");
@@ -24,97 +22,95 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var horarios = document.querySelectorAll(".horario_input");
 
+    // ============================
+    // SISTEMA DE MENSAJES (UI)
+    // ============================
+    function mostrarMensaje(texto, tipo) {
 
+        var msg = document.createElement("div");
+        msg.textContent = texto;
 
-    // ==================================
-    // CARGAR DATOS GUARDADOS
-    // ==================================
+        msg.className = "msg_toast " + (tipo === "error" ? "msg_error" : "msg_success");
 
+        document.body.appendChild(msg);
+
+        setTimeout(function () {
+            msg.classList.add("msg_show");
+        }, 10);
+
+        setTimeout(function () {
+            msg.classList.remove("msg_show");
+
+            setTimeout(function () {
+                msg.remove();
+            }, 300);
+
+        }, 2500);
+    }
+
+    // ============================
+    // CARGAR CONFIGURACIÓN
+    // ============================
     var datosGuardados = localStorage.getItem("configuracion_restaurante");
 
-    if (datosGuardados != null) {
-
+    if (datosGuardados) {
         var datos = JSON.parse(datosGuardados);
 
-        nombre.value = datos.nombre;
-        descripcion.value = datos.descripcion;
-        telefono.value = datos.telefono;
-
+        nombre.value = datos.nombre || "";
+        descripcion.value = datos.descripcion || "";
+        telefono.value = datos.telefono || "";
     }
 
-
-
-    // ==================================
+    // ============================
     // CARGAR HORARIOS
-    // ==================================
-
+    // ============================
     var horariosGuardados = localStorage.getItem("horarios_restaurante");
 
-    if (horariosGuardados != null) {
+    if (horariosGuardados) {
 
-        var datosHorario = JSON.parse(horariosGuardados);
+        var d = JSON.parse(horariosGuardados);
 
-        horarios[0].value = datosHorario.lv_inicio;
-        horarios[1].value = datosHorario.lv_fin;
+        horarios[0].value = d.lv_inicio;
+        horarios[1].value = d.lv_fin;
 
-        horarios[2].value = datosHorario.sab_inicio;
-        horarios[3].value = datosHorario.sab_fin;
+        horarios[2].value = d.sab_inicio;
+        horarios[3].value = d.sab_fin;
 
-        horarios[4].value = datosHorario.dom_inicio;
-        horarios[5].value = datosHorario.dom_fin;
+        horarios[4].value = d.dom_inicio;
+        horarios[5].value = d.dom_fin;
 
-        toggleLV.checked = datosHorario.lv_cerrado;
-        toggleSab.checked = datosHorario.sab_cerrado;
-        toggleDom.checked = datosHorario.dom_cerrado;
-
+        toggleLV.checked = d.lv_cerrado;
+        toggleSab.checked = d.sab_cerrado;
+        toggleDom.checked = d.dom_cerrado;
     }
 
-
-
-    // ==================================
-    // GUARDAR INFORMACIÓN
-    // ==================================
-
+    // ============================
+    // GUARDAR INFO RESTAURANTE
+    // ============================
     guardarDatos.addEventListener("click", function () {
 
-        if (nombre.value.trim() == "") {
-
-            alert("Ingrese el nombre del restaurante.");
-
+        if (nombre.value.trim() === "") {
+            mostrarMensaje("El nombre del restaurante es obligatorio", "error");
             return;
-
         }
 
-        var informacion = {
-
+        var info = {
             nombre: nombre.value,
             descripcion: descripcion.value,
             telefono: telefono.value
-
         };
 
-        localStorage.setItem(
+        localStorage.setItem("configuracion_restaurante", JSON.stringify(info));
 
-            "configuracion_restaurante",
-
-            JSON.stringify(informacion)
-
-        );
-
-        alert("Información guardada correctamente.");
-
+        mostrarMensaje("Información guardada correctamente", "success");
     });
 
-
-
-    // ==================================
+    // ============================
     // GUARDAR HORARIOS
-    // ==================================
-
+    // ============================
     guardarHorarios.addEventListener("click", function () {
 
         var horario = {
-
             lv_inicio: horarios[0].value,
             lv_fin: horarios[1].value,
 
@@ -127,27 +123,16 @@ document.addEventListener("DOMContentLoaded", function () {
             lv_cerrado: toggleLV.checked,
             sab_cerrado: toggleSab.checked,
             dom_cerrado: toggleDom.checked
-
         };
 
-        localStorage.setItem(
+        localStorage.setItem("horarios_restaurante", JSON.stringify(horario));
 
-            "horarios_restaurante",
-
-            JSON.stringify(horario)
-
-        );
-
-        alert("Horarios actualizados correctamente.");
-
+        mostrarMensaje("Horarios actualizados correctamente", "success");
     });
 
-
-
-    // ==================================
-    // DESHABILITAR HORAS SI ESTÁ CERRADO
-    // ==================================
-
+    // ============================
+    // DESHABILITAR HORARIOS
+    // ============================
     function actualizarEstado() {
 
         horarios[0].disabled = toggleLV.checked;
@@ -158,19 +143,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         horarios[4].disabled = toggleDom.checked;
         horarios[5].disabled = toggleDom.checked;
-
     }
 
-
-
     toggleLV.addEventListener("change", actualizarEstado);
-
     toggleSab.addEventListener("change", actualizarEstado);
-
     toggleDom.addEventListener("change", actualizarEstado);
 
-
-
     actualizarEstado();
-
 });

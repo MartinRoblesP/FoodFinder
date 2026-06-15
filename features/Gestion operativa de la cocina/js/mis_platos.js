@@ -1,263 +1,167 @@
+// ==========================================
+// mis_platos.js
+// Épica 4 - Gestión de platos
+// CRUD + localStorage + modal limpio
+// ==========================================
+
 document.addEventListener("DOMContentLoaded", function () {
 
-    //----------------------------------------
-    // LOCALSTORAGE KEY
-    //----------------------------------------
+    // =========================
+    // ELEMENTOS
+    // =========================
+    const tbody = document.querySelector("table tbody");
+    const btnAgregar = document.querySelector(".btn_agregar");
 
-    var CLAVE_PLATOS = "platos_foodfinder";
+    // =========================
+    // LOCAL STORAGE
+    // =========================
+    const KEY = "platos_data";
+    let platos = [];
 
-    //----------------------------------------
-    // ELEMENTOS DEL DOM
-    //----------------------------------------
+    // =========================
+    // DATOS INICIALES
+    // =========================
+    const datosIniciales = [
+        { id: 1, nombre: "Seco de pollo", precio: 30, stock: 15 },
+        { id: 2, nombre: "Locro de zapallo", precio: 15, stock: 8 }
+    ];
 
-    var tbodyPlatos = document.querySelector(".tabla_dashboard tbody");
-
-    var btnAgregarPlato = document.querySelector(".btn_agregar");
-
-    //----------------------------------------
-    // ARREGLO PRINCIPAL
-    //----------------------------------------
-
-    var platos = [];
-
-    //----------------------------------------
-    // ESTADO DEL PLATO
-    //----------------------------------------
-
-    function obtenerEstado(stock) {
-
-        if (stock <= 0) {
-            return "Agotado";
-        }
-
-        if (stock <= 3) {
-            return "Stock bajo";
-        }
-
-        return "Con stock";
-
+    // =========================
+    // CARGAR
+    // =========================
+    function cargar() {
+        const data = localStorage.getItem(KEY);
+        platos = data ? JSON.parse(data) : datosIniciales;
+        guardar();
     }
 
-    //----------------------------------------
-    // GUARDAR EN LOCALSTORAGE
-    //----------------------------------------
-
-    function guardarPlatos() {
-
-        localStorage.setItem(
-            CLAVE_PLATOS,
-            JSON.stringify(platos)
-        );
-
+    function guardar() {
+        localStorage.setItem(KEY, JSON.stringify(platos));
     }
 
-    //----------------------------------------
-    // CARGAR DATOS
-    //----------------------------------------
-
-    function cargarPlatos() {
-
-        var data = localStorage.getItem(CLAVE_PLATOS);
-
-        if (data !== null) {
-
-            platos = JSON.parse(data);
-
-        } else {
-
-            leerTablaInicial();
-
-        }
-
+    // =========================
+    // ESTADO
+    // =========================
+    function obtenerEstado(plato) {
+        return plato.stock > 0 ? "Disponible" : "Agotado";
     }
 
-    //----------------------------------------
-    // LEER HTML INICIAL
-    //----------------------------------------
+    // =========================
+    // RENDER
+    // =========================
+    function render() {
 
-    function leerTablaInicial() {
+        tbody.innerHTML = "";
 
-        platos = [];
+        platos.forEach(p => {
 
-        var filas = tbodyPlatos.querySelectorAll("tr");
+            const fila = document.createElement("tr");
+            fila.classList.add("tabla_fila");
 
-        filas.forEach(function (fila, index) {
+            fila.innerHTML = `
+                <td class="tabla_td">${p.nombre}</td>
+                <td class="tabla_td">S/ ${p.precio}</td>
+                <td class="tabla_td">${p.stock}</td>
+                <td class="tabla_td">${obtenerEstado(p)}</td>
+                <td class="tabla_td">0</td>
+                <td class="tabla_td tabla_acciones">
+                    <button class="btn_editar" data-id="${p.id}">✏ Editar</button>
+                    <button class="btn_eliminar" data-id="${p.id}">🗑</button>
+                </td>
+            `;
 
-            var celdas = fila.querySelectorAll("td");
-
-            var nombre = celdas[0].innerText.trim();
-            var precio = celdas[1].innerText.replace("S/", "").trim();
-            var stock = parseInt(celdas[2].innerText.trim());
-
-            platos.push({
-
-                id: index + 1,
-                nombre: nombre,
-                precio: parseFloat(precio),
-                stock: stock
-
-            });
-
+            tbody.appendChild(fila);
         });
 
-        guardarPlatos();
-
+        eventos();
     }
 
-    //----------------------------------------
-    // RENDER TABLA
-    //----------------------------------------
+    // =========================
+    // MODAL (AGREGAR / EDITAR)
+    // =========================
+    function modal(plato = null) {
 
-    function renderPlatos(lista) {
+        const overlay = document.createElement("div");
+        overlay.className = "modal_bg";
 
-        tbodyPlatos.innerHTML = "";
+        overlay.innerHTML = `
+            <div class="modal_box">
+                <h3>${plato ? "Editar plato" : "Agregar plato"}</h3>
 
-        lista.forEach(function (plato) {
+                <input id="m_nombre" placeholder="Nombre" value="${plato ? plato.nombre : ""}">
+                <input id="m_precio" type="number" placeholder="Precio" value="${plato ? plato.precio : ""}">
+                <input id="m_stock" type="number" placeholder="Stock" value="${plato ? plato.stock : ""}">
 
-            var estado = obtenerEstado(plato.stock);
+                <div class="modal_actions">
+                    <button id="m_cancelar">Cancelar</button>
+                    <button id="m_guardar">Guardar</button>
+                </div>
+            </div>
+        `;
 
-            var badgeClass = "";
+        document.body.appendChild(overlay);
 
-            if (estado === "Con stock") {
-                badgeClass = "badge_con_stock";
-            } else if (estado === "Stock bajo") {
-                badgeClass = "badge_stock_bajo";
+        document.querySelector("#m_cancelar").onclick = () => overlay.remove();
+
+        document.querySelector("#m_guardar").onclick = () => {
+
+            const nombre = document.querySelector("#m_nombre").value.trim();
+            const precio = parseFloat(document.querySelector("#m_precio").value);
+            const stock = parseInt(document.querySelector("#m_stock").value);
+
+            if (!nombre || isNaN(precio) || isNaN(stock)) return;
+
+            if (plato) {
+                plato.nombre = nombre;
+                plato.precio = precio;
+                plato.stock = stock;
             } else {
-                badgeClass = "badge_agotado";
+                platos.push({
+                    id: Date.now(),
+                    nombre,
+                    precio,
+                    stock
+                });
             }
 
-            var fila = document.createElement("tr");
+            guardar();
+            overlay.remove();
+            render();
+        };
+    }
 
-            fila.className = "tabla_fila";
+    // =========================
+    // EVENTOS
+    // =========================
+    function eventos() {
 
-            fila.innerHTML =
-                "<td class='tabla_td'>" + plato.nombre + "</td>" +
-                "<td class='tabla_td'>S/ " + plato.precio + "</td>" +
-                "<td class='tabla_td'>" + plato.stock + "</td>" +
-                "<td class='tabla_td'><span class='" + badgeClass + "'>" + estado + "</span></td>" +
-                "<td class='tabla_td'>" + Math.floor(Math.random() * 10) + "</td>" +
-                "<td class='tabla_td tabla_acciones'>" +
-                "<button class='btn_editar' data-id='" + plato.id + "'>✎ Editar</button>" +
-                "<button class='btn_eliminar' data-id='" + plato.id + "'>🗑</button>" +
-                "</td>";
-
-            tbodyPlatos.appendChild(fila);
-
+        document.querySelectorAll(".btn_eliminar").forEach(btn => {
+            btn.onclick = () => {
+                const id = Number(btn.dataset.id);
+                platos = platos.filter(p => p.id !== id);
+                guardar();
+                render();
+            };
         });
 
+        document.querySelectorAll(".btn_editar").forEach(btn => {
+            btn.onclick = () => {
+                const id = Number(btn.dataset.id);
+                const plato = platos.find(p => p.id === id);
+                modal(plato);
+            };
+        });
     }
 
-    //----------------------------------------
-    // AGREGAR PLATO
-    //----------------------------------------
+    // =========================
+    // AGREGAR
+    // =========================
+    btnAgregar.onclick = () => modal();
 
-    btnAgregarPlato.addEventListener("click", function () {
-
-        var nombre = prompt("Nombre del plato:");
-
-        if (!nombre) return;
-
-        var precio = parseFloat(prompt("Precio del plato:"));
-
-        if (isNaN(precio)) return;
-
-        var stock = parseInt(prompt("Stock disponible:"));
-
-        if (isNaN(stock)) return;
-
-        var nuevoId = platos.length > 0
-            ? platos[platos.length - 1].id + 1
-            : 1;
-
-        var nuevoPlato = {
-
-            id: nuevoId,
-            nombre: nombre,
-            precio: precio,
-            stock: stock
-
-        };
-
-        platos.push(nuevoPlato);
-
-        guardarPlatos();
-        renderPlatos(platos);
-
-    });
-
-    //----------------------------------------
-    // EDITAR Y ELIMINAR (EVENT DELEGATION)
-    //----------------------------------------
-
-    tbodyPlatos.addEventListener("click", function (e) {
-
-        var target = e.target;
-
-        //------------------------------------
-        // ELIMINAR
-        //------------------------------------
-
-        if (target.classList.contains("btn_eliminar")) {
-
-            var id = parseInt(target.getAttribute("data-id"));
-
-            platos = platos.filter(function (p) {
-                return p.id !== id;
-            });
-
-            guardarPlatos();
-            renderPlatos(platos);
-
-        }
-
-        //------------------------------------
-        // EDITAR
-        //------------------------------------
-
-        if (target.classList.contains("btn_editar")) {
-
-            var id = parseInt(target.getAttribute("data-id"));
-
-            var plato = platos.find(function (p) {
-                return p.id === id;
-            });
-
-            if (!plato) return;
-
-            var nuevoPrecio = parseFloat(
-                prompt("Nuevo precio:", plato.precio)
-            );
-
-            var nuevoStock = parseInt(
-                prompt("Nuevo stock:", plato.stock)
-            );
-
-            if (!isNaN(nuevoPrecio)) {
-                plato.precio = nuevoPrecio;
-            }
-
-            if (!isNaN(nuevoStock)) {
-                plato.stock = nuevoStock;
-            }
-
-            guardarPlatos();
-            renderPlatos(platos);
-
-        }
-
-    });
-
-    //----------------------------------------
-    // INICIALIZACIÓN
-    //----------------------------------------
-
-    function init() {
-
-        cargarPlatos();
-        renderPlatos(platos);
-
-    }
-
-    init();
+    // =========================
+    // INIT
+    // =========================
+    cargar();
+    render();
 
 });

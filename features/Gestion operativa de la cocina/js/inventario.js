@@ -1,738 +1,277 @@
-// ==========================================
-// inventario.js
-// Épica 4 - Gestión de Inventario
-// FoodFinder
-// ==========================================
-
-// Esperamos que cargue toda la página
 document.addEventListener("DOMContentLoaded", function () {
 
-    //----------------------------------------
-    // CLAVE DEL LOCALSTORAGE
-    //----------------------------------------
+    // =========================
+    // ELEMENTOS
+    // =========================
+    const tbody = document.querySelector("#tbodyInventario");
+    const btnAgregar = document.querySelector("#btnAgregarInsumo");
+    const buscador = document.querySelector("#buscadorInventario");
 
-    var CLAVE_STORAGE = "inventario_foodfinder";
+    const filtroTodos = document.querySelector("#filtroTodos");
+    const filtroDisponible = document.querySelector("#filtroDisponible");
+    const filtroStockBajo = document.querySelector("#filtroStockBajo");
+    const filtroAgotado = document.querySelector("#filtroAgotado");
 
-    //----------------------------------------
-    // OBTENEMOS ELEMENTOS DEL HTML
-    //----------------------------------------
+    const filtrosCategoria = document.querySelectorAll(".filtro_categoria");
 
-    var tbodyInventario = document.getElementById("tbodyInventario");
+    const totalInsumos = document.querySelector("#totalInsumos");
+    const stockOk = document.querySelector("#stockOk");
+    const stockBajo = document.querySelector("#stockBajo");
+    const stockAgotado = document.querySelector("#stockAgotado");
 
-    var buscador = document.getElementById("buscadorInventario");
+    // =========================
+    // LOCAL STORAGE
+    // =========================
+    const KEY = "inventario_data";
+    let inventario = [];
 
-    var btnAgregar = document.getElementById("btnAgregarInsumo");
+    let filtroEstado = "todos";
+    let categoriaActual = "Todas";
 
-    var totalInsumos = document.getElementById("totalInsumos");
-    var stockOk = document.getElementById("stockOk");
-    var stockBajo = document.getElementById("stockBajo");
-    var stockAgotado = document.getElementById("stockAgotado");
+    // =========================
+    // CATEGORÍAS (IMPORTANTE)
+    // =========================
+    const categorias = [
+        "Carnes y Pescados",
+        "Tubérculos",
+        "Verduras y Hierbas",
+        "Aceites y Grasas",
+        "Cereales y Granos",
+        "Frutas",
+        "Lácteos y Derivados"
+    ];
 
-    //----------------------------------------
-    // ARREGLO PRINCIPAL
-    //----------------------------------------
+    // =========================
+    // DATA INICIAL
+    // =========================
+    const datosIniciales = [
+        { id: 1, nombre: "Leche de Coco", categoria: "Lácteos y Derivados", cantidad: 0 },
+        { id: 2, nombre: "Papa Amarilla", categoria: "Tubérculos", cantidad: 3 },
+        { id: 3, nombre: "Ajo", categoria: "Verduras y Hierbas", cantidad: 1 },
+        { id: 4, nombre: "Filete de Salmón", categoria: "Carnes y Pescados", cantidad: 15 },
+        { id: 5, nombre: "Pechuga de Pollo", categoria: "Carnes y Pescados", cantidad: 8 }
+    ];
 
-    var inventario = [];
-
-    //----------------------------------------
-    // FUNCIÓN:
-    // Guardar en localStorage
-    //----------------------------------------
-
-    function guardarInventario() {
-
-        localStorage.setItem(
-            CLAVE_STORAGE,
-            JSON.stringify(inventario)
-        );
-
+    // =========================
+    // INIT
+    // =========================
+    function cargar() {
+        const data = localStorage.getItem(KEY);
+        inventario = data ? JSON.parse(data) : datosIniciales;
+        guardar();
     }
 
-    //----------------------------------------
-    // FUNCIÓN:
-    // Leer localStorage
-    //----------------------------------------
-
-    function cargarInventario() {
-
-        var datos = localStorage.getItem(CLAVE_STORAGE);
-
-        if (datos !== null) {
-
-            inventario = JSON.parse(datos);
-
-        } else {
-
-            leerTablaInicial();
-
-        }
-
+    function guardar() {
+        localStorage.setItem(KEY, JSON.stringify(inventario));
     }
 
-    //----------------------------------------
-    // FUNCIÓN:
-    // Leer la tabla HTML inicial
-    //----------------------------------------
+    // =========================
+    // ESTADO
+    // =========================
+    function estado(item) {
+        if (item.cantidad <= 0) return "agotado";
+        if (item.cantidad <= 3) return "bajo";
+        return "ok";
+    }
 
-    function leerTablaInicial() {
+    // =========================
+    // RENDER
+    // =========================
+    function render(texto = "") {
 
-        inventario = [];
+        tbody.innerHTML = "";
 
-        var filas = tbodyInventario.querySelectorAll("tr");
+        let data = inventario.filter(i => {
 
-        filas.forEach(function (fila, indice) {
+            const okTexto = i.nombre.toLowerCase().includes(texto.toLowerCase());
 
-            var columnas = fila.querySelectorAll("td");
+            const okCategoria =
+                categoriaActual === "Todas" ||
+                i.categoria === categoriaActual;
 
-            var nombre =
-                columnas[0]
-                .innerText
-                .replace(/\n/g, "")
-                .trim();
+            const est = estado(i);
 
-            var categoria =
-                columnas[1]
-                .innerText
-                .trim();
+            let okEstado = true;
 
-            var cantidadTexto =
-                columnas[2]
-                .innerText
-                .trim();
+            if (filtroEstado === "disponible") okEstado = est === "ok";
+            if (filtroEstado === "bajo") okEstado = est === "bajo";
+            if (filtroEstado === "agotado") okEstado = est === "agotado";
 
-            var cantidad =
-                parseInt(cantidadTexto);
-
-            var unidad =
-                cantidadTexto
-                .replace(cantidad, "")
-                .trim();
-
-            var estado =
-                columnas[3]
-                .innerText
-                .trim();
-
-            inventario.push({
-
-                id: indice + 1,
-
-                nombre: nombre,
-
-                categoria: categoria,
-
-                cantidad: cantidad,
-
-                unidad: unidad,
-
-                estado: estado
-
-            });
-
+            return okTexto && okCategoria && okEstado;
         });
 
-        guardarInventario();
+        data.forEach(i => {
 
+            const est = estado(i);
+
+            let badge = "";
+            let cantidadClass = "cantidad_normal";
+
+            if (est === "ok") badge = `<span class="badge_disponible">✔ Disponible</span>`;
+            if (est === "bajo") {
+                badge = `<span class="badge_stock_bajo">⚠ Stock bajo</span>`;
+                cantidadClass = "cantidad_amarillo";
+            }
+            if (est === "agotado") {
+                badge = `<span class="badge_agotado">❌ Agotado</span>`;
+                cantidadClass = "cantidad_rojo";
+            }
+
+            const row = document.createElement("tr");
+            row.classList.add("tabla_fila");
+
+            row.innerHTML = `
+                <td class="tabla_td tabla_insumo">
+                    <span class="insumo_icono">📦</span> ${i.nombre}
+                </td>
+                <td class="tabla_td">${i.categoria}</td>
+                <td class="tabla_td"><span class="${cantidadClass}">${i.cantidad}</span></td>
+                <td class="tabla_td">${badge}</td>
+                <td class="tabla_td tabla_acciones">
+                    <button class="btn_editar" data-id="${i.id}">✏ Editar</button>
+                    <button class="btn_eliminar" data-id="${i.id}">🗑</button>
+                </td>
+            `;
+
+            tbody.appendChild(row);
+        });
+
+        actualizarResumen();
+        eventos();
     }
 
-        //----------------------------------------
-    // FUNCIÓN:
-    // Determinar estado automáticamente
-    //----------------------------------------
-
-    function obtenerEstado(cantidad) {
-
-        if (cantidad <= 0) {
-            return "Agotado";
-        }
-
-        if (cantidad <= 5) {
-            return "Stock bajo";
-        }
-
-        return "Disponible";
-
-    }
-
-    //----------------------------------------
-    // FUNCIÓN:
-    // Actualizar tarjetas superiores
-    //----------------------------------------
-
+    // =========================
+    // RESUMEN
+    // =========================
     function actualizarResumen() {
-
-        var disponibles = 0;
-        var bajos = 0;
-        var agotados = 0;
-
-        for (var i = 0; i < inventario.length; i++) {
-
-            var estado = obtenerEstado(inventario[i].cantidad);
-
-            if (estado == "Disponible") {
-                disponibles++;
-            }
-
-            else if (estado == "Stock bajo") {
-                bajos++;
-            }
-
-            else {
-                agotados++;
-            }
-
-        }
-
         totalInsumos.textContent = inventario.length;
-        stockOk.textContent = disponibles;
-        stockBajo.textContent = bajos;
-        stockAgotado.textContent = agotados;
-
+        stockOk.textContent = inventario.filter(i => estado(i) === "ok").length;
+        stockBajo.textContent = inventario.filter(i => estado(i) === "bajo").length;
+        stockAgotado.textContent = inventario.filter(i => estado(i) === "agotado").length;
     }
 
-    //----------------------------------------
-    // FUNCIÓN:
-    // Renderizar tabla
-    //----------------------------------------
+    // =========================
+    // MODAL (AGREGAR / EDITAR)
+    // =========================
+    function modal(item = null) {
 
-    function renderizarTabla(lista) {
+        const div = document.createElement("div");
+        div.className = "modal_bg";
 
-        tbodyInventario.innerHTML = "";
+        let opciones = categorias.map(c =>
+            `<option value="${c}" ${item?.categoria === c ? "selected" : ""}>${c}</option>`
+        ).join("");
 
-        lista.forEach(function(insumo){
+        div.innerHTML = `
+            <div class="modal_box">
+                <h3>${item ? "Editar insumo" : "Agregar insumo"}</h3>
 
-            var estado = obtenerEstado(insumo.cantidad);
+                <input id="m_nombre" placeholder="Nombre" value="${item ? item.nombre : ""}">
 
-            var claseBadge = "";
-            var claseCantidad = "";
+                <select id="m_categoria">
+                    <option disabled selected>Selecciona categoría</option>
+                    ${opciones}
+                </select>
 
-            if (estado == "Disponible") {
+                <input id="m_cantidad" type="number" placeholder="Cantidad" value="${item ? item.cantidad : ""}">
 
-                claseBadge = "badge_disponible";
-                claseCantidad = "cantidad_normal";
+                <div class="modal_actions">
+                    <button id="m_cancelar">Cancelar</button>
+                    <button id="m_guardar">Guardar</button>
+                </div>
+            </div>
+        `;
 
+        document.body.appendChild(div);
+
+        document.querySelector("#m_cancelar").onclick = () => div.remove();
+
+        document.querySelector("#m_guardar").onclick = () => {
+
+            const nombre = document.querySelector("#m_nombre").value;
+            const categoria = document.querySelector("#m_categoria").value;
+            const cantidad = parseInt(document.querySelector("#m_cantidad").value);
+
+            if (!nombre || !categoria) return;
+
+            if (item) {
+                item.nombre = nombre;
+                item.categoria = categoria;
+                item.cantidad = cantidad;
+            } else {
+                inventario.push({
+                    id: Date.now(),
+                    nombre,
+                    categoria,
+                    cantidad
+                });
             }
 
-            else if (estado == "Stock bajo") {
-
-                claseBadge = "badge_stock_bajo";
-                claseCantidad = "cantidad_amarillo";
-
-            }
-
-            else {
-
-                claseBadge = "badge_agotado";
-                claseCantidad = "cantidad_rojo";
-
-            }
-
-            var fila = document.createElement("tr");
-
-            fila.className = "tabla_fila";
-
-            fila.innerHTML =
-
-            "<td class='tabla_td tabla_insumo'>" +
-
-            "<span class='insumo_icono'>📦</span>" +
-
-            insumo.nombre +
-
-            "</td>" +
-
-            "<td class='tabla_td'>" +
-
-            insumo.categoria +
-
-            "</td>" +
-
-            "<td class='tabla_td'>" +
-
-            "<span class='" + claseCantidad + "'>" +
-
-            insumo.cantidad +
-
-            "</span> " +
-
-            insumo.unidad +
-
-            "</td>" +
-
-            "<td class='tabla_td'>" +
-
-            "<span class='" + claseBadge + "'>" +
-
-            estado +
-
-            "</span>" +
-
-            "</td>" +
-
-            "<td class='tabla_td tabla_acciones'>" +
-
-            "<button class='btn_editar' data-id='" +
-
-            insumo.id +
-
-            "'>✎ Editar</button>" +
-
-            "<button class='btn_eliminar' data-id='" +
-
-            insumo.id +
-
-            "'>🗑</button>" +
-
-            "</td>";
-
-            tbodyInventario.appendChild(fila);
-
-        });
-
-        actualizarResumen();
-
-    }
-
-    //----------------------------------------
-    // Cargar inventario inicial
-    //----------------------------------------
-
-    cargarInventario();
-
-    renderizarTabla(inventario);
-
-    //----------------------------------------
-    // FILTRO ACTUAL
-    //----------------------------------------
-
-    var estadoActual = "Todos";
-
-    //----------------------------------------
-    // FUNCIÓN:
-    // Aplicar búsqueda y filtros
-    //----------------------------------------
-
-    function aplicarFiltros() {
-
-        var textoBusqueda = buscador.value.toLowerCase();
-
-        var resultado = inventario.filter(function(insumo){
-
-            // Buscar por nombre
-            var coincideBusqueda =
-                insumo.nombre.toLowerCase().includes(textoBusqueda);
-
-            // Obtener estado actual
-            var estado = obtenerEstado(insumo.cantidad);
-
-            // Filtrar por estado
-            var coincideEstado = false;
-
-            if (estadoActual == "Todos") {
-
-                coincideEstado = true;
-
-            }
-
-            else if (
-                estadoActual == "Disponible" &&
-                estado == "Disponible"
-            ) {
-
-                coincideEstado = true;
-
-            }
-
-            else if (
-                estadoActual == "Stock bajo" &&
-                estado == "Stock bajo"
-            ) {
-
-                coincideEstado = true;
-
-            }
-
-            else if (
-                estadoActual == "Agotado" &&
-                estado == "Agotado"
-            ) {
-
-                coincideEstado = true;
-
-            }
-
-            return coincideBusqueda && coincideEstado;
-
-        });
-
-        renderizarTabla(resultado);
-
-    }
-
-    //----------------------------------------
-    // BUSCADOR
-    //----------------------------------------
-
-    buscador.addEventListener("input", function(){
-
-        aplicarFiltros();
-
-    });
-
-    //----------------------------------------
-    // BOTONES DE FILTRO
-    //----------------------------------------
-
-    var btnTodos =
-        document.getElementById("filtroTodos");
-
-    var btnDisponible =
-        document.getElementById("filtroDisponible");
-
-    var btnStockBajo =
-        document.getElementById("filtroStockBajo");
-
-    var btnAgotado =
-        document.getElementById("filtroAgotado");
-
-    //----------------------------------------
-    // QUITAR BOTÓN ACTIVO
-    //----------------------------------------
-
-    function limpiarBotones(){
-
-        btnTodos.classList.remove("filtro_estado_activo");
-
-        btnDisponible.classList.remove("filtro_estado_activo");
-
-        btnStockBajo.classList.remove("filtro_estado_activo");
-
-        btnAgotado.classList.remove("filtro_estado_activo");
-
-    }
-
-    //----------------------------------------
-    // EVENTOS DE FILTROS
-    //----------------------------------------
-
-    btnTodos.addEventListener("click", function(){
-
-        estadoActual = "Todos";
-
-        limpiarBotones();
-
-        this.classList.add("filtro_estado_activo");
-
-        aplicarFiltros();
-
-    });
-
-    btnDisponible.addEventListener("click", function(){
-
-        estadoActual = "Disponible";
-
-        limpiarBotones();
-
-        this.classList.add("filtro_estado_activo");
-
-        aplicarFiltros();
-
-    });
-
-    btnStockBajo.addEventListener("click", function(){
-
-        estadoActual = "Stock bajo";
-
-        limpiarBotones();
-
-        this.classList.add("filtro_estado_activo");
-
-        aplicarFiltros();
-
-    });
-
-    btnAgotado.addEventListener("click", function(){
-
-        estadoActual = "Agotado";
-
-        limpiarBotones();
-
-        this.classList.add("filtro_estado_activo");
-
-        aplicarFiltros();
-
-    });
-
-        //----------------------------------------
-    // BOTÓN AGREGAR INSUMO
-    //----------------------------------------
-
-    btnAgregar.addEventListener("click", function () {
-
-        // Solicitar nombre
-
-        var nombre = prompt("Ingrese el nombre del insumo:");
-
-        if (nombre === null || nombre.trim() === "") {
-
-            alert("Debe ingresar un nombre.");
-
-            return;
-
-        }
-
-        //----------------------------------------
-
-        // Solicitar categoría
-
-        var categoria = prompt(
-            "Ingrese la categoría:\n\n" +
-            "Ejemplo:\n" +
-            "- Carnes y Pescados\n" +
-            "- Tubérculos\n" +
-            "- Verduras y Hierbas\n" +
-            "- Lácteos y Derivados"
-        );
-
-        if (categoria === null || categoria.trim() === "") {
-
-            alert("Debe ingresar una categoría.");
-
-            return;
-
-        }
-
-        //----------------------------------------
-
-        // Solicitar cantidad
-
-        var cantidad = prompt("Ingrese la cantidad:");
-
-        if (cantidad === null) {
-
-            return;
-
-        }
-
-        cantidad = parseInt(cantidad);
-
-        if (isNaN(cantidad) || cantidad < 0) {
-
-            alert("Cantidad inválida.");
-
-            return;
-
-        }
-
-        //----------------------------------------
-
-        // Solicitar unidad
-
-        var unidad = prompt(
-            "Ingrese la unidad:\n\nEjemplo:\nkg\nlt\nunid"
-        );
-
-        if (unidad === null || unidad.trim() === "") {
-
-            unidad = "unid";
-
-        }
-
-        //----------------------------------------
-
-        // Calcular nuevo ID
-
-        var nuevoId = 1;
-
-        if (inventario.length > 0) {
-
-            nuevoId =
-                inventario[inventario.length - 1].id + 1;
-
-        }
-
-        //----------------------------------------
-
-        // Crear nuevo objeto
-
-        var nuevoInsumo = {
-
-            id: nuevoId,
-
-            nombre: nombre.trim(),
-
-            categoria: categoria.trim(),
-
-            cantidad: cantidad,
-
-            unidad: unidad.trim(),
-
-            estado: obtenerEstado(cantidad)
-
+            guardar();
+            div.remove();
+            render();
         };
+    }
 
-        //----------------------------------------
+    // =========================
+    // EVENTOS TABLA
+    // =========================
+    function eventos() {
 
-        // Agregar al arreglo
-
-        inventario.push(nuevoInsumo);
-
-        //----------------------------------------
-
-        // Guardar
-
-        guardarInventario();
-
-        //----------------------------------------
-
-        // Actualizar tabla
-
-        aplicarFiltros();
-
-        //----------------------------------------
-
-        alert("Insumo agregado correctamente.");
-
-    });
-
-        //----------------------------------------
-    // ELIMINAR INSUMO
-    //----------------------------------------
-
-    function eliminarInsumo(id) {
-
-        var confirmar = confirm(
-            "¿Seguro que deseas eliminar este insumo?"
-        );
-
-        if (!confirmar) {
-            return;
-        }
-
-        // Filtrar el inventario eliminando el ID
-        inventario = inventario.filter(function(insumo){
-            return insumo.id != id;
+        document.querySelectorAll(".btn_eliminar").forEach(b => {
+            b.onclick = () => {
+                const id = Number(b.dataset.id);
+                inventario = inventario.filter(i => i.id !== id);
+                guardar();
+                render(buscador.value);
+            };
         });
 
-        guardarInventario();
-        aplicarFiltros();
-
+        document.querySelectorAll(".btn_editar").forEach(b => {
+            b.onclick = () => {
+                const id = Number(b.dataset.id);
+                const item = inventario.find(i => i.id === id);
+                modal(item);
+            };
+        });
     }
 
-    //----------------------------------------
-    // EDITAR INSUMO (solo cantidad)
-    //----------------------------------------
+    // =========================
+    // FILTROS ESTADO
+    // =========================
+    filtroTodos.onclick = () => { filtroEstado = "todos"; render(buscador.value); };
+    filtroDisponible.onclick = () => { filtroEstado = "disponible"; render(buscador.value); };
+    filtroStockBajo.onclick = () => { filtroEstado = "bajo"; render(buscador.value); };
+    filtroAgotado.onclick = () => { filtroEstado = "agotado"; render(buscador.value); };
 
-    function editarInsumo(id) {
+    // =========================
+    // FILTROS CATEGORÍA
+    // =========================
+    filtrosCategoria.forEach(btn => {
 
-        var nuevoValor = prompt(
-            "Ingrese la nueva cantidad:"
-        );
+        btn.onclick = () => {
 
-        if (nuevoValor === null) {
-            return;
-        }
+            filtrosCategoria.forEach(b => b.classList.remove("filtro_categoria_activo"));
+            btn.classList.add("filtro_categoria_activo");
 
-        nuevoValor = parseInt(nuevoValor);
-
-        if (isNaN(nuevoValor) || nuevoValor < 0) {
-
-            alert("Cantidad inválida");
-            return;
-
-        }
-
-        // Buscar el insumo
-        for (var i = 0; i < inventario.length; i++) {
-
-            if (inventario[i].id == id) {
-
-                inventario[i].cantidad = nuevoValor;
-
-                // actualizar estado automáticamente
-                inventario[i].estado =
-                    obtenerEstado(nuevoValor);
-
-                break;
-
-            }
-
-        }
-
-        guardarInventario();
-        aplicarFiltros();
-
-    }
-
-    //----------------------------------------
-    // CLICK EN BOTONES (delegación de eventos)
-    //----------------------------------------
-
-    tbodyInventario.addEventListener("click", function (e) {
-
-        var target = e.target;
-
-        //------------------------------------
-        // BOTÓN ELIMINAR
-        //------------------------------------
-
-        if (target.classList.contains("btn_eliminar")) {
-
-            var id = parseInt(target.getAttribute("data-id"));
-
-            eliminarInsumo(id);
-
-        }
-
-        //------------------------------------
-        // BOTÓN EDITAR
-        //------------------------------------
-
-        if (target.classList.contains("btn_editar")) {
-
-            var id = parseInt(target.getAttribute("data-id"));
-
-            editarInsumo(id);
-
-        }
-
+            categoriaActual = btn.textContent.trim();
+            render(buscador.value);
+        };
     });
 
-        //----------------------------------------
-    // RE-RENDER GLOBAL (UTILIDAD FINAL)
-    //----------------------------------------
-    // Esta función sirve para volver a pintar todo
-    // desde el estado actual del inventario
-    //----------------------------------------
+    // =========================
+    // BUSCADOR
+    // =========================
+    buscador.oninput = () => render(buscador.value);
 
-    function refrescarTodo() {
+    // =========================
+    // AGREGAR
+    // =========================
+    btnAgregar.onclick = () => modal();
 
-        aplicarFiltros();
-
-        actualizarResumen();
-
-        guardarInventario();
-
-    }
-
-    //----------------------------------------
-    // INICIALIZACIÓN FINAL SEGURA
-    //----------------------------------------
-
-    function inicializarInventario() {
-
-        cargarInventario();
-
-        renderizarTabla(inventario);
-
-        actualizarResumen();
-
-    }
-
-    //----------------------------------------
-    // LLAMADA INICIAL
-    //----------------------------------------
-
-    inicializarInventario();
-
+    // =========================
+    // START
+    // =========================
+    cargar();
+    render();
 });
