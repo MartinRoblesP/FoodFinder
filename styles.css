@@ -9,564 +9,626 @@ html {
     padding: 0;
 }
 
-.btnLanding:hover{
-    background-color: #FF8A00;
-}
+/*Landin page-Robles*/
 
-#encabezado{
-    display: flex;         
+.navbar_LANDING {
+    display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    margin-bottom: auto;
-    padding: 23px 37px 35px 43px;              
-    flex-wrap:wrap;
-    align-items:center;   
-}
-
-.btnLanding{
-    background-color: #1C2B39;
-    color: #FAFAFA;
-    border-radius: 99px;
-    box-shadow: 0px 2px 0 rgb(0,0,0);
-    cursor: pointer;
-    font-size: 20px;
-    display: inline-flex;
-    justify-content: center;      
-    padding: 8.5px 41px;
-    
-}
-#btnCuenta{
-    background-color:#FF8A00;
-    color:#FAFAFA;
-    border-radius: 99px;
-    max-height:50px;
-    max-width:165px;
-    box-shadow: 0 2px 0 rgb(0,0,0);
-    cursor:pointer;
-    font-size:20px;
-    padding:10px 17px;
-    margin: 29px 37px 0 27px;
-}
-#btnIniciarSesion{
-    font-size:20px;
-    background-color:#4CAF50;
-    color:#FAFAFA;
-    border-radius: 99px;
-    height:50px;
-    width:165px;
-    box-shadow: 0 2px 0 rgb(0,0,0);
-    cursor:pointer;
-    margin: 20px 27px 41px 36px;
-    padding:10px 15px;
-}
-.caracteristica{
-    display: flex;              
-    justify-content: center;                
-    border-radius: 8px;  
-    max-width: 372px;     
-    width: 37.2%;
-    background-color: rgba(255, 254, 254, 0.12); 
-    backdrop-filter: blur(8px);
-    color: #FAFAFA; 
-    margin-bottom:55.75px;
-    flex-direction:column;
-}
-
-.tarjeta{
-    background-color:rgba(0,0,0,0.5);
-    border-radius:8px;
-    display:flex;
-    justify-content: flex-start;
-    margin-bottom: 0px;
-    margin-top:39.71px;
-    margin-right:197px;
-}
-.tarjeta h3{
-    margin-bottom:16.85px;
-    margin-left:17px;
-}.tarjeta p{
-    margin-top:0;
-    margin-bottom:5.95px;
-    margin-left:17px;
-}
-.tarjeta img{
-    border-radius:10px;
-    margin-left:10px;
-    margin-top:10.9px;
-}
-
-#CTA{
-    display:flex;
-    height: auto;
-    font-size:32px;
-    font-weight: 450;
-    margin-left:69px;
-    align-items:flex-start;
-    flex-direction:column;
-    justify-content:flex-start ;
-}
-#CTA_parrafo{
-    font-size:16px;
-    font-weight:100;
-    line-height: 1.3;
-}
-span{
-    color:#FF8A00;
-    font-weight:bold;
-}
-#contenido_CTA{
-    color:#FAFAFA;
-    font-family:sans-serif;
-    text-align:left;
-    position:relative;
-    width:100%;
-    max-width:1440px;
-    height: 410px;
-    justify-content:space-between;
-    display:flex;
     align-items: center;
-    padding-left:17px;
-    
+    justify-content: space-between; 
+    width: 1440px;
+    height: 120px;
+    padding: 0 40px;
+    box-sizing: border-box;
 }
-#contenido_CTA:before{
+
+
+.navbar_LANDING img {
+    max-width: 181px;
+    max-height: 62px;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+
+.navbar_LANDING .navbar_botones {
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+    gap:26px;
+}
+
+
+.navbar_LANDING .navbar_botones button {
+    background-color: #1C2B39;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-family: Verdana, sans-serif;
+    border-radius: 99px;
+    cursor: pointer;
+    
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    
+    padding: 0 24px;         
+    height: 47px;            
+    white-space: nowrap;     
+}
+
+
+#btnISesion {
+    background-color: #FF8A00;
+    color: #000000;            
+}
+
+#btnCCrear {
+    background-color: #4CAF50; 
+    color: #FFFFFF;
+}
+
+.navbar_LANDING .navbar_botones button:hover{
+    background-color: #FF8A00;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-family: Verdana, sans-serif;
+    border-radius: 99px;
+    border: none;
+    cursor: pointer;
+    
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    
+    padding: 0 24px;         
+    height: 47px;            
+    white-space: nowrap;     
+}
+
+/*Seccion CTA*/
+.ElProducto:before{
     content:"";
     position:absolute;
-    top:0;
-    bottom:0;
-    left:0;
-    right:0;
+    inset:0;
     background-position:center;
-    background-size:contain;
-    background-image:url("/Assests/Img/imagen_fondo.png");
+    background-size:cover;
+    background-repeat: no-repeat;
+    background-image:url("/Assests/Icons/fondo_Landing.png");
     filter:brightness(30%);
-    z-index:-1;
+    z-index:0;
 }
-/*Fin de la seccion CTA*/
-
-/*Inicio de la seccion beneficios*/
-.Seccion_Beneficios h2{
-    color:#FF8A00;
-    font-size:32px;
-    margin-left:168px;
-}
-.Seccion_Beneficios p{
-    font-weight: bold;
-    font-size:20px;
-    margin-left:168px;
-}
-.Seccion_Beneficios{
-    background-color:#E9E7E7;
-    font-family:sans-serif;
-    max-width:1440px;
-    padding: 47.6px 0;
-}
-#cardsBeneficios{
+.ElProducto{
+    position: relative;
     display:flex;
     flex-direction:row;
-    align-items:stretch;
-    justify-content: center;
-    margin: 0 auto;
-    height:179.4px;
-    gap: 16px;
-}
-#card_consumidores{
-    flex:1;
-    background-color:#FFFFFF;
-    max-width:592px;
-    padding:20.8px 20.8px 0px 22.4px;
-}
-
-#card_consumidores li{
-    margin:12px 0px 22px 22px;
-    line-height:0.5;
-}
-#card_consumidores h3{
-    color:#1C2B39;
-    margin: 0 0 7px 50px;
-}
-#card_emprendedores{
-    flex:1;
-    background-color:#FFFFFF;
-    max-width:592px;
-    padding:20.8px 20.8px 0px 22.4px;
-}
-#card_emprendedores li{
-    margin:12px 0px 22px 22px;
-    line-height:0.5;
-}
-#card_emprendedores h3{
-    color:#1C2B39;
-    margin: 0 0 8.6px 50px;
-}
-
-/*fin de la seccion beneficios*/
-
-/*Inicio de la seccion Como funciona*/
-.Seccion_Comofunciona .contenedor_flujos{
-    display:flex;
-    flex-direction:row;
-    justify-content:center;
-    gap:358px;
-}
-.Seccion_Comofunciona h2{
-    color:#FF8A00;
-    font-size:32px;
-    margin-left:43px;
-    font-family: sans-serif;
-}
-.Seccion_Comofunciona p{
-    font-size:22px;
-    color:#1C2B39;
-    margin-left:43px;
-    font-weight:500;
-    font-family: sans-serif;
-}
-.flujo_consumidor h2{
-    font-size:20px;
-    color:#FF8A00;
-    font-weight:500;
-    margin-top:30.94px;
-}
-.flujo_consumidor h3{
-    color:#1C2B39;
-    font-size:20px;
-}
-.flujo_consumidor p{
-    color:#777777;
-    font-size: 12px;
-}
-.flujo_emprendedor h2{
-    color:#4CAF50;
-    font-size:20px;
-    font-weight:500;
-    margin-top:30.94px;
-    font-family:sans-serif;
-}
-.flujo_emprendedor h3{
-    color:#1C2B39;
-    font-size:20px;
-}
-.flujo_emprendedor p{
-    color:#777777;
-    font-size: 12px;
-}
-/*Fin de la seccion flujos*/
-.Seccion_testimonio{
-    color:#FF8A00;
-    font-size:32px;
-    margin-left:43px;
-    font-family: sans-serif;
-}
-/*fin de la seccion testimonios*/
-/*Inicio de closing CTA*/
-.Closing_CTA{
-    background-color:#1C2B39;
-    color:#FFFFFF;
-    display:flex;
-    align-items: center;
     justify-content:space-around;
-    width:100%;
-    max-width:1440px;
-    max-height:247px;
-    flex-direction: column;
-    font-family:sans-serif;
+    align-items: center;
+    min-height: 360px;
+    overflow: hidden;
 }
-.Closing_CTA h1{
+
+.ElProducto #CTA,
+.ElProducto .CTA_CARDS {
+    position: relative;
+    z-index: 1;
+}
+
+#CTA span{
+    color:#FF8A00;
+}
+.ElProducto #CTA h1{
+    color:#ffffff;
     font-size:32px;
-    font-weight: 500;
 }
-.Closing_CTA p{
-    font-size:14px;
-    margin-top:12px;
-    margin-bottom:41px;
+.ElProducto #CTA p{
+    font-size:18px;
+    color: #FAFAFA; 
 }
-.Closing_CTA button{
-    border-radius:99px;
-    max-width: 165px;
-    max-height: 50px;
-    margin-bottom:51px;
-    padding-top:12px;
-    padding-bottom:12px;
-    padding-right:12px;
-    padding-left:12px;
-    color:#FAFAFA;
+.CTA_CARDS{
+    display:flex;
+    flex-direction:column;
+    justify-content:space-around;
+    color: #FAFAFA; 
+    backdrop-filter: blur(8px);
+    gap: 28px;
+}
+.CTA_CARDS .cartaCTA1 img{
+    width:52px;
+    height:51.53px;
+    border-radius: 10px;
+}
+.CTA_CARDS .cartaCTA2 img{
+    width:52px;
+    height:51.53px;
+    border-radius: 10px;
+}
+.CTA_CARDS .cartaCTA3 img{
+    width:52px;
+    height:51.53px;
+    border-radius: 10px;
+}
+
+.cartaCTA1,
+.cartaCTA2,
+.cartaCTA3 {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    width: 370px;
+    min-height: 75px;
+    padding: 12px 18px;
+
+    background-color: rgba(255, 254, 254, 0.22);
+    backdrop-filter: blur(8px);
+    border-radius: 8px;
+}
+
+/*Seccion beneficios*/
+#TituloBeneficios{
+    color:#FF8A00;
+    font-size:32px;
+    font-weight: bold;
+}
+#TituloBeneficios > p{
     font-size:20px;
-    background-color:#4CAF50;
-    box-shadow: 0px 3px rgb(0,0,0);
+    font-weight: 600px;
 }
-/*fin de closing CTA*/
-/*Inicio del footer*/
-footer{
-    margin:auto;
+
+.BeneficiosProducto{
+    background-color: #E9E7E7;
+}
+
+.BeneficiosProducto #TituloBeneficios{
+    font-family: Verdana;
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 0 0; 
+}
+.BeneficiosProducto > p{
+    font-size:20px;
+    font-weight:600;
+    font-family: sans-serif;
+}
+
+.BeneficiosProducto .TarjetaB{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+#tarjeta_Bconsumidores h3{
+    color:#FF8A00;
+}
+#tarjeta_Bemprendedores h3{
+    color:#4CAF50;
+}
+/*Seccion Como funciona*/
+
+
+.FlujoOperaciones_producto .TituloFunciones{
+    color:#FF8A00;
+    font-size:32px;
+    font-weight:800;
+    font-family: sans-serif;
+}
+.FlujoOperaciones_producto  #Reforzar_tituloF{
+    font-size: 20px;
+    font-family: sans-serif;
+    font-weight: 600;
+}
+
+.TarjetaF{
+    display: flex;
+    justify-content:space-around;
+}
+
+
+.contenido-paso h3{
+    font-size: 20px;
+    color:#1C2B39;
+    font-family: sans-serif;
+}
+
+.lista-pasos li {
+    display: flex;
+    align-items: center; 
+    margin-bottom: 16px;  
+}
+
+
+.numero-circulo {
+    background-color: #ff8c00; 
+    color: white;              
+    font-weight: bold;
+    font-size: 1rem;
+    
+    width: 32px;               
+    height: 32px;
+    border-radius: 50%;        
+    
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    margin-right: 12px;        
+    flex-shrink: 0;         
+}
+
+
+.contenido-paso p {
+    margin: 0;
+    font-size: 1rem;
+    color: #112233;            
+}
+
+
+.lista-pasos {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 0 0;
+}
+
+.lista-pasos li {
+    display: flex;
+    align-items: flex-start; 
+    margin-bottom: 20px;
+}
+
+.numero-circulo {
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 14px;
+    flex-shrink: 0;
+    margin-top: 2px; 
+}
+
+
+.contenido-paso h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    color: #112233; 
+    font-weight: 700;
+}
+
+.contenido-paso p {
+    margin: 2px 0 0 0;
+    font-size: 0.9rem;
+    color: #777777; 
+}
+
+
+
+
+.lista-pasos .numero-circulo {
+    background-color: #ff8c00; 
+}
+
+
+.lista-pasos.pasos-verde .numero-circulo {
+    background-color: #4caf50; 
+}
+
+
+/*Seccion testimonios*/
+.Seccion_Testimonios .TituloTestimonios{
+    font-size:32px;
+    font-family: sans-serif;
+    color:#ff8c00;
+}
+#grupo_testimonios{
+    display:flex;
+    justify-content: space-around;
+    
+}
+#grupo_testimonios #testimonioOne{
+    border-color:#000000;
+    border-style: solid;
+    width:370px;
+    height:132px;
+    margin-right: 78px;
+    margin-bottom: 52px;
+    padding:53px 40px 23px 28px;
+}
+#grupo_testimonios #testimonioDos{
+    border-color:#000000;
+    border-style:solid;
+    width:370px;
+    height:132px;
+    margin-right: 78px;
+    padding:53px 50px 23px 18px;
+}
+#grupo_testimonios #testimonioTres{
+    border-color:#000000;
+    border-style: solid;
+    width:370px;
+    height:132px;
+    padding:50px 53px 26px 15px;
+}  
+
+/*closer CTA-Robles*/
+
+.Closer_CTA{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #1C2B39;
+    color:#FAFAFA;
+    
+}
+.Closer_CTA >h2{
+    font-size:32px;
+    font-weight: 600;
+    margin-right: 528px;
+    margin-bottom:12px;
+    margin-left:554px;
+    margin-top:34px;
+}
+.Closer_CTA >p{
+    font-size:14px;
+    margin-left: 458px;
+    margin-right:432px;
+}
+.Closer_CTA >button{
+    background-color: #4CAF50;
+    color:#FAFAFA;
+    border-radius: 99px;
+    width:165px;
+    height: 50px;
+    margin-left: 654px;
+    margin-bottom:51px;
+    margin-right:621px;
+    margin-top:41px;
+}
+/*pie de pagina-Robles*/
+#pie_Landing{
+    margin:auto;    
     display:flex;
     flex-direction: row;
     justify-content:space-around;
     font-size:20px;
     font-family:sans-serif;
 }
+
+
+
 /* ==========================================
-   NUEVO CÓDIGO RESPONSIVE - NO MODIFICAR NADA ARRIBA
+   Gestión de pago 1/2 ->Andy
    ========================================== */
 
-/* Reglas base para responsive */
-html {
-    font-size: 16px;
+:root {
+  --inter-regular-font-family: "Inter", Helvetica;
+  --inter-regular-font-weight: 400;
+  --inter-regular-font-size: 14.6px;
+  --inter-regular-letter-spacing: 0px;
+  --inter-regular-line-height: normal;
+  --inter-regular-font-style: normal;
+  --semantic-label-font-family: "Inter", Helvetica;
+  --semantic-label-font-weight: 400;
+  --semantic-label-font-size: 15.1px;
+  --semantic-label-letter-spacing: 0px;
+  --semantic-label-line-height: normal;
+  --semantic-label-font-style: normal;
+  --semantic-textarea-font-family: "Inter", Helvetica;
+  --semantic-textarea-font-weight: 400;
+  --semantic-textarea-font-size: 13.3px;
+  --semantic-textarea-letter-spacing: 0px;
+  --semantic-textarea-line-height: normal;
+  --semantic-textarea-font-style: normal;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+@font-face {
+  font-family: "Poppins-Bold";
+  src: local("Poppins-Bold");
+}
+@font-face {
+  font-family: "DM Sans-Bold";
+  src: local("DM Sans-Bold");
+}
+@font-face {
+  font-family: "DM Sans-SemiBold";
+  src: local("DM Sans-SemiBold");
+}
+@font-face {
+  font-family: "DM Sans-Regular";
+  src: local("DM Sans-Regular");
+}
+@font-face {
+  font-family: "DM Sans-Medium";
+  src: local("DM Sans-Medium");
+}
+@font-face {
+  font-family: "Syne-Bold";
+  src: local("Syne-Bold");
+}
+@font-face {
+  font-family: "Poppins-Medium";
+  src: local("Poppins-Medium");
+}
+@font-face {
+  font-family: "Poppins-Regular";
+  src: local("Poppins-Regular");
 }
 
-img {
-    max-width: 100%;
-    height: auto;
+/* Estilos de Carrito 1 */
+.carrito-de-compra {
+  background: linear-gradient(0deg, rgba(240, 242, 245, 1) 0%, rgba(240, 242, 245, 1) 100%),
+              linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 100%);
+  width: 100%;
+  min-width: 1440px;
+  min-height: 1024px;
+  display: flex;
+  gap: 161px;
 }
 
-
-/* Media queries que agrego al final */
-@media screen and (max-width: 1024px) {
-     #encabezado {
-        flex-direction: column;
-        align-items: center;
-        padding: 20px;
-        gap: 20px;
-    }
-
-    #logo {
-        width: 150px;
-        height: auto;
-    }
-
-    nav {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-    }
-
-    .btnLanding, 
-    #btnIniciarSesion, 
-    #btnCuenta {
-        font-size: 16px;
-        padding: 8px 20px;
-        margin: 5px;
-        width: auto;
-    }
-
-    #contenido_CTA {
-        flex-direction: column;
-        height: auto;
-        padding: 30px 20px;
-    }
-
-    #CTA {
-        margin-left: 0;
-        font-size: 24px;
-        text-align: center;
-        align-items: center;
-    }
-
-    #CTA_parrafo {
-        text-align: center;
-    }
-
-    .tarjeta {
-        margin-right: 0;
-        width: 100%;
-    }
-
-    #cardsBeneficios {
-        flex-direction: column;
-        height: auto;
-        padding: 20px;
-    }
-
-    #card_consumidores,
-    #card_emprendedores {
-        max-width: 100%;
-    }
-
-    .Seccion_Comofunciona .contenedor_flujos {
-        gap: 40px;
-        padding: 20px;
-    }
+.carrito-de-compra .container {
+  margin-top: 40px;
+  width: 560px;
+  height: 619px;
+  margin-left: 212px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-@media screen and (max-width: 767px) {
-     #encabezado {
-        padding: 15px;
-    }
-
-    #logo {
-        width: 120px;
-    }
-
-    nav {
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-    }
-
-    .btnLanding {
-        width: 100%;
-        max-width: 280px;
-        font-size: 14px;
-        padding: 10px;
-    }
-
-    #btnIniciarSesion,
-    #btnCuenta {
-        width: 100%;
-        max-width: 280px;
-        margin: 5px 0;
-    }
-
-    #contenido_CTA {
-        height: auto;
-        min-height: auto;
-        padding: 20px 15px;
-    }
-
-    #CTA h1 {
-        font-size: 20px;
-        line-height: 1.3;
-    }
-
-    #CTA_parrafo {
-        font-size: 14px;
-    }
-
-    .caracteristicas {
-        flex-direction: column;
-        width: 100%;
-        padding: 15px;
-    }
-
-    .tarjeta {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        padding: 15px;
-        margin: 10px 0;
-    }
-
-    .tarjeta img {
-        margin: 0 0 10px 0;
-    }
-
-    .tarjeta h3,
-    .tarjeta p {
-        margin: 5px 0;
-        text-align: center;
-    }
-
-    .Seccion_Beneficios h2,
-    .Seccion_Beneficios p {
-        margin-left: 20px;
-        text-align: center;
-    }
-
-    .Seccion_Beneficios p {
-        font-size: 16px;
-    }
-
-    #cardsBeneficios {
-        padding: 15px;
-    }
-
-    #card_consumidores,
-    #card_emprendedores {
-        padding: 15px;
-    }
-
-    #card_consumidores h3,
-    #card_emprendedores h3 {
-        margin-left: 20px;
-        font-size: 18px;
-    }
-
-    #card_consumidores li,
-    #card_emprendedores li {
-        margin: 10px 0;
-        line-height: 1.4;
-        font-size: 14px;
-    }
-
-    .Seccion_Comofunciona .contenedor_flujos {
-        flex-direction: column;
-        gap: 30px;
-        padding: 15px;
-    }
-
-    .flujo_consumidor h2,
-    .flujo_emprendedor h2 {
-        font-size: 18px;
-        margin-left: 0;
-    }
-
-    .Seccion_Comofunciona h2,
-    .Seccion_Comofunciona p {
-        margin-left: 20px;
-    }
-
-    .Closing_CTA {
-        padding: 30px 20px;
-        text-align: center;
-        height: auto;
-        max-height: none;
-    }
-
-    .Closing_CTA h1 {
-        font-size: 24px;
-    }
-
-    .Closing_CTA p {
-        font-size: 14px;
-        margin: 15px 0;
-    }
-
-    footer {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-        padding: 20px;
-        text-align: center;
-        font-size: 14px;
-    }
+.carrito-de-compra .checkout-paso-wrapper {
+  width: 560px;
+  height: 13px;
+  display: flex;
 }
 
-@media screen and (max-width: 480px) {
-     #CTA h1 {
-        font-size: 18px;
-    }
-
-    #CTA h1 br {
-        display: none; /* Elimina los saltos de línea en móviles */
-    }
-
-    .btnLanding {
-        font-size: 13px;
-        padding: 8px 15px;
-    }
-
-    #btnIniciarSesion,
-    #btnCuenta {
-        font-size: 14px;
-        padding: 8px 12px;
-    }
-
-    .Seccion_Beneficios h2 {
-        font-size: 24px;
-    }
-
-    .flujo_consumidor ol,
-    .flujo_emprendedor ol {
-        padding-left: 20px;
-    }
+.carrito-de-compra .checkout-paso {
+  display: flex;
+  align-items: center;
+  margin-top: -2px;
+  width: 292px;
+  height: 17px;
+  font-family: "Poppins-Bold", Helvetica;
+  font-weight: 700;
+  color: #999999;
+  font-size: 11px;
+  letter-spacing: 1.32px;
+  line-height: normal;
 }
 
+.carrito-de-compra .step-bar {
+  width: 560px;
+  display: flex;
+  gap: 8px;
+}
+
+.carrito-de-compra .background {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  background-color: #ff8a00;
+  border-radius: 14px;
+}
+
+.carrito-de-compra .text-wrapper {
+  margin-top: 5.5px;
+  width: 5px;
+  height: 17px;
+  margin-left: 11.5px;
+  font-family: "DM Sans-Bold", Helvetica;
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.carrito-de-compra .div-wrapper {
+  margin-top: 5.5px;
+  width: 123px;
+  display: flex;
+}
+
+.carrito-de-compra .div {
+  display: flex;
+  align-items: center;
+  width: 123px;
+  height: 17px;
+  font-family: "DM Sans-SemiBold", Helvetica;
+  font-weight: 600;
+  color: #0f0f0f;
+  font-size: 13px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.carrito-de-compra .horizontal-divider {
+  margin-top: 13px;
+  width: 40px;
+  height: 2px;
+  background-color: #00000014;
+  border-radius: 99px;
+}
+
+.carrito-de-compra .background-2 {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  background-color: #f0eee9;
+  border-radius: 14px;
+}
+
+.carrito-de-compra .text-wrapper-2 {
+  margin-top: 5.5px;
+  width: 8px;
+  height: 17px;
+  margin-left: 10px;
+  font-family: "DM Sans-Bold", Helvetica;
+  font-weight: 700;
+  color: #999999;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.carrito-de-compra .container-2 {
+  margin-top: 5.5px;
+  width: 30px;
+  display: flex;
+}
+
+.carrito-de-compra .text-wrapper-3 {
+  display: flex;
+  align-items: center;
+  width: 30px;
+  height: 17px;
+  font-family: "DM Sans-Regular", Helvetica;
+  font-weight: 400;
+  color: #999999;
+  font-size: 13px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.carrito-de-compra .container-3 {
+  display: grid;
+  width: 560px;
+  height: 487px;
+  position: relative;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  grid-template-rows: 471px;
+  gap: 20px;
+  padding: 16px 0px 0px;
+}
+
+.carrito-de-compra .form-card {
+  position: relative;
+  grid-row: 1 / 2;
+  grid-column: 1 / 2;
+  align-self: start;
+  width: 100%;
+  height: 471px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #00000014;
+  box-shadow: 0px 4px 16px #00000014;
+}
 /*Page/Pedido/LieserlAyala*/
 
 /*cuenta-1*/
@@ -1263,6 +1325,61 @@ button {
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
+/*Pagina Mis platos - Martin Robles*/
+    #btn_Dashboard{
+    color:#FAFAFA;
+    background-color:#4CAF50;
+    font-family: sans-serif;
+    border-radius: 99px;
+    font-size: 18.4px;
+    border-style:hidden;
+    padding:7.8px 14px 7.8px 14px;
+    }
+    img[alt="logo_consumidor"]{
+        max-width:179.31;
+        width:100%;
+    }
+    #btn_Dashboard:hover{
+        background-color: #FF8A00;
+        cursor:pointer;
+    }
+    .cabecera_plataforma img{
+        margin-left:24px;
+        max-width:179.31px;
+        width:100%;
+        height:33px;
+    }
+    .cabecera_plataforma{
+        max-width:1441px;
+        height:64px;
+        display:flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .usuario_bloque {
+        display: flex;
+        flex-direction: row;
+        gap:24px;
+        align-items: center;
+    }
+    .btn {
+        color:#5A6A77;
+        font-size:13px;
+        max-width:194.27px;
+        height:42px;
+        gap:10px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        padding: 0 12px;
+        box-sizing: border-box;
+    }
+    .btn img {
+        /* Elimina el margin: auto */
+        padding-left: 12px;
+    }
 .navbar-left {
     display: flex;
     align-items: center;
@@ -3026,6 +3143,17 @@ body{
     display: inline-block;
 }
 
+.datos_plato button{
+    background-color: #DC2626;
+    color:#FAFAFA;
+    border-radius: 99px;
+    font-size:13px;
+    max-height:34px;
+    max-width:132px;
+    margin:0px 133px 43px 133px;
+    padding: 9px 43px 9px 45px;
+    border:none;
+    cursor:pointer;
 .hero-logo-circle {
     width: 80px;
     height: 80px;
@@ -3343,6 +3471,191 @@ body{
         width: 70px;
         height: 70px;
     }
+}
+/*Pagina de estadisticas-Martin Robles*/
+#Titulo_Estadistica{
+    font-size:20px;
+    color:#1C2B39;
+    margin-left:28px;
+}
+#Ventas_hoy{
+    width:280.5px;
+    height:119px;
+    color:#9AAAB8;
+    background-color: #FAFAFA;
+    padding:18px 18px 18px 18px; 
+    border-radius: 18px;
+    margin:20px 14px 16px 28px;
+}
+#Pedidos_hoy{
+    width:280.5px;
+    height:119px;
+    color:#9AAAB8;
+    background-color: #FAFAFA;
+    padding:18px 18px 18px 18px; 
+    border-radius: 18px;
+    margin:20px 14px 16px 14px;
+}
+#Ticket_promedio{
+    width:280.5px;
+    height:119px;
+    color:#9AAAB8;
+    background-color: #FAFAFA;
+    padding:18px 18px 18px 18px; 
+    border-radius: 18px;
+    margin:20px 294.5px 16px 14px;
+}
+
+
+.cards_estadisticos{
+    display:flex;
+    justify-content:space-around;
+}
+.card_ventasMensuales{
+    display:flex;
+    justify-content:space-around;
+    flex-direction: row;
+    width:1164px;
+    height:227px;
+}
+.card_ventasDiarias{
+    display:flex;
+    justify-content:space-around;
+    flex-direction: row;
+    width:1164px;
+    height:227px;
+}
+.card_ventasMensuales #card1{
+    max-width:573px;
+    width:100%;
+    max-height:224px;
+    width:100%;
+    background-color: #FAFAFA;
+    margin-top:24px;
+    border-radius:18px;
+}
+.card_ventasMensuales #card2{
+    max-width:573px;
+    width:100%;
+    max-height:224px;
+    width:100%;
+    background-color: #FAFAFA;
+    margin-top:24px;
+    margin-left:18px;
+    border-radius:18px;
+}
+.card_ventasDiarias #card1{
+    max-width:573px;
+    width:100%;
+    max-height:224px;
+    width:100%;
+    background-color: #FAFAFA;
+    margin-top:20px;
+    border-radius:18px;
+}
+.card_ventasDiarias #card2{
+    max-width:573px;
+    width:100%;
+    max-height:224px;
+    width:100%;
+    background-color: #FAFAFA;
+    margin-top:20px;
+    margin-left:18px;
+    border-radius:18px;
+}
+.card_ventasMensuales #card1 h6{
+    margin:18px 18px 14px 18px;
+    font-size: 14px;
+}
+.card_ventasMensuales #card2 h6{
+    margin:18px 18px 14px 18px;
+    font-size: 14px;
+}
+.card_ventasDiarias #card1,
+.card_ventasMensuales #card1 {
+    padding: 18px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+.card_ventasDiarias #card2 h6{
+    margin:18px 18px 14px 18px;
+    font-size: 14px;
+}
+.grafico-barras {
+     width: 100%;
+    height: 120px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 18px;
+    overflow: visible;
+}
+
+.barra-contenedor {
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.barra {
+    width: 28px;
+    background-color: #9BD3A5;
+    border-radius: 6px 6px 0 0;
+    flex-shrink: 0;
+}
+
+.label-barra {
+    font-size: 10px;
+    color: #9AAAB8;
+}
+
+.item-plato {
+    margin-bottom: 12px;
+}
+
+.info-plato {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #1C2B39;
+    margin-bottom: 5px;
+}
+
+.linea-fondo {
+    width: 100%;
+    height: 6px;
+    background-color: #EEEEEE;
+    border-radius: 20px;
+}
+
+.linea-verde {
+    height: 6px;
+    background-color: #4CAF50;
+    border-radius: 20px;
+}
+
+#valorVentasHoy,
+#valorPedidosHoy,
+#valorTicketPromedio {
+    color: #1C2B39;
+    margin-top: 10px;
+    font-size: 24px;
+}
+
+#variacionVentas,
+#variacionPedidos,
+#variacionTicket {
+    color: #4CAF50;
+    font-size: 12px;
+    margin-top: 8px;
+}
+
 
 /*==========================================================================================*/
 /* PETER - CONFIGURACION */
