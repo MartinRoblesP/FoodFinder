@@ -2243,7 +2243,7 @@ button {
         flex-direction:row;
         justify-content: space-between;
     }
-    main{
+    .Contenido_Misplatos{
         max-width: 1221px;
         width: 100%;
         min-height: 960px;
@@ -2254,7 +2254,7 @@ button {
         flex-direction: column; /* Cambiado a column para que la tabla vaya abajo */
         gap: 24px;  
     }
-    main h1{
+    .Contenido_Misplatos h1{
         margin:0;
         color:#1C2B39;
         font-family: sans-serif;
@@ -2551,7 +2551,7 @@ body{
         padding-left: 4px;
     }
 
-    main {
+    .Contenido_Misplatos {
         max-width: 100%;
         width: 100%;
         min-height: auto;
@@ -2637,7 +2637,7 @@ body{
         flex-direction: column;
     }
 
-    main {
+    .Contenido_Misplatos {
         padding: 12px;
     }
 
