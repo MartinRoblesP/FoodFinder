@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const contenedorPlatos = document.getElementById("contenedor-platos");
 
     const btnSubmitPlato = document.querySelector('.datos_plato button[type="submit"]');
-    const btnCancelar = document.querySelector('.datos_plato button[type="cancelar"]');
+    const btnCancelar = document.querySelector('.datos_plato button[type="button"]');
 
     const inputNombre = document.getElementById("nombre");
     const inputPrecio = document.getElementById("Precio");
@@ -38,14 +38,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         platos.forEach(function (plato) {
             const nuevaFila = document.createElement("tr");
-            nuevaFila.dataset.descripcion = plato.descripcion;
+            nuevaFila.dataset.descripcion = plato.descripcion || "";
 
             nuevaFila.innerHTML = `
                 <td>${plato.nombre}</td>
                 <td>S/ ${plato.precio}</td>
                 <td>${plato.stock}</td>
                 <td></td>
-                <td>${plato.pedidos}</td>
+                <td>${plato.pedidos || 0}</td>
                 <td>
                     <div class="acciones-celda">
                         <button class="btn-editar">✏️ Editar</button>
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 </td>
             `;
 
-            actualizarEstado(nuevaFila.children[3], parseInt(plato.stock));
+            actualizarEstado(nuevaFila.children[3], parseInt(plato.stock) || 0);
             contenedorPlatos.appendChild(nuevaFila);
         });
     }
@@ -162,11 +162,9 @@ document.addEventListener("DOMContentLoaded", function () {
             formularioValido = false;
         }
 
-        if (filaEditando === null) {
-            if (inputFoto.files.length === 0) {
-                plusIcon.classList.add("campo-error");
-                formularioValido = false;
-            }
+        if (filaEditando === null && inputFoto.files.length === 0) {
+            plusIcon.classList.add("campo-error");
+            formularioValido = false;
         }
 
         if (inputFoto.files.length > 0) {
@@ -184,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        const stockNumero = parseInt(stock);
+        const stockNumero = parseInt(stock) || 0;
 
         if (filaEditando !== null) {
             const celdas = filaEditando.children;
@@ -222,9 +220,7 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
 
         actualizarEstado(nuevaFila.children[3], stockNumero);
-
         contenedorPlatos.appendChild(nuevaFila);
-
         guardarLocalStorage();
 
         fondoCard.style.display = "none";

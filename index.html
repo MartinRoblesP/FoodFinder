@@ -7,172 +7,193 @@
     <link rel="stylesheet" href="/styles.css">
     <title>Document</title>
 </head>
-<body>
-    <header id="encabezado">
-        <img id="logo" src="/Assests/Icons/LogoPrincipal.svg" alt="logo de la pagina" width=181px height=62px>
-        <nav>
-            <button class="btnLanding">Inicio</button>
-            <button class="btnLanding">Como funciona</button>
-            <button class="btnLanding">Sobre nosotros</button>
-            <button class="btnLanding">FAQ</button>
-            <button id="btnIniciarSesion">Iniciar Sesión</button>
-            <button id="btnCuenta">Crear Cuenta</button>
-        </nav>
-    </header>
+    <body>
 
-    <main>
-        <section id="contenido_CTA">
-        <section>
+        <header class="navbar_LANDING">
+            <div>
+                <img src="/Assests/Icons/FF_Logo_Consu.png">
+            </div>
+            <div class="navbar_botones">
+            <button id="btnInicio">Inicio</button>
+            <button id="btnCfunciona">Como funciona</button>
+            <button id="btnSNosotros">Sobre nosotros</button>
+            <button id="btnFAQ">FAQ</button>
+            <button id="btnISesion">Iniciar Sesión</button>
+            <button id="btnCCrear">Crear Cuenta</button>
+            </div>
+        </header>
+
+
+        <section class="ElProducto">
             <div id="CTA">
-                <h1>Descubre los mejores <br><span>sabores locales</span> cerca <br>de ti</h1>
-                <p id="CTA_parrafo">Conectemos a emprendedores gastronómicos con <br>consumidores que buscan comida casera, rapido y a <br>buen precio</p>
+                <h1>
+                    Descubre los mejores <br><span> sabores locales</span> cerca de ti
+                </h1>
+                <p>
+                    Conectamos a emprendedores gastronómicos con<br>consumidores que buscan comida casera, rápida y a<br>buen precio.
+                </p>
+            </div>
+            <div class="CTA_CARDS">
+                <div class="cartaCTA1">
+                    <img src="/Assests/Icons/Icono restaurantes.png">
+                    <div>
+                        <h5>Restaurantes</h5>
+                        <p>Filtra por distrito  y calificación</p>
+                    </div>
+                </div>
+                <div class="cartaCTA2">
+                    <img src="/Assests/Icons/Seguimiento en tiempo real.png">
+                    <div>
+                        <h5>Seguridad de pago</h5>
+                        <p>Billetera digital y multiples pagos</p>
+                    </div>
+                </div>
+                <div class="cartaCTA3">
+                    <img src="/Assests/Icons/Icono seguridad de pago.png">
+                    <div>
+                        <h5>Seguimiento en tiempo real</h5>
+                        <p>Sube exactamente donde esta tu pedido</p>
+                    </div>
+                </div>
             </div>
         </section>
-        <section class="caracteristicas">
-                <div class="tarjeta">
-                    <img src="/Assests/Icons/Icono restaurantes.png" alt="Icono restaurantes" width="52" height="51.53">
-                        <div>
-                            <h3>Restaurantes</h3>
-                            <p>Filtra por distrito y calificación</p>
-                        </div>
-                </div>
 
-                <div class="tarjeta">
-                    <img src="/Assests/Icons/Icono seguridad de pago.png" alt="Icono seguridad"  width="52" height="51.53">
-                        <div>
-                            <h3>Seguridad de pago</h3>
-                            <p>Billetera digital y múltiples pagos</p>
-                        </div>
-                </div>
-
-            
-                <div class="tarjeta">
-                    <img src="/Assests/Icons/Seguimiento en tiempo real.png" alt="Icono seguimiento"  width="52" height="51.53">
-                        <div>
-                            <h3>Seguimiento en tiempo real</h3>
-                            <p>Sabe exactamente dónde está tu pedido</p>
-                        </div>
-                </div>
-        </section>
-        </section>
-
-
-        <section class="Seccion_Beneficios">
-            <div>
-                <h2>Beneficios</h2> <!--colorNaranja sera para indicar que subtitulos son naranja-->
-                <p>Para todos en el ecosistema</p>
-            </div>
-            <div id="cardsBeneficios">
-            <div id="card_consumidores">
-                <div>
+        <section class="BeneficiosProducto">
+            <h1 id="TituloBeneficios">Beneficios</h1>
+            <p>Para todos en el ecosistema</p>
+            <div class="TarjetaB">
+                <div id="tarjeta_Bconsumidores">
                     <h3>Para consumidores</h3>
-                        <ul>
-                            <li>Buscan por plato, distrito o precio</li>
-                            <li>Ve promociones y descuentos en tiempo real</li>
-                            <li>Historial y reseñas de tus pedidos</li>
-                            <li>Pago seguro con billetera digital</li>
-                        </ul>
+                    <!-- Corregido a listas semánticas -->
+                    <ul>
+                        <li>Busca por plato, distrito o precio</li>
+                        <li>Ve promociones y descuentos en tiempo real</li>
+                        <li>Historial y reseñas de tus pedidos</li>
+                        <li>Pago seguro con billetera digital</li>
+                    </ul>
                 </div>
-            </div>
-            <div id="card_emprendedores">
-                <div>
+                <div id="tarjeta_Bemprendedores">
                     <h3>Para emprendedores</h3>
-                        <ul>
-                            <li>Crea y gestiona tu carta digital</li>
-                            <li>Administra inventario y stock</li>
-                            <li>Ve estadisticas de ventas e ingresos</li>
-                            <li>Gestiona pedidos y horarios</li>
-                        </ul>
+                    <ul>
+                        <li>Crea y gestiona tu carta digital</li>
+                        <li>Administra inventario y stock</li>
+                        <li>Ve estadísticas de ventas e ingresos</li>
+                        <li>Gestiona pedidos y horarios</li>
+                    </ul>
                 </div>
-            </div>
             </div>
         </section>
 
-        <section class="Seccion_Comofunciona">
-            <div>
-                <h2>Como funciona</h2>
-                <p>Dos flujos, un solo marketplace</p>
-            </div>
-            <div class="contenedor_flujos"> 
-            <div class="flujo_consumidor">
-                <h2>Flujo consumidor</h2>
-                    <ol>
-                        <li>
-                             <div>
-                                <h3>Registrate</h3>
-                                <p>Crea tu cuenta como consumidro</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div>
-                                <h3>Busca y filtra</h3>
-                                <p>Por plato, precio, distrito o promoción</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div>
-                                <h3>Agrega al carrito</h3>
-                                <p>Selecciona tus platos favoritos</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div>
-                                <h3>Paga y sigue tu pedido</h3>
-                                <p>Seguimiento en tiempo real</p>
-                            </div>
-                        </li>
-                    </ol>
-            </div>
+
+            <section class="FlujoOperaciones_producto">
+                <h2 class="TituloFunciones">Como funciona</h2>
+                <p id="Reforzar_tituloF">Dos flujos, un solo marketplace</p>
+    
+                <div class="TarjetaF">
+                    <div id="funciones_consumidores">
+                        <h3>👤 Flujo consumidor</h3>
             
-            
-        
-            <div class="flujo_emprendedor">
-                <h2>Flujo emprendedor</h2>
-                    <ol>
+                        <ol class="lista-pasos">
+                            <li>
+                                <span class="numero-circulo">1</span>
+                                <div class="contenido-paso">
+                                    <h3>Regístrate</h3>
+                                    <p>Crea tu cuenta como consumidor</p>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="numero-circulo">2</span>
+                                <div class="contenido-paso">
+                                    <h3>Busca y filtra</h3>
+                                    <p>Por plato, precio, distrito o promoción</p>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="numero-circulo">3</span>
+                                <div class="contenido-paso">
+                                    <h3>Agrega al carrito</h3>
+                                    <p>Selecciona tus platos favoritos</p>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="numero-circulo">4</span>
+                                <div class="contenido-paso">
+                                    <h3>Paga y sigue tu pedido</h3>
+                                    <p>Seguimiento en tiempo real</p>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                
+
+
+                <div id="funciones_emprendedores">
+                    <h3>🏪 Flujo emprendedor</h3>
+                    <ol class="lista-pasos pasos-verde">
                         <li>
-                            <div>
+                            <span class="numero-circulo">1</span>
+                            <div class="contenido-paso">
                                 <h3>Registra tu negocio</h3>
                                 <p>Crea tu cuenta como emprendedor</p>
                             </div>
                         </li>
                         <li>
-                            <div>
+                            <span class="numero-circulo">2</span>
+                            <div class="contenido-paso">
                                 <h3>Sube tu carta digital</h3>
-                                <p>platos, precios y promociones</p>
+                                <p>Platos, precios y promociones</p>
                             </div>
                         </li>
                         <li>
-                            <div>
+                            <span class="numero-circulo">3</span>
+                            <div class="contenido-paso">
                                 <h3>Recibe pedidos</h3>
-                                <p>Gestiona y comfirma desde el dashboard</p>
+                                <p>Gestiona y confirma desde el dashboard</p>
                             </div>
                         </li>
                         <li>
-                            <div>
-                                <h3>Revisa tus estadisticas</h3>
-                                <p>ventas, ingresos y platos mas pedidos</p>
+                            <span class="numero-circulo">4</span>
+                            <div class="contenido-paso">
+                                <h3>Revisa tus estadísticas</h3>
+                                <p>Ventas, ingresos y platos más pedidos</p>
                             </div>
                         </li>
                     </ol>
-            </div>
-            </div>
-        </section>
-        <section>
-            <h2 class="Seccion_testimonio">Testimonios</h2>
-        </section>
-    </main>
+                </div>
+                </div>
+            </section>
 
-    <section class="Closing_CTA">
-        <h1>¿Listo para empezar?</h1>
-        <p>Únete a FoodFinder hoy y descubre una nueva forma de comer (o vender).</p>
-        <button>Crear Cuenta</button>
-    </section>
-    <footer>
-        <p>@2026 FoodFinder</p>
-        <p>status</p>
-        <p>seguridad</p>
-        <p>terminos</p>
-        <p>Preferencia de cookies</p>
-    </footer>
-</body>
+
+        <section class="Seccion_Testimonios">
+            <h2 class="TituloTestimonios">Testimonios</h2>
+            <div id="grupo_testimonios">
+                <div id="testimonioOne">
+                    <p>★★★★★</p>
+                    <p>“Encontre comida a buen precio, recomendado Luisa C.- Consumidora”</p>
+                </div>
+                <div id="testimonioDos">
+                    <p>★★★★★</p>
+                    <p>““Mi negocio tiene mayor demanda de clientes gracias FoodFinder” Amancio G.”</p>
+                </div>
+                <div id="testimonioTres">
+                    <p>★★★★★</p>
+                    <p>“““"El seguimiento en tiempo real es genial. Sé exactamente cuándo llega." Angel D.”</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="Closer_CTA">
+            <h2>¿Listo para empezar?</h2>
+            <p>Únete a FoodFinder hoy y descubre una nueva forma de comer (o vender).</p>
+            <button>Crear Cuenta</button>
+        </section>
+        
+        <footer id="pie_Landing">
+            <p>@ 2026 FoodFinder</p>
+            <p>Seguridad</p>
+            <p>Terminos</p>
+            <p>Preferencias de cookies</p>
+        </footer>
+
+    </body>
 </html>

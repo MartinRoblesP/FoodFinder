@@ -19,7 +19,7 @@
 
     <div id="contenedor-principal">
         <section id="sidebar">
-            <nav>
+            <nav id="navPlatos">
             <h5>PANEL DE GESTIÓN</h5>
                 <div class="btn">
                     <img src="/Assests/Icons/home.png" width="29.98" height="19">            
@@ -71,33 +71,41 @@
             </div>
 
             <div class="fondo_card">
-             <div class="card_NewDish">
-                <div id="Crear_plato">
-                <h1>Añada su plato</h1>
-                <input type="file" id="foto-plato" accept="image/*" class="visually-hidden">
-                <label for="foto-plato" class="upload-label">
-                    <div id="plus-icon">
-                        <span>+</span>
+                <div class="card_NewDish">
+                    <div id="Crear_plato">
+                        <h1>Añada su plato</h1>
+                        <input type="file" id="foto-plato" accept="image/*" class="visually-hidden">
+                        <label for="foto-plato" class="upload-label">
+                            <div id="plus-icon">
+                                <span>+</span>
+                            </div>
+                        </label>
                     </div>
-                </label>
+
+                    <span class="label-text">Ingrese foto del plato</span>
+
+                    <div class="datos_plato">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre" name="nombre" required>
+
+                        <label for="Precio">Precio:</label>
+                        <input type="number" id="Precio" name="precio" required>
+
+                        <label for="Stock">Stock:</label>
+                        <input type="number" id="Stock" name="stock" required>
+
+                        <label for="Descripcion">Descripción:</label>
+                        <input type="text" id="Descripcion" name="descripcion" required>
+
+                        <button type="submit">Añadir</button>
+                        <button type="button">Cancelar</button>
+                    </div>
+                </div>
             </div>
-            <span class="label-text">Ingrese foto del plato</span>
-            <div class="datos_plato">
-                <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" placeholder="" required>
-                <label for="Precio">Precio:</label>
-                <input type="number" id="Precio" name="precio"  placeholder="" required>
-                <label for="Stock">Stock:</label>
-                <input type="number" id="Stock" name="stock"  placeholder="" required>
-                <label for="Descripcion">Descripción:</label>
-                <input type="text" id="Descripcion" name="descripcion" required>
-                <button type="submit">Añadir</button>
-                <button type="cancelar">Cancelar</button>
-            </div>
-        </div> 
     </main>
+    </div>
 <!--Aqui inicia el modal de crear plato-->
     
-    <script src="/features/Administración/js/MisPlatos.js"></script>
+    <script src="/features/Administracion/js/MisPlatos.js"></script>
 </body>
 </html>
