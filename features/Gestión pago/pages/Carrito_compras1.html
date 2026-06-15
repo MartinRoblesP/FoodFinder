@@ -7,289 +7,144 @@
     <link rel="stylesheet" href="../../../styles.css">
 </head>
 <body>
-        <!-- Navbar -->
+            <!-- Navbar -->
     <header class="navbar">
         <div class="navbar-left">
             <img src="../../../Assests/icons/FF_Logo_Consu.png" alt="FoodFinder Logo" class="logo-completo-consumidor">
         </div>
-        
         <div class="navbar-center">
             <input type="text" placeholder="Buscar restaurantes, platos…" class="search-bar">
         </div>
-        
         <div class="navbar-right">
             <button class="btn-active-orders">Pedidos Activos</button>
             <div class="nav-icons">
-                <img src="../../../Assests/Icons/carrito.png" alt="Carrito de compras" class ="icon">
-                <img src="../../../Assests/Icons/perfil.png" alt="Perfil" class ="icon">
+                <img src="../../../Assests/Icons/carrito.png" alt="Carrito de compras" class="icon">
+                <img src="../../../Assests/Icons/perfil.png" alt="Perfil" class="icon">
             </div>
         </div>
     </header>
-    <div class="carrito-de-compra">
-        <div class="container">
-            <div class="checkout-paso-wrapper">
-                <p class="checkout-paso">CHECKOUT — PASO 1: DIRECCIÓN Y ENTREGA</p>
+
+    <main class="main-container">
+        <p class="breadcrumb">CHECKOUT <span class="separator">—</span> PASO 1: DIRECCIÓN Y ENTREGA</p>
+
+        <div class="step-bar">
+            <div class="step-item active">
+                <div class="step-number">1</div>
+                <span class="step-label">Dirección y entrega</span>
             </div>
-            <div class="step-bar">
-                <div class="background">
-                    <div class="text-wrapper">1</div>
-                </div>
-                <div class="div-wrapper">
-                    <div class="div">Dirección y entrega</div>
-                </div>
-                <div class="horizontal-divider"></div>
-                <div class="background-2">
-                    <div class="text-wrapper-2">2</div>
-                </div>
-                <div class="container-2">
-                    <div class="text-wrapper-3">Pago</div>
-                </div>
-            </div>
-            <div class="container-3">
-                <div class="form-card">
-                    <div class="direcci-n-de-entrega-wrapper">
-                        <div class="direcci-n-de-entrega">📍 Dirección de<br/>entrega</div>
-                    </div>
-                    <div class="container-4">
-                        <div class="label">
-                            <div class="text-wrapper-4">Dirección</div>
-                        </div>
-                        <div class="input">
-                            <div class="container-5">
-                                <div class="text-wrapper-5">Av. Javier Prado 1234</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="container-6">
-                        <div class="margin">
-                            <div class="container-7">
-                                <div class="label-2">
-                                    <div class="text-wrapper-6">Distrito</div>
-                                </div>
-                                <div class="container-wrapper">
-                                    <div class="container-8">
-                                        <div class="text-wrapper-7">San Isidro</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="margin-2">
-                            <div class="container-7">
-                                <div class="label-2">
-                                    <div class="text-wrapper-8">Referencia</div>
-                                </div>
-                                <div class="container-wrapper">
-                                    <div class="container-9">
-                                        <div class="text-wrapper-9">Piso 3, Dpto 302</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="container-10">
-                        <div class="instrucciones-al-wrapper">
-                            <div class="instrucciones-al">Instrucciones al<br/>repartidor</div>
-                        </div>
-                        <div class="textarea">
-                            <div class="instrucciones-wrapper">
-                                <div class="instrucciones">Instrucciones <br/>especiales...</div>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="button">
-                        <div class="text-wrapper-10">Continuar →</div>
-                    </button>
-                </div>
-                <div class="resumen-pedido">
-                    <div class="background-border">
-                        <div class="container-11">
-                            <div class="text-wrapper-11">Tu pedido</div>
-                        </div>
-                        <div class="container-12">
-                            <div class="container-13">
-                                <div class="text-wrapper-12">1x Ceviche Clásico</div>
-                            </div>
-                            <div class="container-14">
-                                <div class="text-wrapper-13">S/ 28.00</div>
-                            </div>
-                        </div>
-                        <div class="container-15">
-                            <div class="container-16">
-                                <div class="text-wrapper-14">2x Salmon Roll Premium</div>
-                            </div>
-                            <div class="container-17">
-                                <div class="text-wrapper-15">S/ 90.00</div>
-                            </div>
-                        </div>
-                        <div class="container-18">
-                            <div class="container-19">
-                                <div class="text-wrapper-16">1x Smash Burger Doble</div>
-                            </div>
-                            <div class="container-20">
-                                <div class="text-wrapper-13">S/ 38.00</div>
-                            </div>
-                        </div>
-                        <div class="horizontal-divider-2"></div>
-                        <div class="container-21">
-                            <div class="container-22">
-                                <div class="text-wrapper-17">Subtotal</div>
-                            </div>
-                            <div class="container-23">
-                                <div class="text-wrapper-18">S/ 156.00</div>
-                            </div>
-                        </div>
-                        <div class="container-24">
-                            <div class="container-25">
-                                <div class="text-wrapper-19">Delivery</div>
-                            </div>
-                            <div class="container-26">
-                                <div class="text-wrapper-20">S/ 3.50</div>
-                            </div>
-                        </div>
-                        <div class="container-27">
-                            <div class="container-28">
-                                <div class="text-wrapper-21">Total</div>
-                            </div>
-                            <div class="container-29">
-                                <div class="text-wrapper-22">S/ 159.50</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="background-border-2">
-                        <div class="SVG">
-                            <img class="vector" src="img/vector.svg" />
-                            <img class="img" src="img/vector-4.svg" />
-                        </div>
-                        <div class="text-wrapper-23">Tiempo estimado:</div>
-                        <div class="strong">
-                            <div class="text-wrapper-24">25-35 min</div>
-                        </div>
-                    </div>
-                </div>
+            <div class="step-divider"></div>
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <span class="step-label">Pago</span>
             </div>
         </div>
-        <div class="container-30">
-            <div class="carrito-de-compras-wrapper">
-                <div class="carrito-de-compras">CARRITO DE COMPRAS</div>
-            </div>
-            <div class="background-border-3">
-                <div class="header">
-                    <div class="container-31">
-                        <div class="text-wrapper-25">🛒 Tu pedido</div>
+
+        <div class="content-grid">
+            <section class="payment-section">
+                <h2 class="section-title">📍 Dirección de entrega</h2>
+
+                <div class="card-fields">
+                    <div class="form-group">
+                        <label>Dirección</label>
+                        <input type="text" value="Av. Javier Prado 1234">
                     </div>
-                    <div class="SVG-wrapper">
-                        <div class="SVG-2">
-                            <img class="vector-2" src="img/vector-3.svg" />
-                            <img class="vector-2" src="img/vector-2.svg" />
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Distrito</label>
+                            <input type="text" value="San Isidro">
                         </div>
-                    </div>
-                </div>
-                <div class="items">
-                    <div class="item">
-                        <div class="background-3">
-                            <div class="ceviche"></div>
-                        </div>
-                        <div class="container-32">
-                            <div class="container-33">
-                                <div class="text-wrapper-26">Ceviche Clásico</div>
-                            </div>
-                            <div class="container-34">
-                                <div class="text-wrapper-27">S/ 28.00</div>
-                            </div>
-                            <div class="container-35">
-                                <button class="button-2">
-                                    <div class="text-wrapper-28">−</div>
-                                </button>
-                                <div class="container-36">
-                                    <div class="text-wrapper-29">1</div>
-                                </div>
-                                <button class="button-2">
-                                    <div class="text-wrapper-28">+</div>
-                                </button>
-                                <img class="button-margin" src="img/button-margin.svg" />
-                            </div>
+                        <div class="form-group">
+                            <label>Referencia</label>
+                            <input type="text" value="Piso 3, Dpto 302">
                         </div>
                     </div>
-                    <div class="item-2">
-                        <div class="background-4"></div>
-                        <div class="container-32">
-                            <div class="container-34">
-                                <div class="text-wrapper-30">Salmon Roll Premium</div>
-                            </div>
-                            <div class="container-34">
-                                <div class="text-wrapper-31">S/ 90.00</div>
-                            </div>
-                            <div class="container-35">
-                                <button class="button-2">
-                                    <div class="text-wrapper-28">−</div>
-                                </button>
-                                <div class="container-37">
-                                    <div class="text-wrapper-32">2</div>
-                                </div>
-                                <button class="button-2">
-                                    <div class="text-wrapper-28">+</div>
-                                </button>
-                                <img class="button-margin" src="img/image.svg" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item-3">
-                        <div class="background-3">
-                            <div class="burger"></div>
-                        </div>
-                        <div class="container-32">
-                            <div class="container-33">
-                                <div class="text-wrapper-33">Smash Burger Doble</div>
-                            </div>
-                            <div class="container-34">
-                                <div class="text-wrapper-27">S/ 38.00</div>
-                            </div>
-                            <div class="container-35">
-                                <button class="button-2">
-                                    <div class="text-wrapper-28">−</div>
-                                </button>
-                                <div class="container-36">
-                                    <div class="text-wrapper-29">1</div>
-                                </div>
-                                <button class="button-2">
-                                    <div class="text-wrapper-28">+</div>
-                                </button>
-                                <img class="button-margin" src="img/button-margin-2.svg" />
-                            </div>
-                        </div>
+
+                    <div class="form-group">
+                        <label>Instrucciones al repartidor</label>
+                        <textarea class="form-textarea" placeholder="Instrucciones especiales..." rows="3"></textarea>
                     </div>
                 </div>
-                <div class="footer-totales">
-                    <div class="container-38">
-                        <div class="container-39">
-                            <div class="text-wrapper-34">Subtotal</div>
-                        </div>
-                        <div class="container-40">
-                            <div class="text-wrapper-35">S/ 156.00</div>
-                        </div>
-                    </div>
-                    <div class="container-41">
-                        <div class="container-42">
-                            <div class="text-wrapper-36">Delivery</div>
-                        </div>
-                        <div class="container-43">
-                            <div class="text-wrapper-37">S/ 3.50</div>
-                        </div>
-                    </div>
-                    <div class="container-44">
-                        <div class="container-45">
-                            <div class="text-wrapper-38">Total</div>
-                        </div>
-                        <div class="container-46">
-                            <div class="text-wrapper-39">S/ 159.50</div>
-                        </div>
-                    </div>
-                    <button class="button-3">
-                        <div class="text-wrapper-40">Ir al checkout →</div>
-                    </button>
+
+                <div class="actions" style="margin-top: 24px; justify-content: flex-start;">
+                    <button class="btn-primary" style="max-width: 200px;">Continuar →</button>
                 </div>
-            </div>
+            </section>
+
+            <aside class="order-summary">
+                <div class="summary-card">
+                    <h3>🛒 Tu pedido</h3>
+                    
+                    <div class="cart-items">
+                        <div class="cart-item">
+                            <div class="item-img" style="background-image: url('img/ceviche.png');"></div>
+                            <div class="item-details">
+                                <h4>Ceviche Clásico</h4>
+                                <span class="price">S/ 28.00</span>
+                                <div class="quantity-control">
+                                    <button class="btn-qty">−</button>
+                                    <span class="qty-number">1</span>
+                                    <button class="btn-qty">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="cart-item">
+                            <div class="item-img" style="background-color: #F0EEE9;"></div>
+                            <div class="item-details">
+                                <h4>Salmon Roll Premium</h4>
+                                <span class="price">S/ 90.00</span>
+                                <div class="quantity-control">
+                                    <button class="btn-qty">−</button>
+                                    <span class="qty-number">2</span>
+                                    <button class="btn-qty">+</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="cart-item">
+                            <div class="item-img" style="background-image: url('img/burger.png');"></div>
+                            <div class="item-details">
+                                <h4>Smash Burger Doble</h4>
+                                <span class="price">S/ 38.00</span>
+                                <div class="quantity-control">
+                                    <button class="btn-qty">−</button>
+                                    <span class="qty-number">1</span>
+                                    <button class="btn-qty">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="summary-divider"></div>
+
+                    <div class="summary-totals">
+                        <div class="total-row">
+                            <span>Subtotal</span>
+                            <span>S/ 156.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Delivery</span>
+                            <span>S/ 3.50</span>
+                        </div>
+                        <div class="total-row final">
+                            <span>Total</span>
+                            <span>S/ 159.50</span>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary" style="width: 100%; margin-top: 20px;">Ir al checkout →</button>
+                </div>
+
+                <div class="estimated-time">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8.00016 14.6667C11.6821 14.6667 14.6668 11.6819 14.6668 8C14.6668 4.3181 11.6821 1.33333 8.00016 1.33333C4.31826 1.33333 1.3335 4.3181 1.3335 8C1.3335 11.6819 4.31826 14.6667 8.00016 14.6667Z" stroke="#555555" stroke-width="1.33333" stroke-linecap="round"/>
+                        <path d="M8 4V8L10.6667 9.33333" stroke="#555555" stroke-width="1.33333" stroke-linecap="round"/>
+                    </svg>
+                    <span>Tiempo estimado: <strong>25-35 min</strong></span>
+                </div>
+            </aside>
         </div>
-    </div>
+    </main>
 </body>
 </html>
