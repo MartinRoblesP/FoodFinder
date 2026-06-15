@@ -3102,12 +3102,38 @@ button {
 }
 
 /* ==========================================
-   DETALLES RESTAURANTE
+   DETALLE DE RESTAURANTE
    ========================================== */
 
-/* Hero Banner (Fondo Marrón y tarjeta blanca inferior) */
+/* --- Breadcrumb --- */
+.breadcrumb {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px; 
+    font-size: 13px;
+    color: #9AAAB8;
+    margin-bottom: 12px;
+    font-family: 'DM Sans', sans-serif;
+    text-transform: uppercase; 
+    font-weight: 600;
+    letter-spacing: 1px;
+    flex-wrap: nowrap; 
+    white-space: nowrap; 
+}
+
+.breadcrumb .separator {
+    color: #FF8A00; 
+    margin: 0;
+}
+
+.breadcrumb .current {
+    color: #FF8A00; 
+}
+
+/* --- Hero Banner (Fondo Marrón y tarjeta blanca inferior) --- */
 .restaurant-hero-container {
-    margin-bottom: 16px; /* Antes estaba en 24px */
+    margin-bottom: 16px;
     border-radius: 20px;
     box-shadow: 0px 4px 16px rgba(0,0,0,0.04);
     background: white;
@@ -3115,7 +3141,7 @@ button {
 }
 
 .hero-banner {
-    background-color: #4A3320; /* Color marrón del figma */
+    background-color: #4A3320;
     padding: 40px;
     display: flex;
     justify-content: space-between;
@@ -3145,17 +3171,6 @@ button {
     display: inline-block;
 }
 
-.datos_plato button{
-    background-color: #DC2626;
-    color:#FAFAFA;
-    border-radius: 99px;
-    font-size:13px;
-    max-height:34px;
-    max-width:132px;
-    margin:0px 133px 43px 133px;
-    padding: 9px 43px 9px 45px;
-    border:none;
-    cursor:pointer;
 .hero-logo-circle {
     width: 80px;
     height: 80px;
@@ -3201,11 +3216,11 @@ button {
     background-color: #E4E8ED;
 }
 
-/* Categorías (Píldoras) */
+/* --- Categorías (Píldoras) --- */
 .categories-tabs {
     display: flex;
     gap: 12px;
-    margin-bottom: 16px; /* Antes estaba en 32px */
+    margin-bottom: 16px;
     overflow-x: auto;
 }
 
@@ -3231,7 +3246,7 @@ button {
     border-color: #1C2B39;
 }
 
-/* Tarjetas de Platos (El arreglo a las imágenes a la izquierda) */
+/* --- Tarjetas de Menú --- */
 .menu-category-section {
     margin-bottom: 40px;
 }
@@ -3240,8 +3255,7 @@ button {
     font-family: 'Poppins', sans-serif;
     font-size: 20px;
     color: #1C2B39;
-    /* Cambiamos el primer valor (margin-top) a 0 */
-    margin: 0 0 16px 0; /* Antes era: 32px 0 16px 0 */
+    margin: 0 0 16px 0;
     padding-bottom: 12px;
     border-bottom: 1px solid #E4E8ED;
 }
@@ -3250,13 +3264,6 @@ button {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
     gap: 16px;
-}
-
-/* Sidebar Reseñas e Info */
-.sidebar-column {
-    display: flex;
-    flex-direction: column;
-    gap: 24px; /* Esto crea la separación perfecta entre ambas tarjetas */
 }
 
 .menu-card {
@@ -3274,9 +3281,8 @@ button {
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-/* ⚠️ EL SECRETO PARA QUE LAS ETIQUETAS NO VUELEN ⚠️ */
 .menu-card-img-wrapper {
-    position: relative; /* Atrapa a los hijos "absolute" */
+    position: relative; 
     width: 110px;
     height: 110px;
     flex-shrink: 0;
@@ -3287,10 +3293,9 @@ button {
     height: 100%;
     object-fit: cover;
     border-radius: 12px;
-    background-color: #F0F2F5; /* Color cuadrado por defecto */
+    background-color: #F0F2F5; 
 }
 
-/* Las etiquetas posadas sobre la imagen */
 .badge.top-left {
     position: absolute;
     top: -8px;
@@ -3336,7 +3341,6 @@ button {
     overflow: hidden;
 }
 
-/* Footer de la tarjeta con alineación Flex */
 .menu-card-bottom {
     display: flex;
     justify-content: space-between;
@@ -3398,7 +3402,13 @@ button {
     cursor: not-allowed;
 }
 
-/* Sidebar Reseñas (Arriba) e Info (Abajo) */
+/* --- Sidebar Derecha --- */
+.sidebar-column {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
 .rating-header {
     display: flex;
     align-items: center;
@@ -3469,193 +3479,21 @@ button {
     line-height: 1.4;
 }
 
-    #plus-icon {
-        width: 70px;
-        height: 70px;
-    }
-}
-/*Pagina de estadisticas-Martin Robles*/
-#Titulo_Estadistica{
-    font-size:20px;
-    color:#1C2B39;
-    margin-left:28px;
-}
-#Ventas_hoy{
-    width:280.5px;
-    height:119px;
-    color:#9AAAB8;
-    background-color: #FAFAFA;
-    padding:18px 18px 18px 18px; 
-    border-radius: 18px;
-    margin:20px 14px 16px 28px;
-}
-#Pedidos_hoy{
-    width:280.5px;
-    height:119px;
-    color:#9AAAB8;
-    background-color: #FAFAFA;
-    padding:18px 18px 18px 18px; 
-    border-radius: 18px;
-    margin:20px 14px 16px 14px;
-}
-#Ticket_promedio{
-    width:280.5px;
-    height:119px;
-    color:#9AAAB8;
-    background-color: #FAFAFA;
-    padding:18px 18px 18px 18px; 
-    border-radius: 18px;
-    margin:20px 294.5px 16px 14px;
-}
-
-
-.cards_estadisticos{
-    display:flex;
-    justify-content:space-around;
-}
-.card_ventasMensuales{
-    display:flex;
-    justify-content:space-around;
-    flex-direction: row;
-    width:1164px;
-    height:227px;
-}
-.card_ventasDiarias{
-    display:flex;
-    justify-content:space-around;
-    flex-direction: row;
-    width:1164px;
-    height:227px;
-}
-.card_ventasMensuales #card1{
-    max-width:573px;
-    width:100%;
-    max-height:224px;
-    width:100%;
-    background-color: #FAFAFA;
-    margin-top:24px;
-    border-radius:18px;
-}
-.card_ventasMensuales #card2{
-    max-width:573px;
-    width:100%;
-    max-height:224px;
-    width:100%;
-    background-color: #FAFAFA;
-    margin-top:24px;
-    margin-left:18px;
-    border-radius:18px;
-}
-.card_ventasDiarias #card1{
-    max-width:573px;
-    width:100%;
-    max-height:224px;
-    width:100%;
-    background-color: #FAFAFA;
-    margin-top:20px;
-    border-radius:18px;
-}
-.card_ventasDiarias #card2{
-    max-width:573px;
-    width:100%;
-    max-height:224px;
-    width:100%;
-    background-color: #FAFAFA;
-    margin-top:20px;
-    margin-left:18px;
-    border-radius:18px;
-}
-.card_ventasMensuales #card1 h6{
-    margin:18px 18px 14px 18px;
-    font-size: 14px;
-}
-.card_ventasMensuales #card2 h6{
-    margin:18px 18px 14px 18px;
-    font-size: 14px;
-}
-.card_ventasDiarias #card1,
-.card_ventasMensuales #card1 {
-    padding: 18px;
-    box-sizing: border-box;
-    overflow: hidden;
-}
-.card_ventasDiarias #card2 h6{
-    margin:18px 18px 14px 18px;
-    font-size: 14px;
-}
-.grafico-barras {
-     width: 100%;
-    height: 120px;
+.info-item {
     display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 10px;
-    margin-top: 18px;
-    overflow: visible;
+    gap: 12px;
+    margin-bottom: 16px;
 }
 
-.barra-contenedor {
-    height: 100%;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 8px;
-    min-width: 0;
+.info-text strong { 
+    display: block; 
+    font-size: 14px; 
+    color: #1C2B39; 
 }
 
-.barra {
-    width: 28px;
-    background-color: #9BD3A5;
-    border-radius: 6px 6px 0 0;
-    flex-shrink: 0;
-}
-
-.label-barra {
-    font-size: 10px;
-    color: #9AAAB8;
-}
-
-.item-plato {
-    margin-bottom: 12px;
-}
-
-.info-plato {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: #1C2B39;
-    margin-bottom: 5px;
-}
-
-.linea-fondo {
-    width: 100%;
-    height: 6px;
-    background-color: #EEEEEE;
-    border-radius: 20px;
-}
-
-.linea-verde {
-    height: 6px;
-    background-color: #4CAF50;
-    border-radius: 20px;
-}
-
-#valorVentasHoy,
-#valorPedidosHoy,
-#valorTicketPromedio {
-    color: #1C2B39;
-    margin-top: 10px;
-    font-size: 24px;
-}
-
-#variacionVentas,
-#variacionPedidos,
-#variacionTicket {
-    color: #4CAF50;
-    font-size: 12px;
-    margin-top: 8px;
+.info-text span { 
+    font-size: 13px; 
+    color: #5A6A77; 
 }
 
 
@@ -6400,7 +6238,6 @@ textarea:focus{
 
 /*==================================================
                 FIN ÉPICA 4
-==================================================*/
 
 /* Resposive del lading page- Robles*/
 body {
