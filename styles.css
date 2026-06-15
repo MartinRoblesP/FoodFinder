@@ -3497,326 +3497,6 @@ body{
 }
 
 
-/*==========================================================================================*/
-/* PETER - CONFIGURACION */
-.cabecera_plataforma {
-            border-bottom: 1px solid #E5E7EB;
-            padding: 0 24px;
-            background-color: #FFFFFF;
-        }
-
-        /* Sidebar activo resaltado */
-        .btn.activo {
-            background-color: #E3FCE4;
-            color: #4CAF50;
-            border-radius: 12px;
-        }
-
-        
-        nav .btn img {
-            padding-left: 0;
-            width: 18px;
-            height: 18px;
-            flex-shrink: 0;
-        }
-
-        nav .btn a {
-            padding-left: 0;
-            text-decoration: none;
-            color: inherit;
-            font-size: 13px;
-        }
-
-        nav .btn {
-            gap: 10px;
-            padding: 0 16px;
-        }
-
-
-        .config-section {
-            background-color: #FFFFFF;
-            border-radius: 12px;
-            padding: 28px 32px;
-            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .config-section h2 {
-            font-family: sans-serif;
-            font-size: 16px;
-            font-weight: 600;
-            color: #1C2B39;
-            margin-bottom: 20px;
-        }
-
-
-
-        .form-field {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            margin-bottom: 16px;
-        }
-
-        .form-field label {
-            font-family: sans-serif;
-            font-size: 13px;
-            font-weight: 400;
-            color: #5A6A77;
-        }
-
-        .form-field input[type="text"],
-        .form-field input[type="tel"],
-        .form-field textarea {
-            width: 100%;
-            border: 1px solid #D1D5DB;
-            border-radius: 8px;
-            padding: 10px 14px;
-            font-family: sans-serif;
-            font-size: 14px;
-            color: #1C2B39;
-            background-color: #FFFFFF;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .form-field input[type="text"]:focus,
-        .form-field input[type="tel"]:focus,
-        .form-field textarea:focus {
-            border-color: #4CAF50;
-        }
-
-        .form-field textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .fila-inferior {
-            display: flex;
-            flex-direction: row;
-            align-items: flex-end;
-            gap: 24px;
-            margin-bottom: 20px;
-        }
-
-        .fila-inferior .campo-telefono {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .fila-inferior .campo-telefono label {
-            font-family: sans-serif;
-            font-size: 13px;
-            color: #5A6A77;
-        }
-
-        .fila-inferior .campo-telefono input {
-            width: 100%;
-            max-width: 316px;
-            border: 1px solid #D1D5DB;
-            border-radius: 8px;
-            padding: 10px 14px;
-            font-family: sans-serif;
-            font-size: 14px;
-            color: #9AAAB8;
-            background-color: #FFFFFF;
-            outline: none;
-        }
-
-        .fila-inferior .campo-telefono input:focus {
-            border-color: #4CAF50;
-        }
-
-        /* Grupos de adjuntar imagen/logo */
-        .adjuntar-grupo {
-            display: flex;
-            flex-direction: row;
-            gap: 48px;
-            align-items: flex-end;
-            margin-left: auto;
-        }
-
-        .adjuntar-item {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 6px;
-        }
-
-        .adjuntar-item label {
-            font-family: sans-serif;
-            font-size: 12px;
-            color: #5A6A77;
-            white-space: nowrap;
-        }
-
-        .btn-adjuntar {
-            background-color: #FFFFFF;
-            border: 1px solid #D1D5DB;
-            border-radius: 8px;
-            padding: 8px 20px;
-            font-family: sans-serif;
-            font-size: 13px;
-            color: #5A6A77;
-            cursor: pointer;
-            transition: border-color 0.2s, background-color 0.2s;
-        }
-
-        .btn-adjuntar:hover {
-            border-color: #4CAF50;
-            background-color: #F0FDF4;
-        }
-
-        /* Botón guardar cambios */
-        .btn-guardar {
-            background-color: #4CAF50;
-            color: #FAFAFA;
-            border: none;
-            border-radius: 99px;
-            padding: 10px 24px;
-            font-family: sans-serif;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .btn-guardar:hover {
-            background-color: #FF8A00;
-        }
-
-        .horario-fila {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 16px;
-            padding: 16px 0;
-            border-bottom: 1px solid #F0F2F5;
-        }
-
-        .horario-fila:last-of-type {
-            border-bottom: none;
-        }
-
-        .horario-dia {
-            font-family: sans-serif;
-            font-size: 14px;
-            color: #1C2B39;
-            min-width: 140px;
-        }
-
-        .horario-inputs {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .horario-inputs input[type="time"] {
-            width: 115px;
-            border: 1px solid #D1D5DB;
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-family: sans-serif;
-            font-size: 14px;
-            color: #1C2B39;
-            background-color: #FFFFFF;
-            outline: none;
-            text-align: left;
-        }
-
-        .horario-inputs input[type="time"]:focus {
-            border-color: #4CAF50;
-        }
-
-        .separador-hora {
-            color: #9AAAB8;
-            font-size: 14px;
-        }
-
-        /* Toggle cerrado */
-        .cerrado-toggle {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-left: auto;
-        }
-
-        .cerrado-toggle span {
-            font-family: sans-serif;
-            font-size: 13px;
-            color: #9AAAB8;
-            font-weight: normal;
-        }
-
-        /* Toggle switch */
-        .toggle-switch {
-            position: relative;
-            width: 40px;
-            height: 22px;
-            cursor: pointer;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-track {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #D1D5DB;
-            border-radius: 99px;
-            transition: background-color 0.2s;
-        }
-
-        .toggle-track::before {
-            content: "";
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            background-color: #FFFFFF;
-            border-radius: 50%;
-            top: 3px;
-            left: 3px;
-            transition: transform 0.2s;
-        }
-
-        .toggle-switch input:checked + .toggle-track {
-            background-color: #4CAF50;
-        }
-
-        .toggle-switch input:checked + .toggle-track::before {
-            transform: translateX(18px);
-        }
-
-        /* Botón actualizar horarios */
-        .btn-actualizar {
-            background-color: #4CAF50;
-            color: #FAFAFA;
-            border: none;
-            border-radius: 99px;
-            padding: 10px 24px;
-            font-family: sans-serif;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            margin-top: 20px;
-        }
-
-        .btn-actualizar:hover {
-            background-color: #FF8A00;
-        }
-
-        /* Espaciado entre secciones */
-        .config-sections-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-/*==========================================================================================*/
 .info-item {
     display: flex;
     gap: 12px;
@@ -3932,3 +3612,474 @@ body{
     color: #0F0F0F;
     font-family: 'DM Sans', sans-serif;
 }
+
+
+
+/* ==========================================
+   CONFIGURACIÓN — Gestion operativa de la cocina - Peter
+   ========================================== */
+
+/* --- Sidebar --- */
+.btn.activo {
+    background-color: #E3FCE4;
+    color: #4CAF50;
+    border-radius: 12px;
+}
+
+.btn {
+    gap: 10px;
+    padding: 0 16px;
+}
+
+.sidebar-icon {
+    padding-left: 0;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.sidebar-link {
+    padding-left: 0;
+    text-decoration: none;
+    color: inherit;
+    font-size: 13px;
+}
+
+/* --- Secciones --- */
+.config-section {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    padding: 28px 32px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.config-section-titulo {
+    font-family: sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1C2B39;
+    margin-bottom: 20px;
+}
+
+.config-sections-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* --- Formulario --- */
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.form-label {
+    font-family: sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #5A6A77;
+}
+
+.form-input {
+    width: 100%;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: sans-serif;
+    font-size: 14px;
+    color: #1C2B39;
+    background-color: #FFFFFF;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    border-color: #4CAF50;
+}
+
+.form-input.campo-error {
+    border-color: #EF4444;
+}
+
+.form-input.textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* --- Fila teléfono + adjuntar --- */
+.fila-inferior {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 24px;
+    margin-bottom: 20px;
+}
+
+.campo-telefono {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.campo-telefono-label {
+    font-family: sans-serif;
+    font-size: 13px;
+    color: #5A6A77;
+}
+
+.campo-telefono-input {
+    width: 100%;
+    max-width: 316px;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: sans-serif;
+    font-size: 14px;
+    color: #9AAAB8;
+    background-color: #FFFFFF;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.campo-telefono-input:focus {
+    border-color: #4CAF50;
+}
+
+.campo-telefono-input.campo-error {
+    border-color: #EF4444;
+}
+
+.adjuntar-grupo {
+    display: flex;
+    flex-direction: row;
+    gap: 48px;
+    align-items: flex-end;
+    margin-left: auto;
+}
+
+.adjuntar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.adjuntar-label {
+    font-family: sans-serif;
+    font-size: 12px;
+    color: #5A6A77;
+    white-space: nowrap;
+}
+
+.btn-adjuntar {
+    background-color: #FFFFFF;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-family: sans-serif;
+    font-size: 13px;
+    color: #5A6A77;
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.btn-adjuntar:hover {
+    border-color: #4CAF50;
+    background-color: #F0FDF4;
+}
+
+/* --- Botones de acción --- */
+.btn-guardar {
+    background-color: #4CAF50;
+    color: #FAFAFA;
+    border: none;
+    border-radius: 99px;
+    padding: 10px 24px;
+    font-family: sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-guardar:hover {
+    background-color: #FF8A00;
+}
+
+.btn-actualizar {
+    background-color: #4CAF50;
+    color: #FAFAFA;
+    border: none;
+    border-radius: 99px;
+    padding: 10px 24px;
+    font-family: sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 20px;
+}
+
+.btn-actualizar:hover {
+    background-color: #FF8A00;
+}
+
+/* --- Horario de atención --- */
+.horario-fila {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid #F0F2F5;
+}
+
+.horario-fila:last-of-type {
+    border-bottom: none;
+}
+
+.horario-dia {
+    font-family: sans-serif;
+    font-size: 14px;
+    color: #1C2B39;
+    min-width: 140px;
+}
+
+.horario-inputs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.horario-time {
+    width: 115px;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: sans-serif;
+    font-size: 14px;
+    color: #1C2B39;
+    background-color: #FFFFFF;
+    outline: none;
+    text-align: left;
+    transition: border-color 0.2s, opacity 0.2s;
+}
+
+.horario-time:focus {
+    border-color: #4CAF50;
+}
+
+.horario-time:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background-color: #F3F4F6;
+}
+
+.separador-hora {
+    color: #9AAAB8;
+    font-size: 14px;
+}
+
+/* --- Toggle "Cerrado" --- */
+.cerrado-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.cerrado-texto {
+    font-family: sans-serif;
+    font-size: 13px;
+    color: #9AAAB8;
+    font-weight: normal;
+}
+
+.toggle-switch {
+    position: relative;
+    width: 40px;
+    height: 22px;
+    cursor: pointer;
+}
+
+.toggle-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-track {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #D1D5DB;
+    border-radius: 99px;
+    transition: background-color 0.2s;
+}
+
+.toggle-track::before {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background-color: #FFFFFF;
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.2s;
+}
+
+.toggle-input:checked + .toggle-track {
+    background-color: #4CAF50;
+}
+
+.toggle-input:checked + .toggle-track::before {
+    transform: translateX(18px);
+}
+
+/* --- Toast --- */
+.toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background-color: #1C2B39;
+    color: #FFFFFF;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-family: sans-serif;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 999;
+    pointer-events: none;
+}
+
+.toast.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- Nav mobile (solo se muestra en móvil) --- */
+.nav-mobile {
+    display: none;
+}
+
+.nav-mobile-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+    color: #9AAAB8;
+    font-family: sans-serif;
+    font-size: 10px;
+}
+
+.nav-mobile-item.activo {
+    color: #4CAF50;
+}
+
+.nav-mobile-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* --- Responsive móvil ≤ 640px --- */
+@media (max-width: 640px) {
+    #contenedor-principal {
+        flex-direction: column;
+    }
+
+    nav {
+        display: none;
+    }
+
+    .nav-mobile {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #FFFFFF;
+        border-top: 1px solid #E5E7EB;
+        justify-content: space-around;
+        align-items: center;
+        padding: 8px 0 12px;
+        z-index: 100;
+    }
+
+    main {
+        padding-bottom: 80px;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .config-section {
+        padding: 20px 16px;
+    }
+
+    .fila-inferior {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .campo-telefono-input {
+        max-width: 100%;
+    }
+
+    .adjuntar-grupo {
+        flex-direction: column;
+        gap: 16px;
+        margin-left: 0;
+    }
+
+    .adjuntar-label {
+        white-space: normal;
+    }
+
+    .btn-adjuntar,
+    .btn-guardar,
+    .btn-actualizar {
+        width: 100%;
+        text-align: center;
+    }
+
+    .horario-fila {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .horario-dia {
+        min-width: 100%;
+        font-weight: 600;
+    }
+
+    .horario-inputs {
+        flex: 1;
+    }
+
+    .horario-time {
+        width: 100px;
+    }
+
+    .cerrado-toggle {
+        margin-left: 0;
+    }
+
+    .toast {
+        left: 16px;
+        right: 16px;
+        bottom: 76px;
+        text-align: center;
+    }
+}
+/* ===========================================================
+
+
+
+
