@@ -3485,7 +3485,6 @@ body{
     margin-bottom: 16px;
 }
 
-<<<<<<< Updated upstream
 .info-text strong { 
     display: block; 
     font-size: 14px; 
@@ -3498,8 +3497,6 @@ body{
 }
 
 
-=======
->>>>>>> Stashed changes
 .info-item {
     display: flex;
     gap: 12px;
@@ -3508,7 +3505,6 @@ body{
 .info-text strong { display: block; font-size: 14px; color: #1C2B39; }
 .info-text span { font-size: 13px; color: #5A6A77; }
 
-<<<<<<< Updated upstream
 /* ==========================================
    Gestion pago 1/2
    ========================================== */
@@ -3618,8 +3614,6 @@ body{
 }
 
 
-=======
->>>>>>> Stashed changes
 
 /* ==========================================
    CONFIGURACIÓN — Gestion operativa de la cocina - Peter
@@ -4084,11 +4078,8 @@ body{
         text-align: center;
     }
 }
-<<<<<<< Updated upstream
 /* ===========================================================
 
 
 
 
-=======
->>>>>>> Stashed changes
