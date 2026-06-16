@@ -10,24 +10,42 @@
     
     <header class="navbar">
         <div class="navbar-left">
-            <img src="../../../Assests/icons/FF_Logo_Consu.png" alt="FoodFinder Logo" class="logo-completo-consumidor" style="height: 33px;">
+            <img src="../../../Assests/Icons/FF_Logo_Consu.png" alt="FoodFinder Logo" class="logo-completo-consumidor" style="height: 33px;">
         </div>
         <div class="navbar-center">
             <input type="text" placeholder="Buscar restaurantes, platos…" class="search-bar">
         </div>
         <div class="navbar-right">
-            <button class="btn-active-orders">Mis Pedidos</button>
+            <a  href="../../Gestion de pedido/Pages/detalles-cliente.html"
+                class="btn-active-orders"
+                id="btn-mis-pedidos">
+                Mis Pedidos
+            </a>
             <div class="nav-icons">
-                <img src="../../../Assests/Icons/carrito.png" alt="Carrito de compras" class="icon">
-                <img src="../../../Assests/Icons/perfil.png" alt="Perfil" class="icon">
+
+                <a href="../../Gestión pago/pages/Carrito_compras1.html">
+                <img src="../../../Assests/Icons/carrito.png" alt="Carrito de compras" class="icon" id="btn-carrito">
+                </a>
+
+               <a href="../../Gestion de pedido/Pages/cuenta-cliente.html">
+                    <img
+                        src="../../../Assests/Icons/perfil.png"
+                        alt="Perfil"
+                        class="icon"
+                        id="btn-perfil">
+                </a>
             </div>
         </div>
     </header>
 
     <main class="main-container">
         
-        <nav class="breadcrumb">
-            Inicio <span class="separator">›</span> Restaurantes <span class="separator">›</span> <span class="current">El Rincón del Sabor</span>
+       <nav class="breadcrumb">
+            <a href="home.html">Inicio</a>
+            <span class="separator">›</span>
+            <a href="home.html">Restaurantes</a>
+            <span class="separator">›</span>
+            <span class="current">El Rincón del Sabor</span>
         </nav>
 
         <div class="restaurant-hero-container">
@@ -72,13 +90,13 @@
             <div class="menu-column">
                 
                 <section class="menu-category-section">
-                    <h2 class="category-title">Más pedidos</h2>
+                    <h2 id="mas-pedidos" class="category-title">Más pedidos</h2>
                     <div class="menu-items-grid">
                         
                         <article class="menu-card">
                             <div class="menu-card-img-wrapper">
                                 <span class="badge top-left promo">Más vendido</span>
-                                <img src="../../../Assests/img/ceviche clasico.jpg" alt="Ceviche Clásico">
+                                <img src="../../../Assests/Img/Ceviche clasico.jpg" alt="Ceviche Clásico">
                             </div>
                             <div class="menu-card-content">
                                 <div class="menu-card-info">
@@ -100,7 +118,7 @@
 
                         <article class="menu-card">
                             <div class="menu-card-img-wrapper">
-                                <img src="../../../Assests/img/lomo saltado.jpg" alt="Lomo Saltado">
+                                <img src="../../../Assests/Img/lomo saltado.jpg" alt="Lomo Saltado">
                             </div>
                             <div class="menu-card-content">
                                 <div class="menu-card-info">
@@ -119,7 +137,7 @@
 
                         <article class="menu-card">
                             <div class="menu-card-img-wrapper">
-                                <img src="../../../Assests/img/causa de pollo.jpg" alt="Causa de Pollo">
+                                <img src="../../../Assests/Img/causa de pollo.jpg" alt="Causa de Pollo">
                             </div>
                             <div class="menu-card-content">
                                 <div class="menu-card-info">
@@ -138,7 +156,7 @@
                         
                         <article class="menu-card">
                             <div class="menu-card-img-wrapper">
-                                <img src="../../../Assests/img/arroz con leche.jpg" alt="Arroz con Leche">
+                                <img src="../../../Assests/Img/arroz con leche.jpg" alt="Arroz con Leche">
                             </div>
                             <div class="menu-card-content">
                                 <div class="menu-card-info">
@@ -159,12 +177,12 @@
                 </section>
 
                 <section class="menu-category-section">
-                    <h2 class="category-title">Ceviches y Tiraditos</h2>
+                    <h2 id="ceviches" class="category-title">Ceviches y Tiraditos</h2>
                     <div class="menu-items-grid">
                         
                         <article class="menu-card">
                             <div class="menu-card-img-wrapper">
-                                <img src="../../../Assests/img/ceviche mixto.jpg" alt="Ceviche Mixto">
+                                <img src="../../../Assests/Img/ceviche mixto.jpg" alt="Ceviche Mixto">
                             </div>
                             <div class="menu-card-content">
                                 <div class="menu-card-info">
@@ -183,7 +201,7 @@
 
                         <article class="menu-card">
                             <div class="menu-card-img-wrapper">
-                                <img src="../../../Assests/img/tiradito.jpg" alt="Tiradito de Lenguado">
+                                <img src="../../../Assests/Img/tiradito.jpg" alt="Tiradito de Lenguado">
                             </div>
                             <div class="menu-card-content">
                                 <div class="menu-card-info">
@@ -203,7 +221,7 @@
                         <article class="menu-card">
                             <div class="menu-card-img-wrapper">
                                 <span class="badge top-left out-of-stock">Sin stock</span>
-                                <img src="../../../Assests/img/ceviche de pulpo.jpg" alt="Ceviche Pulpo" style="opacity: 0.5;">
+                                <img src="../../../Assests/Img/ceviche de pulpo.jpg" alt="Ceviche Pulpo" style="opacity: 0.5;">
                             </div>
                             <div class="menu-card-content">
                                 <div class="menu-card-info">
@@ -221,7 +239,7 @@
                         
                         <article class="menu-card">
                             <div class="menu-card-img-wrapper">
-                                <img src="../../../Assests/img/leche de tigre.jpg" alt="Leche de Tigre">
+                                <img src="../../../Assests/Img/leche de tigre.jpg" alt="Leche de Tigre">
                             </div>
                             <div class="menu-card-content">
                                 <div class="menu-card-info">
@@ -303,7 +321,9 @@
                         <div class="info-item">
                             <span class="icon" style="color: #E91E63;">📞</span>
                             <div class="info-text">
-                                <strong>+51 984 123 456</strong>
+                                <a href="tel:+51984123456">
+                                    <strong>+51 984 123 456</strong>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -311,5 +331,6 @@
 
             </aside>
         </div> </main>
+        <script src="../js/carrito2.js" defer></script>
 </body>
 </html>

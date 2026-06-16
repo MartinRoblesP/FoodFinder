@@ -4,33 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis Pedidos - FoodFinder</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="../../../styles.css">
 </head>
+
 <body>
 
     <header class="cabecera-pedidos">
-        <div class="logo-pedidos">
-            <img src="/Assests/Icons/Logo_Sin_Fondo.png" alt="Logo FoodFinder" width="42" height="42">
-            <h1>Food<span>Finder</span></h1>
-        </div>
+        <button
+            type="button"
+            class="logo-pedidos"
+            id="btnHomePedidos"
+            style="border: none; background: transparent; cursor: pointer;">
+            <img
+                src="../../../Assests/Icons/Logo_Sin_Fondo.png"
+                alt="Logo FoodFinder"
+                width="42"
+                height="42">
+
+            <h1>
+                Food<span>Finder</span>
+            </h1>
+        </button>
 
         <nav class="nav-pedidos">
-            <button type="button" class="btn-mis-pedidos">Mis Pedidos</button>
-
-            <button type="button" class="btn-icono-nav" id="btnCarrito">
-                <img src="/Assests/Icons/carrito.png" alt="Carrito de compras" width="50" height="50">
+            <button
+                type="button"
+                class="btn-mis-pedidos"
+                id="btnMisPedidosActual">
+                Mis Pedidos
             </button>
 
-            <button type="button" class="btn-icono-nav" id="btnUsuario">
-                 <img src="/Assests/Icons/usuario.png" alt="Perfil del cliente" width="50" height="50">
+            <button
+                type="button"
+                class="btn-icono-nav"
+                id="btnCarrito">
+                <img
+                    src="../../../Assests/Icons/carrito.png"
+                    alt="Carrito de compras"
+                    width="50"
+                    height="50">
+            </button>
+
+            <button
+                type="button"
+                class="btn-icono-nav"
+                id="btnUsuario">
+                <img
+                    src="../../../Assests/Icons/usuario.png"
+                    alt="Perfil del cliente"
+                    width="50"
+                    height="50">
             </button>
         </nav>
     </header>
 
     <main class="contenedor-pedidos-cliente">
 
-        <!-- seguimiento de pedido -->
-        <section class="seccion-pedido">
+        <section class="seccion-pedido" id="seccionPedidosActivos">
             <div class="titulo-seccion-pedido">
                 <h2>Seguimiento de mi pedido</h2>
                 <p>Observa las fases de tu pedido en tiempo real</p>
@@ -59,8 +89,7 @@
             </div>
         </section>
 
-        <!-- historial de pedidos -->
-        <section class="seccion-pedido">
+        <section class="seccion-pedido" id="seccionHistorialPedidos">
             <div class="titulo-seccion-pedido">
                 <h2>Historial de mis pedidos</h2>
                 <p>Observa todos tus pedidos anteriores</p>
@@ -91,6 +120,6 @@
 
     </main>
 
-    <script src="../js/detalles-cliente.js"></script>
+    <script src="../js/detalles.js"></script>
 </body>
 </html>
