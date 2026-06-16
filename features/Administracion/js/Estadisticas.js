@@ -1,4 +1,40 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // =====================
+    // VALIDACIÓN DE SESIÓN ESTADÍSTICAS
+      // =====================
+
+    function obtenerUsuarioActivo() {
+        try {
+            return JSON.parse(
+                localStorage.getItem("usuarioActivo")
+            );
+        } catch (error) {
+            return null;
+        }
+    }
+
+    const usuarioActivo =
+        obtenerUsuarioActivo();
+
+    if (!usuarioActivo) {
+        alert("Debes iniciar sesión para acceder al panel.");
+
+        window.location.href =
+            "../../Gestion de pedido/Pages/cuenta-cliente.html";
+
+        return;
+    }
+
+    if (usuarioActivo.rol !== "cocinero") {
+        alert("Esta sección es solo para emprendedores gastronómicos.");
+
+        window.location.href =
+            "../../Navegación/pages/home.html";
+
+        return;
+    }
+
+
 
     const pedidosHistorial =
         JSON.parse(localStorage.getItem("pedidosHistorial")) || [];
@@ -326,7 +362,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
     }
-
     pintarCards();
     pintarVentasPorPedido();
     pintarResumenMensualEstimado();
@@ -334,4 +369,69 @@ document.addEventListener("DOMContentLoaded", () => {
     pintarPedidosRecientes();
     mostrarAvisoSiNoHayHistorial();
 
+    // =====================
+    // NAVEGACIÓN SUPERIOR ESTADÍSTICAS
+    // =====================
+
+    const btnDashboard =
+        document.getElementById("btnDashboard") ||
+        document.getElementById("btn_Dashboard") ||
+        document.getElementById("btn_dashboard");
+
+    if (btnDashboard) {
+
+        btnDashboard.addEventListener("click", (e) => {
+
+            e.preventDefault();
+
+            window.location.href =
+                "../../Gestion operativa de la cocina/pages/pedidos_entrantes.html";
+
+        });
+
+    }
+
+    const btnPerfil =
+        document.getElementById("btn-perfil") ||
+        document.getElementById("btnPerfil") ||
+        document.querySelector('img[alt="usuario"]') ||
+        document.querySelector('img[alt="Perfil"]') ||
+        document.querySelector('img[alt="perfil"]');
+
+    if (btnPerfil) {
+
+        btnPerfil.style.cursor = "pointer";
+
+        btnPerfil.addEventListener("click", (e) => {
+
+            e.preventDefault();
+
+            window.location.href =
+                "../../Gestion operativa de la cocina/pages/configuracion.html";
+
+        });
+
+    }
+
+    const btnSalir =
+        document.getElementById("btn-salir") ||
+        document.getElementById("btnSalir") ||
+        document.getElementById("linkSalir");
+
+    if (btnSalir) {
+
+        btnSalir.addEventListener("click", (e) => {
+
+            e.preventDefault();
+
+            localStorage.removeItem("usuarioActivo");
+
+            alert("Sesión cerrada correctamente.");
+
+            window.location.href =
+                "../../../index.html";
+
+        });
+
+    }
 });

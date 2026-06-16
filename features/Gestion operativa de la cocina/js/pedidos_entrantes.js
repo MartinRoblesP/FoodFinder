@@ -197,43 +197,89 @@ document.addEventListener("DOMContentLoaded", function () {
     renderActivos();
     renderHistorial();
 
-// =====================
-// DASHBOARD
-// =====================
+    // =====================
+    // NAVEGACIÓN SUPERIOR PANEL RESTAURANTE
+    // =====================
+
+    const usuarioActivo = JSON.parse(
+        localStorage.getItem("usuarioActivo")
+    );
+
+    if (!usuarioActivo) {
+        alert("Debes iniciar sesión para acceder al panel.");
+        window.location.href =
+            "../../Gestion de pedido/Pages/cuenta-cliente.html";
+        return;
+    }
+
+    if (usuarioActivo.rol !== "cocinero") {
+        alert("Esta sección es solo para emprendedores gastronómicos.");
+        window.location.href =
+            "../../Navegación/pages/home.html";
+        return;
+    }
 
     const btnDashboard =
-        document.getElementById("btn_dashboard");
+        document.getElementById("btn_dashboard") ||
+        document.getElementById("btnDashboard") ||
+        document.getElementById("btn_Dashboard");
 
     if (btnDashboard) {
 
-        btnDashboard.addEventListener("click", () => {
+        btnDashboard.addEventListener("click", (e) => {
 
-            alert(
-                "Dashboard en construcción"
-            );
+            e.preventDefault();
+
+            window.location.href =
+                "pedidos_entrantes.html";
 
         });
 
     }
-// =====================
-// SALIR
-// =====================
 
-const btnSalir =
-    document.getElementById("btn-salir");
+    const btnPerfil =
+        document.getElementById("btn-perfil") ||
+        document.getElementById("btnPerfil") ||
+        document.querySelector('img[alt="usuario"]') ||
+        document.querySelector('img[alt="Perfil"]') ||
+        document.querySelector('img[alt="perfil"]');
 
-if (btnSalir) {
+    if (btnPerfil) {
 
-    btnSalir.addEventListener("click", (e) => {
+        btnPerfil.style.cursor = "pointer";
 
-        e.preventDefault();
+        btnPerfil.addEventListener("click", (e) => {
 
-        window.location.href =
-        "../../../index.html";
+            e.preventDefault();
 
-    });
+            window.location.href =
+                "configuracion.html";
 
-}
+        });
+
+    }
+
+    const btnSalir =
+        document.getElementById("btn-salir") ||
+        document.getElementById("btnSalir") ||
+        document.getElementById("linkSalir");
+
+    if (btnSalir) {
+
+        btnSalir.addEventListener("click", (e) => {
+
+            e.preventDefault();
+
+            localStorage.removeItem("usuarioActivo");
+
+            alert("Sesión cerrada correctamente.");
+
+            window.location.href =
+                "../../../index.html";
+
+        });
+
+    }
 
 
 });

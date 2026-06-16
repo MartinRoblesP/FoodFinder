@@ -165,19 +165,35 @@ document.addEventListener("DOMContentLoaded", function () {
     render();
 
     // =====================
-// NAVEGACIÓN PANEL RESTAURANTE
-// =====================
+    // NAVEGACIÓN SUPERIOR PANEL RESTAURANTE
+    // =====================
 
-document.addEventListener("DOMContentLoaded", () => {
+    const usuarioActivo = JSON.parse(
+        localStorage.getItem("usuarioActivo")
+    );
 
-    const botonesDashboard =
-        document.querySelectorAll(
-            "#btnDashboard, #btn_Dashboard, #btn_dashboard, .btn_dashboard"
-        );
+    if (!usuarioActivo) {
+        alert("Debes iniciar sesión para acceder al panel.");
+        window.location.href =
+            "../../Gestion de pedido/Pages/cuenta-cliente.html";
+        return;
+    }
 
-    botonesDashboard.forEach((boton) => {
+    if (usuarioActivo.rol !== "cocinero") {
+        alert("Esta sección es solo para emprendedores gastronómicos.");
+        window.location.href =
+            "../../Navegación/pages/home.html";
+        return;
+    }
 
-        boton.addEventListener("click", (e) => {
+    const btnDashboard =
+        document.getElementById("btn_dashboard") ||
+        document.getElementById("btnDashboard") ||
+        document.getElementById("btn_Dashboard");
+
+    if (btnDashboard) {
+
+        btnDashboard.addEventListener("click", (e) => {
 
             e.preventDefault();
 
@@ -186,20 +202,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         });
 
-    });
+    }
 
-    const posiblesPerfiles =
-        Array.from(
-            document.querySelectorAll("a, button")
-        ).filter(elemento =>
-            elemento.textContent
-                .toLowerCase()
-                .includes("perfil")
-        );
+    const btnPerfil =
+        document.getElementById("btn-perfil") ||
+        document.getElementById("btnPerfil") ||
+        document.querySelector('img[alt="usuario"]') ||
+        document.querySelector('img[alt="Perfil"]') ||
+        document.querySelector('img[alt="perfil"]');
 
-    posiblesPerfiles.forEach((elemento) => {
+    if (btnPerfil) {
 
-        elemento.addEventListener("click", (e) => {
+        btnPerfil.style.cursor = "pointer";
+
+        btnPerfil.addEventListener("click", (e) => {
 
             e.preventDefault();
 
@@ -208,30 +224,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
         });
 
-    });
+    }
 
-    const posiblesSalir =
-        Array.from(
-            document.querySelectorAll("a, button")
-        ).filter(elemento =>
-            elemento.textContent
-                .toLowerCase()
-                .includes("salir")
-        );
+    const btnSalir =
+        document.getElementById("btn-salir") ||
+        document.getElementById("btnSalir") ||
+        document.getElementById("linkSalir");
 
-    posiblesSalir.forEach((elemento) => {
+    if (btnSalir) {
 
-        elemento.addEventListener("click", (e) => {
+        btnSalir.addEventListener("click", (e) => {
 
             e.preventDefault();
+
+            localStorage.removeItem("usuarioActivo");
+
+            alert("Sesión cerrada correctamente.");
 
             window.location.href =
                 "../../../index.html";
 
         });
 
-    });
-
-});
+    }
 
 });
