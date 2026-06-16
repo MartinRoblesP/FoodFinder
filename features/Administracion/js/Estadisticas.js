@@ -1,154 +1,710 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const platos = JSON.parse(localStorage.getItem("platos")) || [];
+document.addEventListener("DOMContentLoaded", () => {
 
-    const valorVentasHoy = document.getElementById("valorVentasHoy");
-    const valorPedidosHoy = document.getElementById("valorPedidosHoy");
-    const valorTicketPromedio = document.getElementById("valorTicketPromedio");
+    // =====================
+    // RUTAS
+    // =====================
 
-    const graficoVentasDia = document.querySelector(".card_ventasDiarias #card1");
-    const platosMasVendidosDia = document.querySelector(".card_ventasDiarias #card2");
+    const RUTA_LOGIN =
+        "../../Gestion de pedido/Pages/cuenta-cliente.html";
 
-    const graficoVentasMes = document.querySelector(".card_ventasMensuales #card1");
-    const platosMasVendidosMes = document.querySelector(".card_ventasMensuales #card2");
-    
-    function convertirNumero(valor) {
-        return parseFloat(String(valor).replace("S/", "").trim()) || 0;
+    const RUTA_HOME_CLIENTE =
+        "../../Navegación/pages/home.html";
+
+    const RUTA_PEDIDOS =
+        "../../Gestion operativa de la cocina/pages/pedidos_entrantes.html";
+
+    const RUTA_CONFIG =
+        "../../Gestion operativa de la cocina/pages/configuracion.html";
+
+    const RUTA_LANDING =
+        "../../../index.html";
+
+
+    // =====================
+    // UTILIDADES GENERALES
+    // =====================
+
+    function getData(key) {
+        try {
+            return JSON.parse(
+                localStorage.getItem(key)
+            ) || [];
+        } catch (error) {
+            return [];
+        }
     }
 
-    function calcularVentasTotales() {
-        let total = 0;
+    function saveData(key, data) {
+        localStorage.setItem(
+            key,
+            JSON.stringify(data)
+        );
+    }
 
-        platos.forEach(function (plato) {
-            const precio = convertirNumero(plato.precio);
-            const pedidos = parseInt(plato.pedidos) || 0;
+    function obtenerUsuarioActivo() {
+        try {
+            return JSON.parse(
+                localStorage.getItem("usuarioActivo")
+            );
+        } catch (error) {
+            return null;
+        }
+    }
 
-            total += precio * pedidos;
+    function guardarUsuarioActivo(usuario) {
+        localStorage.setItem(
+            "usuarioActivo",
+            JSON.stringify(usuario)
+        );
+    }
+
+    function escaparHTML(texto) {
+        return String(texto || "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+    function normalizarTexto(texto) {
+        return String(texto || "")
+            .trim()
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function obtenerFechaPedido(pedido) {
+        const fechaBase =
+            pedido.fechaFinalizado ||
+            pedido.fecha ||
+            "";
+
+        if (!fechaBase) {
+            return null;
+        }
+
+        const fecha =
+            new Date(fechaBase);
+
+        if (isNaN(fecha.getTime())) {
+            return null;
+        }
+
+        return fecha;
+    }
+
+    function formatoFechaClave(fecha) {
+        const year =
+            fecha.getFullYear();
+
+        const month =
+            String(fecha.getMonth() + 1).padStart(2, "0");
+
+        const day =
+            String(fecha.getDate()).padStart(2, "0");
+
+        return `${year}-${month}-${day}`;
+    }
+
+    function formatoMesClave(fecha) {
+        const year =
+            fecha.getFullYear();
+
+        const month =
+            String(fecha.getMonth() + 1).padStart(2, "0");
+
+        return `${year}-${month}`;
+    }
+
+    function obtenerHoyClave() {
+        return formatoFechaClave(new Date());
+    }
+
+    function obtenerAyerClave() {
+        const fecha =
+            new Date();
+
+        fecha.setDate(fecha.getDate() - 1);
+
+        return formatoFechaClave(fecha);
+    }
+
+    function obtenerMesActualClave() {
+        return formatoMesClave(new Date());
+    }
+
+
+    // =====================
+    // VALIDACIÓN DE SESIÓN
+    // =====================
+
+    const usuarioActivo =
+        obtenerUsuarioActivo();
+
+    if (!usuarioActivo) {
+        alert("Debes iniciar sesión para acceder al panel.");
+
+        window.location.href =
+            RUTA_LOGIN;
+
+        return;
+    }
+
+    if (usuarioActivo.rol !== "cocinero") {
+        alert("Esta sección es solo para emprendedores gastronómicos.");
+
+        window.location.href =
+            RUTA_HOME_CLIENTE;
+
+        return;
+    }
+
+
+    // =====================
+    // RESTAURANTE ACTIVO
+    // =====================
+
+    function obtenerRestauranteActivo() {
+        const restaurantes =
+            getData("foodfinder_restaurantes");
+
+        let restaurante =
+            restaurantes.find((item) => {
+                return (
+                    item.id === usuarioActivo.restauranteId ||
+                    item.ownerEmail === usuarioActivo.correo
+                );
+            });
+
+        if (!restaurante) {
+            restaurante = {
+                id: usuarioActivo.restauranteId || "rest_" + usuarioActivo.id,
+                ownerEmail: usuarioActivo.correo,
+                ownerName: usuarioActivo.nombre,
+                nombre: "Restaurante de " + usuarioActivo.nombre.split(" ")[0],
+                cocina: "Emprendimiento gastronómico",
+                descripcion: "Restaurante registrado en FoodFinder.",
+                direccion: usuarioActivo.direccionNegocio || "Dirección pendiente",
+                distrito: "Lima",
+                telefono: usuarioActivo.telefono || "",
+                horario: "Lun–Dom 12:00pm – 10:00pm",
+                estado: "Abierto",
+                rating: 4.8,
+                reviews: 0,
+                imagen: "../../../Assests/Img/El rincon del sabor.jpg",
+                fechaRegistro: new Date().toLocaleDateString()
+            };
+
+            restaurantes.push(restaurante);
+
+            saveData(
+                "foodfinder_restaurantes",
+                restaurantes
+            );
+
+            usuarioActivo.restauranteId =
+                restaurante.id;
+
+            guardarUsuarioActivo(usuarioActivo);
+        }
+
+        return restaurante;
+    }
+
+    const restauranteActual =
+        obtenerRestauranteActivo();
+
+    function perteneceAlRestaurante(item) {
+        if (!item) {
+            return false;
+        }
+
+        return (
+            item.restauranteId === restauranteActual.id ||
+            item.ownerEmail === restauranteActual.ownerEmail
+        );
+    }
+
+
+    // =====================
+    // DATA FILTRADA POR EMPRENDEDOR
+    // =====================
+
+    const pedidosHistorial =
+        getData("pedidosHistorial")
+            .filter(perteneceAlRestaurante);
+
+    const pedidosFinalizados =
+        pedidosHistorial.filter((pedido) => {
+            const estado =
+                normalizarTexto(pedido.estado);
+
+            return (
+                estado.includes("finalizado") ||
+                estado.includes("entregado")
+            );
         });
 
-        return total;
-    }
+    const pedidosFinalizadosHoy =
+        pedidosFinalizados.filter((pedido) => {
+            const fecha =
+                obtenerFechaPedido(pedido);
 
-    function calcularPedidosTotales() {
-        let total = 0;
+            if (!fecha) {
+                return false;
+            }
 
-        platos.forEach(function (plato) {
-            total += parseInt(plato.pedidos) || 0;
+            return formatoFechaClave(fecha) === obtenerHoyClave();
         });
 
-        return total;
+    const pedidosFinalizadosAyer =
+        pedidosFinalizados.filter((pedido) => {
+            const fecha =
+                obtenerFechaPedido(pedido);
+
+            if (!fecha) {
+                return false;
+            }
+
+            return formatoFechaClave(fecha) === obtenerAyerClave();
+        });
+
+    const pedidosFinalizadosMes =
+        pedidosFinalizados.filter((pedido) => {
+            const fecha =
+                obtenerFechaPedido(pedido);
+
+            if (!fecha) {
+                return false;
+            }
+
+            return formatoMesClave(fecha) === obtenerMesActualClave();
+        });
+
+
+    // =====================
+    // ELEMENTOS DOM
+    // =====================
+
+    const valorVentasHoy =
+        document.getElementById("valorVentasHoy");
+
+    const valorPedidosHoy =
+        document.getElementById("valorPedidosHoy");
+
+    const valorTicketPromedio =
+        document.getElementById("valorTicketPromedio");
+
+    const variacionVentas =
+        document.getElementById("variacionVentas");
+
+    const variacionPedidos =
+        document.getElementById("variacionPedidos");
+
+    const variacionTicket =
+        document.getElementById("variacionTicket");
+
+    const graficoVentasDia =
+        document.getElementById("graficoVentasDia");
+
+    const graficoVentasMes =
+        document.getElementById("graficoVentasMes");
+
+    const platosMasVendidosDia =
+        document.getElementById("platosMasVendidosDia");
+
+    const platosMasVendidosMes =
+        document.getElementById("platosMasVendidosMes");
+
+
+    // =====================
+    // CÁLCULOS PRINCIPALES
+    // =====================
+
+    function sumarVentas(listaPedidos) {
+        return listaPedidos.reduce((total, pedido) => {
+            return total + Number(pedido.total || 0);
+        }, 0);
     }
+
+    function calcularTicketPromedio(listaPedidos) {
+        if (listaPedidos.length === 0) {
+            return 0;
+        }
+
+        return sumarVentas(listaPedidos) / listaPedidos.length;
+    }
+
+    function calcularVariacion(actual, anterior) {
+        if (anterior === 0 && actual === 0) {
+            return "▲ 0% vs ayer";
+        }
+
+        if (anterior === 0 && actual > 0) {
+            return "▲ 100% vs ayer";
+        }
+
+        const variacion =
+            ((actual - anterior) / anterior) * 100;
+
+        const simbolo =
+            variacion >= 0
+                ? "▲"
+                : "▼";
+
+        return `${simbolo} ${Math.abs(variacion).toFixed(0)}% vs ayer`;
+    }
+
+
+    // =====================
+    // CARDS PRINCIPALES
+    // =====================
 
     function pintarCards() {
-        const ventas = calcularVentasTotales();
-        const pedidos = calcularPedidosTotales();
-        const ticketPromedio = pedidos > 0 ? ventas / pedidos : 0;
+        const ventasHoy =
+            sumarVentas(pedidosFinalizadosHoy);
 
-        valorVentasHoy.textContent = "S/ " + ventas.toFixed(2);
-        valorPedidosHoy.textContent = pedidos;
-        valorTicketPromedio.textContent = "S/ " + ticketPromedio.toFixed(2);
+        const ventasAyer =
+            sumarVentas(pedidosFinalizadosAyer);
+
+        const pedidosHoy =
+            pedidosFinalizadosHoy.length;
+
+        const pedidosAyer =
+            pedidosFinalizadosAyer.length;
+
+        const ticketHoy =
+            calcularTicketPromedio(pedidosFinalizadosHoy);
+
+        const ticketAyer =
+            calcularTicketPromedio(pedidosFinalizadosAyer);
+
+        if (valorVentasHoy) {
+            valorVentasHoy.textContent =
+                `S/ ${ventasHoy.toFixed(2)}`;
+        }
+
+        if (valorPedidosHoy) {
+            valorPedidosHoy.textContent =
+                pedidosHoy;
+        }
+
+        if (valorTicketPromedio) {
+            valorTicketPromedio.textContent =
+                `S/ ${ticketHoy.toFixed(2)}`;
+        }
+
+        if (variacionVentas) {
+            variacionVentas.textContent =
+                calcularVariacion(ventasHoy, ventasAyer);
+        }
+
+        if (variacionPedidos) {
+            variacionPedidos.textContent =
+                calcularVariacion(pedidosHoy, pedidosAyer);
+        }
+
+        if (variacionTicket) {
+            variacionTicket.textContent =
+                calcularVariacion(ticketHoy, ticketAyer);
+        }
     }
 
-    function crearGraficoBarras(contenedor, datos, labels) {
-    const titulo = contenedor.querySelector("h6").outerHTML;
-    contenedor.innerHTML = titulo;
 
-    const cajaGrafico = document.createElement("div");
-    cajaGrafico.classList.add("grafico-barras");
+    // =====================
+    // PLATOS VENDIDOS
+    // =====================
 
-    const maximo = Math.max(...datos, 1);
+    function limpiarNombrePlato(nombre) {
+        return String(nombre || "")
+            .replace(/^\d+x\s*/i, "")
+            .trim();
+    }
 
-    datos.forEach(function (valor, index) {
-        const altura = valor > 0 ? (valor / maximo) * 90 : 5;
+    function obtenerPlatosVendidos(listaPedidos) {
+        const resumen = {};
 
-        const barraContenedor = document.createElement("div");
-        barraContenedor.classList.add("barra-contenedor");
+        listaPedidos.forEach((pedido) => {
 
-        barraContenedor.innerHTML = `
-            <div class="barra" title="S/ ${valor.toFixed(2)}" style="height: ${altura}px;"></div>
-            <span class="label-barra">${labels[index]}</span>
-        `;
+            if (Array.isArray(pedido.items)) {
+                pedido.items.forEach((item) => {
+                    const nombre =
+                        limpiarNombrePlato(item.nombre);
 
-        cajaGrafico.appendChild(barraContenedor);
-    });
+                    const cantidad =
+                        Number(item.cantidad || 1);
 
-    contenedor.appendChild(cajaGrafico);
+                    if (!nombre) {
+                        return;
+                    }
+
+                    if (!resumen[nombre]) {
+                        resumen[nombre] = 0;
+                    }
+
+                    resumen[nombre] += cantidad;
+                });
+
+                return;
+            }
+
+            const platos =
+                String(pedido.plato || "")
+                    .split(",")
+                    .map((plato) => limpiarNombrePlato(plato))
+                    .filter((plato) => plato.length > 0);
+
+            platos.forEach((plato) => {
+                if (!resumen[plato]) {
+                    resumen[plato] = 0;
+                }
+
+                resumen[plato] += 1;
+            });
+        });
+
+        return Object.entries(resumen)
+            .map(([nombre, cantidad]) => {
+                return {
+                    nombre,
+                    cantidad
+                };
+            })
+            .sort((a, b) => {
+                return b.cantidad - a.cantidad;
+            });
+    }
+
+
+    // =====================
+    // GRÁFICOS
+    // =====================
+
+    function crearGraficoBarras(contenedor, datos, etiquetas, prefijo = "") {
+        if (!contenedor) {
+            return;
+        }
+
+        contenedor.innerHTML =
+            "";
+
+        const hayDatos =
+            datos.some((valor) => {
+                return Number(valor) > 0;
+            });
+
+        if (!hayDatos) {
+            contenedor.innerHTML = `
+                <p style="padding: 12px;">
+                    No hay datos suficientes para mostrar el gráfico.
+                </p>
+            `;
+
+            return;
+        }
+
+        const maximo =
+            Math.max(...datos, 1);
+
+        datos.forEach((valor, index) => {
+            const numero =
+                Number(valor) || 0;
+
+            const altura =
+                numero > 0
+                    ? (numero / maximo) * 90
+                    : 5;
+
+            const textoValor =
+                prefijo
+                    ? `${prefijo}${numero.toFixed(2)}`
+                    : String(numero);
+
+            const barraContenedor =
+                document.createElement("div");
+
+            barraContenedor.classList.add("barra-contenedor");
+
+            barraContenedor.innerHTML = `
+                <div
+                    class="barra"
+                    title="${textoValor}"
+                    style="height: ${altura}px;">
+                </div>
+
+                <span class="label-barra">
+                    ${escaparHTML(etiquetas[index])}
+                </span>
+            `;
+
+            contenedor.appendChild(barraContenedor);
+        });
     }
 
     function pintarVentasPorDia() {
-        const ventasTotales = calcularVentasTotales();
+        const hoy =
+            new Date();
 
-        const ventasDias = [
-            ventasTotales * 0.45,
-            ventasTotales * 0.70,
-            ventasTotales * 0.40,
-            ventasTotales * 0.85,
-            ventasTotales * 0.60,
-            ventasTotales,
-            ventasTotales * 0.75,
-            ventasTotales * 0.55,
-            ventasTotales * 0.90,
-            ventasTotales * 0.65,
-            ventasTotales * 0.98,
-            ventasTotales * 0.98
-        ];
+        const fechas = [];
 
-        const labels = ["L", "M", "MI", "J", "V", "S", "D", "L", "M", "MI", "J", "V"];
+        for (let i = 6; i >= 0; i--) {
+            const fecha =
+                new Date();
 
-        crearGraficoBarras(graficoVentasDia, ventasDias, labels);
+            fecha.setDate(hoy.getDate() - i);
+
+            fechas.push(fecha);
+        }
+
+        const datos =
+            fechas.map((fecha) => {
+                const clave =
+                    formatoFechaClave(fecha);
+
+                const pedidosDelDia =
+                    pedidosFinalizados.filter((pedido) => {
+                        const fechaPedido =
+                            obtenerFechaPedido(pedido);
+
+                        if (!fechaPedido) {
+                            return false;
+                        }
+
+                        return formatoFechaClave(fechaPedido) === clave;
+                    });
+
+                return sumarVentas(pedidosDelDia);
+            });
+
+        const etiquetas =
+            fechas.map((fecha) => {
+                return fecha.toLocaleDateString(
+                    "es-PE",
+                    {
+                        day: "2-digit",
+                        month: "2-digit"
+                    }
+                );
+            });
+
+        crearGraficoBarras(
+            graficoVentasDia,
+            datos,
+            etiquetas,
+            "S/ "
+        );
     }
 
     function pintarVentasPorMes() {
-        const ventasTotales = calcularVentasTotales();
+        const hoy =
+            new Date();
 
-        const ventasMeses = [
-            ventasTotales * 0.45,
-            ventasTotales * 0.70,
-            ventasTotales * 0.42,
-            ventasTotales * 0.85,
-            ventasTotales * 0.60,
-            ventasTotales,
-            ventasTotales * 0.75,
-            ventasTotales * 0.55,
-            ventasTotales * 0.88,
-            ventasTotales * 0.65,
-            ventasTotales,
-            ventasTotales
-        ];
+        const meses = [];
 
-        const labels = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
+        for (let i = 5; i >= 0; i--) {
+            const fecha =
+                new Date(
+                    hoy.getFullYear(),
+                    hoy.getMonth() - i,
+                    1
+                );
 
-        crearGraficoBarras(graficoVentasMes, ventasMeses, labels);
+            meses.push(fecha);
+        }
+
+        const datos =
+            meses.map((fecha) => {
+                const claveMes =
+                    formatoMesClave(fecha);
+
+                const pedidosDelMes =
+                    pedidosFinalizados.filter((pedido) => {
+                        const fechaPedido =
+                            obtenerFechaPedido(pedido);
+
+                        if (!fechaPedido) {
+                            return false;
+                        }
+
+                        return formatoMesClave(fechaPedido) === claveMes;
+                    });
+
+                return sumarVentas(pedidosDelMes);
+            });
+
+        const etiquetas =
+            meses.map((fecha) => {
+                return fecha.toLocaleDateString(
+                    "es-PE",
+                    {
+                        month: "short"
+                    }
+                );
+            });
+
+        crearGraficoBarras(
+            graficoVentasMes,
+            datos,
+            etiquetas,
+            "S/ "
+        );
     }
 
-    function pintarPlatosMasVendidos(contenedor) {
-        const titulo = contenedor.querySelector("h6").outerHTML;
-        contenedor.innerHTML = titulo;
 
-        const platosOrdenados = [...platos].sort(function (a, b) {
-            return (parseInt(b.pedidos) || 0) - (parseInt(a.pedidos) || 0);
-        });
+    // =====================
+    // LISTAS DE PLATOS
+    // =====================
 
-        const totalPedidos = calcularPedidosTotales();
-
-        if (platosOrdenados.length === 0 || totalPedidos === 0) {
-            contenedor.innerHTML = titulo + "<p>No hay ventas registradas todavía.</p>";
+    function pintarListaPlatos(contenedor, listaPedidos, mensajeVacio) {
+        if (!contenedor) {
             return;
-            }
+        }
 
-        platosOrdenados.slice(0, 4).forEach(function (plato) {
-            const pedidos = parseInt(plato.pedidos) || 0;
-            const porcentaje = totalPedidos > 0 ? (pedidos / totalPedidos) * 100 : 0;
+        contenedor.innerHTML =
+            "";
 
-            const item = document.createElement("div");
+        const platos =
+            obtenerPlatosVendidos(listaPedidos);
+
+        if (platos.length === 0) {
+            contenedor.innerHTML = `
+                <p style="padding: 12px;">
+                    ${mensajeVacio}
+                </p>
+            `;
+
+            return;
+        }
+
+        const total =
+            platos.reduce((suma, plato) => {
+                return suma + plato.cantidad;
+            }, 0);
+
+        platos.slice(0, 5).forEach((plato) => {
+            const porcentaje =
+                total > 0
+                    ? (plato.cantidad / total) * 100
+                    : 0;
+
+            const item =
+                document.createElement("div");
+
             item.classList.add("item-plato");
 
             item.innerHTML = `
                 <div class="info-plato">
-                    <span>${plato.nombre}</span>
-                    <strong>${porcentaje.toFixed(0)}%</strong>
+                    <span>${escaparHTML(plato.nombre)}</span>
+                    <strong>${plato.cantidad} vend.</strong>
                 </div>
+
                 <div class="linea-fondo">
-                    <div class="linea-verde" style="width: ${porcentaje}%;"></div>
+                    <div
+                        class="linea-verde"
+                        style="width: ${porcentaje}%;">
+                    </div>
                 </div>
             `;
 
@@ -156,9 +712,102 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    function pintarPlatosMasVendidosDia() {
+        pintarListaPlatos(
+            platosMasVendidosDia,
+            pedidosFinalizadosHoy,
+            "No hay platos vendidos hoy."
+        );
+    }
+
+    function pintarPlatosMasVendidosMes() {
+        pintarListaPlatos(
+            platosMasVendidosMes,
+            pedidosFinalizadosMes,
+            "No hay platos vendidos este mes."
+        );
+    }
+
+
+    // =====================
+    // NAVEGACIÓN
+    // =====================
+
+    function configurarNavegacion() {
+        const btnDashboard =
+            document.getElementById("btnDashboard") ||
+            document.getElementById("btn_Dashboard") ||
+            document.getElementById("btn_dashboard");
+
+        const btnLogoPanel =
+            document.getElementById("btn-logo-panel");
+
+        const btnPerfilPanel =
+            document.getElementById("btn-perfil-panel");
+
+        const btnSalir =
+            document.getElementById("btn-salir") ||
+            document.getElementById("btnSalir") ||
+            document.getElementById("linkSalir");
+
+        if (btnLogoPanel) {
+            btnLogoPanel.addEventListener("click", (e) => {
+                e.preventDefault();
+
+                window.location.href =
+                    RUTA_PEDIDOS;
+            });
+        }
+
+        if (btnDashboard) {
+            btnDashboard.addEventListener("click", (e) => {
+                e.preventDefault();
+
+                window.location.href =
+                    RUTA_PEDIDOS;
+            });
+        }
+
+        if (btnPerfilPanel) {
+            btnPerfilPanel.addEventListener("click", (e) => {
+                e.preventDefault();
+
+                window.location.href =
+                    RUTA_CONFIG;
+            });
+        }
+
+        if (btnSalir) {
+            btnSalir.addEventListener("click", (e) => {
+                e.preventDefault();
+
+                const confirmar =
+                    confirm("¿Deseas cerrar sesión?");
+
+                if (!confirmar) {
+                    return;
+                }
+
+                localStorage.removeItem("usuarioActivo");
+
+                alert("Sesión cerrada correctamente.");
+
+                window.location.href =
+                    RUTA_LANDING;
+            });
+        }
+    }
+
+
+    // =====================
+    // INIT
+    // =====================
+
     pintarCards();
     pintarVentasPorDia();
     pintarVentasPorMes();
-    pintarPlatosMasVendidos(platosMasVendidosDia);
-    pintarPlatosMasVendidos(platosMasVendidosMes);
+    pintarPlatosMasVendidosDia();
+    pintarPlatosMasVendidosMes();
+    configurarNavegacion();
+
 });

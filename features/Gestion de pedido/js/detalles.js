@@ -1,187 +1,819 @@
-const tablaPedidoActivo = document.getElementById("tablaPedidoActivo");
-const tablaHistorialPedidos = document.getElementById("tablaHistorialPedidos");
+// ==========================================
+// detalles.js
+// Mis Pedidos del cliente
+// Filtra pedidos por clienteEmail
+// Permite dejar reseñas reales por restaurante
+// Navegación completa
+// ==========================================
 
-const mensajeSinPedido = document.getElementById("mensajeSinPedido");
-const mensajeSinHistorial = document.getElementById("mensajeSinHistorial");
-const mensajeErrorConexion = document.getElementById("mensajeErrorConexion");
+document.addEventListener("DOMContentLoaded", () => {
 
-const btnCarrito = document.getElementById("btnCarrito");
-const btnUsuario = document.getElementById("btnUsuario");
+    // =====================
+    // VALIDACIÓN DE SESIÓN
+    // =====================
 
-/* cambiar a true para probar el fallo de conexión */
-const falloConexion = false;
+    function obtenerUsuarioActivo() {
+        try {
+            return JSON.parse(
+                localStorage.getItem("usuarioActivo")
+            );
+        } catch (error) {
+            return null;
+        }
+    }
 
-function obtenerPlatos() {
-    return JSON.parse(localStorage.getItem("platos")) || [];
-}
+    function protegerMisPedidos() {
+        const usuarioActivo =
+            obtenerUsuarioActivo();
 
-function obtenerClaseEstado(estado) {
-    if (estado === "Recibido") return "estado-recibido";
-    if (estado === "Preparando pedido") return "estado-preparando";
-    if (estado === "Listo") return "estado-listo";
-    if (estado === "Entregado") return "estado-entregado";
-    return "estado-recibido";
-}
+        if (!usuarioActivo) {
+            alert("Debes iniciar sesión para ver tus pedidos.");
 
-function mostrarPedidoActivo() {
-    tablaPedidoActivo.innerHTML = "";
-    mensajeSinPedido.textContent = "";
+            window.location.href =
+                "cuenta-cliente.html";
 
-    const platos = obtenerPlatos();
+            return null;
+        }
 
-    if (platos.length === 0) {
-        mensajeSinPedido.textContent = "No tienes pedidos en curso actualmente.";
+        if (usuarioActivo.rol !== "cliente") {
+            alert("Esta sección es solo para consumidores.");
+
+            window.location.href =
+                "../../Gestion operativa de la cocina/pages/pedidos_entrantes.html";
+
+            return null;
+        }
+
+        return usuarioActivo;
+    }
+
+    const usuarioActivo =
+        protegerMisPedidos();
+
+    if (!usuarioActivo) {
         return;
     }
 
-    const plato = platos[0];
 
-    const pedidoActivo = {
-        numero: "#1089",
-        nombre: plato.nombre,
-        cantidad: "1",
-        hora: "13:43",
-        estado: "Preparando pedido",
-        tiempo: "25 min",
-        restaurante: "FoodFinder"
-    };
+    // =====================
+    // ELEMENTOS DOM
+    // =====================
 
-    const fila = document.createElement("tr");
+    const tablaPedidoActivo =
+        document.getElementById("tablaPedidoActivo");
 
-    const columnaNumero = document.createElement("td");
-    const columnaNombre = document.createElement("td");
-    const columnaCantidad = document.createElement("td");
-    const columnaHora = document.createElement("td");
-    const columnaEstado = document.createElement("td");
-    const columnaTiempo = document.createElement("td");
-    const columnaRestaurante = document.createElement("td");
+    const tablaHistorialPedidos =
+        document.getElementById("tablaHistorialPedidos");
 
-    const textoNumero = document.createElement("strong");
-    const textoNombre = document.createElement("strong");
-    const textoCantidad = document.createElement("strong");
-    const textoHora = document.createElement("strong");
-    const textoTiempo = document.createElement("strong");
-    const estado = document.createElement("span");
+    const mensajeSinPedido =
+        document.getElementById("mensajeSinPedido");
 
-    textoNumero.textContent = pedidoActivo.numero;
-    textoNombre.textContent = pedidoActivo.nombre;
-    textoCantidad.textContent = pedidoActivo.cantidad;
-    textoHora.textContent = pedidoActivo.hora;
-    estado.textContent = pedidoActivo.estado;
-    textoTiempo.textContent = pedidoActivo.tiempo;
-    columnaRestaurante.textContent = pedidoActivo.restaurante;
+    const mensajeSinHistorial =
+        document.getElementById("mensajeSinHistorial");
 
-    estado.classList.add(obtenerClaseEstado(pedidoActivo.estado));
+    const mensajeErrorConexion =
+        document.getElementById("mensajeErrorConexion");
 
-    columnaNumero.appendChild(textoNumero);
-    columnaNombre.appendChild(textoNombre);
-    columnaCantidad.appendChild(textoCantidad);
-    columnaHora.appendChild(textoHora);
-    columnaEstado.appendChild(estado);
-    columnaTiempo.appendChild(textoTiempo);
+    const btnHomePedidos =
+        document.getElementById("btnHomePedidos");
 
-    fila.appendChild(columnaNumero);
-    fila.appendChild(columnaNombre);
-    fila.appendChild(columnaCantidad);
-    fila.appendChild(columnaHora);
-    fila.appendChild(columnaEstado);
-    fila.appendChild(columnaTiempo);
-    fila.appendChild(columnaRestaurante);
+    const btnMisPedidosActual =
+        document.getElementById("btnMisPedidosActual");
 
-    tablaPedidoActivo.appendChild(fila);
-}
+    const btnCarrito =
+        document.getElementById("btnCarrito");
 
-function mostrarHistorialPedidos() {
-    tablaHistorialPedidos.innerHTML = "";
-    mensajeSinHistorial.textContent = "";
+    const btnUsuario =
+        document.getElementById("btnUsuario");
 
-    const platos = obtenerPlatos();
+    const seccionPedidosActivos =
+        document.getElementById("seccionPedidosActivos");
 
-    if (platos.length === 0) {
-        mensajeSinHistorial.textContent = "Todavía no tienes pedidos anteriores.";
-        return;
+
+    // =====================
+    // RUTAS
+    // =====================
+
+    const RUTA_HOME =
+        "../../Navegación/pages/home.html";
+
+    const RUTA_CARRITO =
+        "../../Gestión pago/pages/Carrito_compras1.html";
+
+    const RUTA_CUENTA =
+        "cuenta-cliente.html";
+
+
+    // =====================
+    // KEYS
+    // =====================
+
+    const KEY_ACTIVOS =
+        "pedidosActivos";
+
+    const KEY_HISTORIAL =
+        "pedidosHistorial";
+
+    const KEY_RESENAS =
+        "foodfinder_resenas";
+
+    const KEY_RESTAURANTES =
+        "foodfinder_restaurantes";
+
+
+    // =====================
+    // LOCALSTORAGE
+    // =====================
+
+    function obtenerDatos(key) {
+        try {
+            return JSON.parse(
+                localStorage.getItem(key)
+            ) || [];
+        } catch (error) {
+            return [];
+        }
     }
 
-    platos.forEach(function (plato, index) {
-        const pedido = {
-            numero: "#10" + (80 + index),
-            nombre: plato.nombre,
-            cantidad: "1",
-            hora: "13:43",
-            restaurante: "FoodFinder",
-            precio: "S/. " + plato.precio,
-            estado: "Entregado"
+    function guardarDatos(key, data) {
+        localStorage.setItem(
+            key,
+            JSON.stringify(data)
+        );
+    }
+
+
+    // =====================
+    // FILTRO POR CLIENTE
+    // =====================
+
+    function perteneceAlCliente(pedido) {
+        if (!pedido) {
+            return false;
+        }
+
+        if (pedido.clienteEmail) {
+            return pedido.clienteEmail === usuarioActivo.correo;
+        }
+
+        return false;
+    }
+
+    function obtenerPedidosActivosDelCliente() {
+        return obtenerDatos(KEY_ACTIVOS)
+            .filter(perteneceAlCliente);
+    }
+
+    function obtenerHistorialDelCliente() {
+        return obtenerDatos(KEY_HISTORIAL)
+            .filter(perteneceAlCliente);
+    }
+
+
+    // =====================
+    // UTILIDADES
+    // =====================
+
+    function escaparHTML(texto) {
+        return String(texto || "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+    function obtenerClaseEstado(estado) {
+        const estadoNormalizado =
+            String(estado || "")
+                .toLowerCase();
+
+        if (estadoNormalizado.includes("preparando")) {
+            return "estado-preparando";
+        }
+
+        if (estadoNormalizado.includes("listo")) {
+            return "estado-listo";
+        }
+
+        if (
+            estadoNormalizado.includes("entregado") ||
+            estadoNormalizado.includes("finalizado")
+        ) {
+            return "estado-entregado";
+        }
+
+        if (estadoNormalizado.includes("cancelado")) {
+            return "estado-cancelado";
+        }
+
+        return "estado-recibido";
+    }
+
+    function formatearEstado(estado) {
+        const estadoNormalizado =
+            String(estado || "")
+                .toLowerCase();
+
+        if (estadoNormalizado.includes("preparando")) {
+            return "Preparando pedido";
+        }
+
+        if (estadoNormalizado.includes("listo")) {
+            return "Listo para entrega";
+        }
+
+        if (estadoNormalizado.includes("finalizado")) {
+            return "Entregado";
+        }
+
+        if (estadoNormalizado.includes("cancelado")) {
+            return "Cancelado";
+        }
+
+        return "Recibido";
+    }
+
+    function obtenerNombreRestaurante(pedido) {
+        return (
+            pedido.restauranteNombre ||
+            "Restaurante FoodFinder"
+        );
+    }
+
+    function obtenerPlatosPedido(pedido) {
+        if (Array.isArray(pedido.items)) {
+            return pedido.items
+                .map((item) => {
+                    const cantidad =
+                        Number(item.cantidad || 1);
+
+                    return `${cantidad}x ${item.nombre}`;
+                })
+                .join(", ");
+        }
+
+        return pedido.plato || "Pedido sin detalle";
+    }
+
+    function obtenerTotalPedido(pedido) {
+        return Number(pedido.total || 0);
+    }
+
+    function pedidoYaTieneResena(pedido) {
+        const resenas =
+            obtenerDatos(KEY_RESENAS);
+
+        return resenas.some((resena) => {
+            return (
+                resena.pedidoId === pedido.id &&
+                resena.clienteEmail === usuarioActivo.correo
+            );
+        });
+    }
+
+    function pedidoPermiteResena(pedido) {
+        const estado =
+            String(pedido.estado || "")
+                .toLowerCase();
+
+        return (
+            estado.includes("finalizado") ||
+            estado.includes("entregado")
+        );
+    }
+
+    // =====================
+    // MOSTRAR PEDIDOS ACTIVOS
+    // =====================
+
+    function mostrarPedidoActivo() {
+        const pedidosActivos =
+            obtenerPedidosActivosDelCliente();
+
+        tablaPedidoActivo.innerHTML =
+            "";
+
+        mensajeSinPedido.textContent =
+            "";
+
+        if (mensajeErrorConexion) {
+            mensajeErrorConexion.style.display =
+                "none";
+
+            mensajeErrorConexion.textContent =
+                "";
+        }
+
+        if (pedidosActivos.length === 0) {
+            mensajeSinPedido.innerHTML = `
+                No tienes pedidos en curso actualmente.
+                <br><br>
+                <button
+                    type="button"
+                    class="btn-resena btn-explorar-restaurantes">
+                    Explorar restaurantes
+                </button>
+            `;
+
+            configurarBotonesExplorar();
+            return;
+        }
+
+        pedidosActivos.forEach((pedido) => {
+            const estadoTexto =
+                formatearEstado(pedido.estado);
+
+            const fila =
+                document.createElement("tr");
+
+            fila.innerHTML = `
+                <td>
+                    <strong>${escaparHTML(pedido.id)}</strong>
+                </td>
+
+                <td>
+                    <strong>${escaparHTML(obtenerPlatosPedido(pedido))}</strong>
+                </td>
+
+                <td>
+                    <strong>${escaparHTML(pedido.cantidad)}</strong>
+                </td>
+
+                <td>
+                    <strong>${escaparHTML(pedido.hora)}</strong>
+                </td>
+
+                <td>
+                    <span class="${obtenerClaseEstado(pedido.estado)}">
+                        ${escaparHTML(estadoTexto)}
+                    </span>
+                </td>
+
+                <td>
+                    <strong>25 - 35 min</strong>
+                </td>
+
+                <td>
+                    ${escaparHTML(obtenerNombreRestaurante(pedido))}
+                </td>
+            `;
+
+            tablaPedidoActivo.appendChild(fila);
+        });
+    }
+
+
+    // =====================
+    // MOSTRAR HISTORIAL
+    // =====================
+
+    function mostrarHistorialPedidos() {
+        const historial =
+            obtenerHistorialDelCliente();
+
+        tablaHistorialPedidos.innerHTML =
+            "";
+
+        mensajeSinHistorial.textContent =
+            "";
+
+        if (historial.length === 0) {
+            mensajeSinHistorial.innerHTML = `
+                Todavía no tienes pedidos anteriores.
+                <br><br>
+                <button
+                    type="button"
+                    class="btn-resena btn-explorar-restaurantes">
+                    Hacer mi primer pedido
+                </button>
+            `;
+
+            configurarBotonesExplorar();
+            return;
+        }
+
+        historial.forEach((pedido) => {
+            const estadoTexto =
+                formatearEstado(pedido.estado);
+
+            const total =
+                obtenerTotalPedido(pedido);
+
+            const tieneResena =
+                pedidoYaTieneResena(pedido);
+
+            const permiteResena =
+                pedidoPermiteResena(pedido);
+
+            const fila =
+                document.createElement("tr");
+
+            fila.innerHTML = `
+                <td>
+                    <strong>${escaparHTML(pedido.id)}</strong>
+                </td>
+
+                <td>
+                    <strong>${escaparHTML(obtenerPlatosPedido(pedido))}</strong>
+                </td>
+
+                <td>
+                    <strong>${escaparHTML(pedido.cantidad)}</strong>
+                </td>
+
+                <td>
+                    <strong>${escaparHTML(pedido.hora)}</strong>
+                </td>
+
+                <td>
+                    ${escaparHTML(obtenerNombreRestaurante(pedido))}
+                </td>
+
+                <td>
+                    S/ ${total.toFixed(2)}
+                </td>
+
+                <td>
+                    <span class="${obtenerClaseEstado(pedido.estado)}">
+                        ${escaparHTML(estadoTexto)}
+                    </span>
+                </td>
+
+                <td>
+                    ${
+                        permiteResena
+                            ? `
+                                <button
+                                    type="button"
+                                    class="btn-resena"
+                                    data-pedido-id="${escaparHTML(pedido.id)}"
+                                    ${tieneResena ? "disabled" : ""}>
+                                    ${tieneResena ? "Reseña enviada" : "Dejar reseña"}
+                                </button>
+                            `
+                            : `
+                                <button
+                                    type="button"
+                                    class="btn-resena"
+                                    disabled>
+                                    Pedido cancelado
+                                </button>
+                            `
+                    }
+                </td>
+            `;
+
+            tablaHistorialPedidos.appendChild(fila);
+        });
+
+        configurarBotonesResena();
+    }
+
+
+    // =====================
+    // RESEÑAS
+    // =====================
+
+    function obtenerPedidoHistorialPorId(idPedido) {
+        return obtenerHistorialDelCliente()
+            .find((pedido) => {
+                return pedido.id === idPedido;
+            });
+    }
+
+    function crearEstrellasTexto(calificacion) {
+        const estrellasLlenas =
+            "★".repeat(calificacion);
+
+        const estrellasVacias =
+            "☆".repeat(5 - calificacion);
+
+        return estrellasLlenas + estrellasVacias;
+    }
+
+    function abrirModalResena(pedido) {
+        if (!pedido) {
+            return;
+        }
+
+        if (pedidoYaTieneResena(pedido)) {
+            alert("Ya dejaste una reseña para este pedido.");
+            return;
+        }
+
+        if (!pedidoPermiteResena(pedido)) {
+            alert("Solo puedes dejar reseñas en pedidos entregados.");
+            return;
+        }
+
+        const modal =
+            document.createElement("div");
+
+        modal.className =
+            "modal_bg";
+
+        modal.innerHTML = `
+            <div class="modal_box">
+                <h3>Dejar reseña</h3>
+
+                <p style="margin-bottom: 12px;">
+                    Restaurante:
+                    <strong>${escaparHTML(obtenerNombreRestaurante(pedido))}</strong>
+                </p>
+
+                <label style="font-size: 13px; font-weight: 600;">
+                    Calificación
+                </label>
+
+                <select id="resena-calificacion">
+                    <option value="5">★★★★★ - Excelente</option>
+                    <option value="4">★★★★☆ - Muy bueno</option>
+                    <option value="3">★★★☆☆ - Bueno</option>
+                    <option value="2">★★☆☆☆ - Regular</option>
+                    <option value="1">★☆☆☆☆ - Malo</option>
+                </select>
+
+                <label style="font-size: 13px; font-weight: 600; margin-top: 10px;">
+                    Comentario
+                </label>
+
+                <textarea
+                    id="resena-comentario"
+                    placeholder="Escribe tu experiencia con el pedido..."
+                    rows="4"></textarea>
+
+                <div class="modal_actions">
+                    <button id="resena-cancelar" type="button">
+                        Cancelar
+                    </button>
+
+                    <button id="resena-guardar" type="button">
+                        Guardar reseña
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        document.getElementById("resena-cancelar")
+            .addEventListener("click", () => {
+                modal.remove();
+            });
+
+        document.getElementById("resena-guardar")
+            .addEventListener("click", () => {
+                const calificacion =
+                    Number(
+                        document.getElementById("resena-calificacion").value
+                    );
+
+                const comentario =
+                    document.getElementById("resena-comentario")
+                        .value
+                        .trim();
+
+                if (!comentario) {
+                    alert("Escribe un comentario para guardar la reseña.");
+                    return;
+                }
+
+                guardarResena(
+                    pedido,
+                    calificacion,
+                    comentario
+                );
+
+                modal.remove();
+                mostrarHistorialPedidos();
+            });
+    }
+
+    function guardarResena(pedido, calificacion, comentario) {
+        const resenas =
+            obtenerDatos(KEY_RESENAS);
+
+        const nuevaResena = {
+            id: "resena_" + Date.now(),
+            pedidoId: pedido.id,
+            restauranteId: pedido.restauranteId || "",
+            ownerEmail: pedido.ownerEmail || "",
+            restauranteNombre: pedido.restauranteNombre || obtenerNombreRestaurante(pedido),
+            clienteEmail: usuarioActivo.correo,
+            clienteNombre: usuarioActivo.nombre || "Cliente FoodFinder",
+            calificacion: calificacion,
+            estrellas: crearEstrellasTexto(calificacion),
+            comentario: comentario,
+            fecha: new Date().toISOString()
         };
 
-        const fila = document.createElement("tr");
+        resenas.push(nuevaResena);
 
-        const columnaNumero = document.createElement("td");
-        const columnaNombre = document.createElement("td");
-        const columnaCantidad = document.createElement("td");
-        const columnaHora = document.createElement("td");
-        const columnaRestaurante = document.createElement("td");
-        const columnaPrecio = document.createElement("td");
-        const columnaEstado = document.createElement("td");
-        const columnaAccion = document.createElement("td");
+        guardarDatos(
+            KEY_RESENAS,
+            resenas
+        );
 
-        const textoNumero = document.createElement("strong");
-        const textoNombre = document.createElement("strong");
-        const textoCantidad = document.createElement("strong");
-        const textoHora = document.createElement("strong");
-        const estado = document.createElement("span");
-        const botonResena = document.createElement("button");
+        actualizarRatingRestaurante(
+            nuevaResena.restauranteId,
+            nuevaResena.ownerEmail
+        );
 
-        textoNumero.textContent = pedido.numero;
-        textoNombre.textContent = pedido.nombre;
-        textoCantidad.textContent = pedido.cantidad;
-        textoHora.textContent = pedido.hora;
-        columnaRestaurante.textContent = pedido.restaurante;
-        columnaPrecio.textContent = pedido.precio;
-        estado.textContent = pedido.estado;
-        botonResena.textContent = "Dejar reseña";
-
-        estado.classList.add(obtenerClaseEstado(pedido.estado));
-        botonResena.classList.add("btn-resena");
-        botonResena.type = "button";
-
-        columnaNumero.appendChild(textoNumero);
-        columnaNombre.appendChild(textoNombre);
-        columnaCantidad.appendChild(textoCantidad);
-        columnaHora.appendChild(textoHora);
-        columnaEstado.appendChild(estado);
-        columnaAccion.appendChild(botonResena);
-
-        fila.appendChild(columnaNumero);
-        fila.appendChild(columnaNombre);
-        fila.appendChild(columnaCantidad);
-        fila.appendChild(columnaHora);
-        fila.appendChild(columnaRestaurante);
-        fila.appendChild(columnaPrecio);
-        fila.appendChild(columnaEstado);
-        fila.appendChild(columnaAccion);
-
-        tablaHistorialPedidos.appendChild(fila);
-    });
-}
-
-function mostrarFalloConexion() {
-    if (falloConexion === true) {
-        mensajeErrorConexion.style.display = "block";
-        mensajeErrorConexion.textContent = "No se pudo cargar el estado del pedido. Intente nuevamente.";
-    } else {
-        mensajeErrorConexion.style.display = "none";
-        mensajeErrorConexion.textContent = "";
+        alert("Reseña guardada correctamente.");
     }
-}
 
-btnCarrito.addEventListener("click", function () {
-    alert("Carrito de compras");
+    function actualizarRatingRestaurante(restauranteId, ownerEmail) {
+        const restaurantes =
+            obtenerDatos(KEY_RESTAURANTES);
+
+        const resenas =
+            obtenerDatos(KEY_RESENAS)
+                .filter((resena) => {
+                    return (
+                        resena.restauranteId === restauranteId ||
+                        resena.ownerEmail === ownerEmail
+                    );
+                });
+
+        if (resenas.length === 0) {
+            return;
+        }
+
+        const promedio =
+            resenas.reduce((suma, resena) => {
+                return suma + Number(resena.calificacion || 0);
+            }, 0) / resenas.length;
+
+        const restaurantesActualizados =
+            restaurantes.map((restaurante) => {
+                if (
+                    restaurante.id === restauranteId ||
+                    restaurante.ownerEmail === ownerEmail
+                ) {
+                    return {
+                        ...restaurante,
+                        rating: Number(promedio.toFixed(1)),
+                        reviews: resenas.length
+                    };
+                }
+
+                return restaurante;
+            });
+
+        guardarDatos(
+            KEY_RESTAURANTES,
+            restaurantesActualizados
+        );
+    }
+
+    function configurarBotonesResena() {
+        const botonesResena =
+            document.querySelectorAll(".btn-resena:not(.btn-explorar-restaurantes)");
+
+        botonesResena.forEach((boton) => {
+            boton.addEventListener("click", () => {
+                const idPedido =
+                    boton.dataset.pedidoId;
+
+                const pedido =
+                    obtenerPedidoHistorialPorId(idPedido);
+
+                abrirModalResena(pedido);
+            });
+        });
+    }
+
+
+    // =====================
+    // PERFIL CLIENTE
+    // =====================
+
+    function abrirModalPerfil() {
+        const modal =
+            document.createElement("div");
+
+        modal.className =
+            "modal_bg";
+
+        modal.innerHTML = `
+            <div class="modal_box">
+                <h3>Perfil del cliente</h3>
+
+                <p>
+                    <strong>Nombre:</strong>
+                    ${escaparHTML(usuarioActivo.nombre || "Cliente FoodFinder")}
+                </p>
+
+                <p>
+                    <strong>Correo:</strong>
+                    ${escaparHTML(usuarioActivo.correo || "Sin correo")}
+                </p>
+
+                <p>
+                    <strong>Rol:</strong>
+                    Consumidor
+                </p>
+
+                <div class="modal_actions">
+                    <button id="perfil-home" type="button">
+                        Ir al Home
+                    </button>
+
+                    <button id="perfil-cerrar-sesion" type="button">
+                        Cerrar sesión
+                    </button>
+
+                    <button id="perfil-cerrar" type="button">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        document.getElementById("perfil-home")
+            .addEventListener("click", () => {
+                window.location.href =
+                    RUTA_HOME;
+            });
+
+        document.getElementById("perfil-cerrar-sesion")
+            .addEventListener("click", () => {
+                const confirmar =
+                    confirm("¿Deseas cerrar sesión?");
+
+                if (!confirmar) {
+                    return;
+                }
+
+                localStorage.removeItem("usuarioActivo");
+
+                window.location.href =
+                    RUTA_CUENTA;
+            });
+
+        document.getElementById("perfil-cerrar")
+            .addEventListener("click", () => {
+                modal.remove();
+            });
+    }
+
+
+    // =====================
+    // NAVEGACIÓN
+    // =====================
+
+    function configurarBotonesExplorar() {
+        const botonesExplorar =
+            document.querySelectorAll(".btn-explorar-restaurantes");
+
+        botonesExplorar.forEach((boton) => {
+            boton.addEventListener("click", () => {
+                window.location.href =
+                    RUTA_HOME;
+            });
+        });
+    }
+
+    if (btnHomePedidos) {
+        btnHomePedidos.addEventListener("click", () => {
+            window.location.href =
+                RUTA_HOME;
+        });
+    }
+
+    if (btnMisPedidosActual) {
+        btnMisPedidosActual.addEventListener("click", () => {
+            if (seccionPedidosActivos) {
+                seccionPedidosActivos.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+            }
+        });
+    }
+
+    if (btnCarrito) {
+        btnCarrito.addEventListener("click", () => {
+            window.location.href =
+                RUTA_CARRITO;
+        });
+    }
+
+    if (btnUsuario) {
+        btnUsuario.addEventListener("click", () => {
+            abrirModalPerfil();
+        });
+    }
+
+
+    // =====================
+    // INIT
+    // =====================
+
+    mostrarPedidoActivo();
+    mostrarHistorialPedidos();
+
 });
-
-btnUsuario.addEventListener("click", function () {
-    alert("Perfil de usuario");
-});
-
-mostrarPedidoActivo();
-mostrarHistorialPedidos();
-mostrarFalloConexion();
