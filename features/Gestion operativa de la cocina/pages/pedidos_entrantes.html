@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="es-PE">
 <head>
     <meta charset="UTF-8">
@@ -8,43 +7,65 @@
     <link rel="stylesheet" href="../../../styles.css">
     <title>Pedidos Entrantes - FoodFinder</title>
 </head>
+
 <body class="dashboard_body">
 
-<!-- NAVBAR -->
 <header class="dashboard_navbar">
-    <a href="#" class="dashboard_logo">
-        <img src="../../../Assests/Icons/LogoPrincipal.svg" alt="Logo FoodFinder" width="32" height="32">
-        <span class="logo_texto"><span class="logo_food">Food</span><span class="logo_finder">Finder</span></span>
+    <a href="pedidos_entrantes.html" class="dashboard_logo" id="btn-logo-panel">
+        <img
+            src="../../../Assests/Icons/LogoPrincipal.svg"
+            alt="Logo FoodFinder"
+            width="32"
+            height="32">
+
+        <span class="logo_texto">
+            <span class="logo_food">Food</span><span class="logo_finder">Finder</span>
+        </span>
     </a>
 
-    <div class="navbar_lupa">
+    <button
+        type="button"
+        class="navbar_lupa"
+        id="btn-buscar-panel"
+        style="border: none; cursor: pointer;">
         <span class="nav_icono">&#128269;</span>
-    </div>
+    </button>
 
     <nav class="dashboard_nav_derecha">
-        <button class="btn_dashboard" id="btn_dashboard">Dashboard</button>
+        <button
+            type="button"
+            class="btn_dashboard"
+            id="btn_dashboard">
+            Dashboard
+        </button>
 
-        <a href="#" class="nav_icono_link">
+        <button
+            type="button"
+            class="nav_icono_link"
+            id="btn-perfil-panel"
+            style="border: none; background: transparent; cursor: pointer;">
             <span class="nav_icono">&#128100;</span>
             <span class="nav_icono_label">Perfil</span>
-        </a>
+        </button>
 
-        <a href="#" class="nav_icono_link" id="btn-salir">
+        <button
+            type="button"
+            class="nav_icono_link"
+            id="btn-salir"
+            style="border: none; background: transparent; cursor: pointer;">
             <span class="nav_icono">&#128682;</span>
             <span class="nav_icono_label">Salir</span>
-        </a>
+        </button>
     </nav>
 </header>
 
 <div class="dashboard_layout">
 
-    <!-- SIDEBAR -->
     <aside class="dashboard_sidebar">
         <p class="sidebar_titulo">PANEL DE GESTIÓN</p>
 
         <nav class="sidebar_nav">
-
-            <a href="pedidos_entrantes.html" class="sidebar_item">
+            <a href="pedidos_entrantes.html" class="sidebar_item sidebar_item_activo">
                 <span class="sidebar_icono">&#127968;</span>
                 Resumen
             </a>
@@ -73,20 +94,15 @@
                 <span class="sidebar_icono">&#9881;</span>
                 Configuración
             </a>
-
         </nav>
     </aside>
 
-    <!-- CONTENIDO PRINCIPAL -->
     <main class="dashboard_contenido">
 
-        <!-- PEDIDOS ACTIVOS -->
         <h1 class="dashboard_titulo_pagina">Pedidos entrantes</h1>
 
         <section class="tabla_card">
-
             <table class="tabla_dashboard">
-
                 <thead>
                     <tr class="tabla_encabezado">
                         <th class="tabla_th">PEDIDO</th>
@@ -100,57 +116,16 @@
                 </thead>
 
                 <tbody id="tbody_pedidos_activos">
-
-                    <tr class="tabla_fila" data-id="1089">
-
-                        <td class="tabla_td">#1089</td>
-                        <td class="tabla_td">Pollo a la norteña</td>
-                        <td class="tabla_td">Ana T.</td>
-                        <td class="tabla_td">2</td>
-
-                        <td class="tabla_td">
-                            <span class="badge_preparando">
-                                Preparando pedido
-                            </span>
-                        </td>
-
-                        <td class="tabla_td">12:45</td>
-
-                        <td class="tabla_td tabla_acciones">
-
-                            <button
-                                class="btn_finalizar"
-                                id="btn_finalizar_1089"
-                                data-id="1089">
-                                &#10003; Finalizar
-                            </button>
-
-                            <button
-                                class="btn_cancelar"
-                                id="btn_cancelar_1089"
-                                data-id="1089">
-                                &#10005; Cancelar
-                            </button>
-
-                        </td>
-
-                    </tr>
-
                 </tbody>
-
             </table>
-
         </section>
 
-        <!-- HISTORIAL -->
         <h2 class="dashboard_subtitulo_pagina">
-            Historial de entregados
+            Historial de pedidos
         </h2>
 
         <section class="tabla_card">
-
             <table class="tabla_dashboard">
-
                 <thead>
                     <tr class="tabla_encabezado">
                         <th class="tabla_th">PEDIDO</th>
@@ -158,34 +133,14 @@
                         <th class="tabla_th">CLIENTE</th>
                         <th class="tabla_th">N° PLATOS</th>
                         <th class="tabla_th">TOTAL</th>
+                        <th class="tabla_th">ESTADO</th>
                         <th class="tabla_th">HORA</th>
                     </tr>
                 </thead>
 
                 <tbody id="tbody_historial">
-
-                    <tr class="tabla_fila" data-id="1087">
-                        <td class="tabla_td">#1087</td>
-                        <td class="tabla_td">Seco de pollo</td>
-                        <td class="tabla_td">Sofia M.</td>
-                        <td class="tabla_td">2</td>
-                        <td class="tabla_td">S/ 30</td>
-                        <td class="tabla_td">12:00</td>
-                    </tr>
-
-                    <tr class="tabla_fila" data-id="1085">
-                        <td class="tabla_td">#1085</td>
-                        <td class="tabla_td">Locro de zapallo</td>
-                        <td class="tabla_td">Tony M.</td>
-                        <td class="tabla_td">1</td>
-                        <td class="tabla_td">S/ 15</td>
-                        <td class="tabla_td">12:00</td>
-                    </tr>
-
                 </tbody>
-
             </table>
-
         </section>
 
     </main>

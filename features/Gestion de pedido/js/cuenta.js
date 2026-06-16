@@ -1,43 +1,151 @@
-const pantallaLogin = document.getElementById("pantallaLogin");
-const pantallaRol = document.getElementById("pantallaRol");
-const pantallaRegistro = document.getElementById("pantallaRegistro");
-const pantallaBienvenido = document.getElementById("pantallaBienvenido");
+// ==========================================
+// cuenta.js
+// Login / Registro FoodFinder
+// Cliente + Cocinero + restaurante propio
+// ==========================================
 
-const btnCrearCuenta = document.getElementById("btnCrearCuenta");
-const btnConsumidor = document.getElementById("btnConsumidor");
-const btnCocinero = document.getElementById("btnCocinero");
-const volverLogin = document.getElementById("volverLogin");
-const volverRol = document.getElementById("volverRol");
 
-const correoLogin = document.getElementById("correoLogin");
-const passwordLogin = document.getElementById("passwordLogin");
-const btnIniciarSesionLogin = document.getElementById("btnIniciarSesionLogin");
-const mensajeLogin = document.getElementById("mensajeLogin");
+// =====================
+// ELEMENTOS
+// =====================
 
-const tarjetaRegistro = document.getElementById("tarjetaRegistro");
-const iconoRegistroRol = document.getElementById("iconoRegistroRol");
-const tituloRegistro = document.getElementById("tituloRegistro");
+const pantallaLogin =
+    document.getElementById("pantallaLogin");
 
-const nombreCliente = document.getElementById("nombreCliente");
-const correoCliente = document.getElementById("correoCliente");
-const telefonoCliente = document.getElementById("telefonoCliente");
-const direccionNegocio = document.getElementById("direccionNegocio");
-const passwordCliente = document.getElementById("passwordCliente");
+const pantallaRol =
+    document.getElementById("pantallaRol");
 
-const grupoDireccionNegocio = document.getElementById("grupoDireccionNegocio");
+const pantallaRegistro =
+    document.getElementById("pantallaRegistro");
 
-const btnGuardarCuenta = document.getElementById("btnGuardarCuenta");
+const pantallaBienvenido =
+    document.getElementById("pantallaBienvenido");
 
-const errorNombre = document.getElementById("errorNombre");
-const errorCorreo = document.getElementById("errorCorreo");
-const errorTelefono = document.getElementById("errorTelefono");
-const errorDireccionNegocio = document.getElementById("errorDireccionNegocio");
-const errorPassword = document.getElementById("errorPassword");
+const btnVolverLanding =
+    document.querySelector("#pantallaLogin .btn-volver");
 
-const mensajeExito = document.getElementById("mensajeExito");
-const mensajeSugerencia = document.getElementById("mensajeSugerencia");
+const btnCrearCuenta =
+    document.getElementById("btnCrearCuenta");
 
-let rolSeleccionado = "";
+const btnConsumidor =
+    document.getElementById("btnConsumidor");
+
+const btnCocinero =
+    document.getElementById("btnCocinero");
+
+const volverLogin =
+    document.getElementById("volverLogin");
+
+const volverRol =
+    document.getElementById("volverRol");
+
+const correoLogin =
+    document.getElementById("correoLogin");
+
+const passwordLogin =
+    document.getElementById("passwordLogin");
+
+const btnIniciarSesionLogin =
+    document.getElementById("btnIniciarSesionLogin");
+
+const mensajeLogin =
+    document.getElementById("mensajeLogin");
+
+const tarjetaRegistro =
+    document.getElementById("tarjetaRegistro");
+
+const iconoRegistroRol =
+    document.getElementById("iconoRegistroRol");
+
+const tituloRegistro =
+    document.getElementById("tituloRegistro");
+
+const nombreCliente =
+    document.getElementById("nombreCliente");
+
+const correoCliente =
+    document.getElementById("correoCliente");
+
+const telefonoCliente =
+    document.getElementById("telefonoCliente");
+
+const direccionNegocio =
+    document.getElementById("direccionNegocio");
+
+const passwordCliente =
+    document.getElementById("passwordCliente");
+
+const grupoDireccionNegocio =
+    document.getElementById("grupoDireccionNegocio");
+
+const btnGuardarCuenta =
+    document.getElementById("btnGuardarCuenta");
+
+const errorNombre =
+    document.getElementById("errorNombre");
+
+const errorCorreo =
+    document.getElementById("errorCorreo");
+
+const errorTelefono =
+    document.getElementById("errorTelefono");
+
+const errorDireccionNegocio =
+    document.getElementById("errorDireccionNegocio");
+
+const errorPassword =
+    document.getElementById("errorPassword");
+
+const mensajeExito =
+    document.getElementById("mensajeExito");
+
+const mensajeSugerencia =
+    document.getElementById("mensajeSugerencia");
+
+const logoLogin =
+    document.getElementById("logo");
+
+const logoBienvenido =
+    document.getElementById("logoBienvenido");
+
+const formLogin =
+    document.querySelector("#pantallaLogin form");
+
+const formRegistro =
+    document.getElementById("formRegistroCliente");
+
+
+// =====================
+// RUTAS
+// =====================
+
+const RUTA_LANDING =
+    "../../../index.html";
+
+const RUTA_HOME_CLIENTE =
+    "../../Navegación/pages/home.html";
+
+const RUTA_PANEL_COCINERO =
+    "../../Gestion operativa de la cocina/pages/pedidos_entrantes.html";
+
+const ICONO_CONSUMIDOR =
+    "../../../Assests/Icons/consumidor.png";
+
+const ICONO_COCINERO =
+    "../../../Assests/Icons/chef.png";
+
+
+// =====================
+// ESTADO
+// =====================
+
+let rolSeleccionado =
+    "";
+
+
+// =====================
+// PANTALLAS
+// =====================
 
 function mostrarPantalla(pantalla) {
     pantallaLogin.classList.remove("activa");
@@ -48,182 +156,407 @@ function mostrarPantalla(pantalla) {
     pantalla.classList.add("activa");
 }
 
+
+// =====================
+// VALIDACIONES
+// =====================
+
 function validarCorreo(correo) {
-    const expresionCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const expresionCorreo =
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     return expresionCorreo.test(correo);
 }
 
 function limpiarMensajes() {
-    errorNombre.textContent = "";
-    errorCorreo.textContent = "";
-    errorTelefono.textContent = "";
-    errorDireccionNegocio.textContent = "";
-    errorPassword.textContent = "";
-    mensajeExito.textContent = "";
-    mensajeSugerencia.textContent = "";
-    mensajeLogin.textContent = "";
+    errorNombre.textContent =
+        "";
+
+    errorCorreo.textContent =
+        "";
+
+    errorTelefono.textContent =
+        "";
+
+    errorDireccionNegocio.textContent =
+        "";
+
+    errorPassword.textContent =
+        "";
+
+    mensajeExito.textContent =
+        "";
+
+    mensajeSugerencia.textContent =
+        "";
+
+    mensajeLogin.textContent =
+        "";
 }
 
 function limpiarFormularioRegistro() {
-    nombreCliente.value = "";
-    correoCliente.value = "";
-    telefonoCliente.value = "";
-    direccionNegocio.value = "";
-    passwordCliente.value = "";
+    nombreCliente.value =
+        "";
+
+    correoCliente.value =
+        "";
+
+    telefonoCliente.value =
+        "";
+
+    direccionNegocio.value =
+        "";
+
+    passwordCliente.value =
+        "";
+}
+
+function limpiarFormularioLogin() {
+    correoLogin.value =
+        "";
+
+    passwordLogin.value =
+        "";
+}
+
+
+// =====================
+// LOCALSTORAGE
+// =====================
+
+function obtenerJSON(key) {
+    try {
+        return JSON.parse(
+            localStorage.getItem(key)
+        );
+    } catch (error) {
+        return null;
+    }
 }
 
 function obtenerUsuariosRegistrados() {
-    const usuarios = localStorage.getItem("usuariosRegistrados");
-
-    if (usuarios === null) {
-        return [];
-    }
-
-    return JSON.parse(usuarios);
+    return obtenerJSON("usuariosRegistrados") || [];
 }
 
 function guardarUsuariosRegistrados(usuarios) {
-    localStorage.setItem("usuariosRegistrados", JSON.stringify(usuarios));
+    localStorage.setItem(
+        "usuariosRegistrados",
+        JSON.stringify(usuarios)
+    );
 }
 
 function guardarUsuarioActivo(usuario) {
-    localStorage.setItem("usuarioActivo", JSON.stringify(usuario));
+    localStorage.setItem(
+        "usuarioActivo",
+        JSON.stringify(usuario)
+    );
+}
+
+function obtenerRestaurantesRegistrados() {
+    return obtenerJSON("foodfinder_restaurantes") || [];
+}
+
+function guardarRestaurantesRegistrados(restaurantes) {
+    localStorage.setItem(
+        "foodfinder_restaurantes",
+        JSON.stringify(restaurantes)
+    );
 }
 
 function inicializarPlatosSiNoExisten() {
-    const platos = localStorage.getItem("platos_data");
+    const platos =
+        localStorage.getItem("platos_data");
 
     if (platos === null) {
-        localStorage.setItem("platos_data", JSON.stringify([]));
+        localStorage.setItem(
+            "platos_data",
+            JSON.stringify([])
+        );
     }
 }
 
+
+// =====================
+// RESTAURANTES POR EMPRENDEDOR
+// =====================
+
+function crearNombreRestaurante(usuario) {
+    const primerNombre =
+        String(usuario.nombre || "Emprendedor")
+            .split(" ")[0]
+            .trim();
+
+    return "Restaurante de " + primerNombre;
+}
+
+function crearOActualizarRestauranteDelUsuario(usuario) {
+    if (usuario.rol !== "cocinero") {
+        return null;
+    }
+
+    const restaurantes =
+        obtenerRestaurantesRegistrados();
+
+    let restaurante =
+        restaurantes.find((item) => {
+            return (
+                item.id === usuario.restauranteId ||
+                item.ownerEmail === usuario.correo
+            );
+        });
+
+    if (!restaurante) {
+        restaurante = {
+            id: usuario.restauranteId || "rest_" + usuario.id,
+            ownerEmail: usuario.correo,
+            ownerName: usuario.nombre,
+            nombre: crearNombreRestaurante(usuario),
+            cocina: "Emprendimiento gastronómico",
+            descripcion: "Restaurante registrado en FoodFinder.",
+            direccion: usuario.direccionNegocio || "Dirección pendiente",
+            distrito: "Lima",
+            telefono: usuario.telefono || "",
+            horario: "Lun–Dom 12:00pm – 10:00pm",
+            estado: "Abierto",
+            rating: 4.8,
+            reviews: 0,
+            imagen: "../../../Assests/Img/El rincon del sabor.jpg",
+            fechaRegistro: new Date().toLocaleDateString()
+        };
+
+        restaurantes.push(restaurante);
+    } else {
+        restaurante.ownerName =
+            usuario.nombre;
+
+        restaurante.telefono =
+            usuario.telefono || restaurante.telefono;
+
+        restaurante.direccion =
+            usuario.direccionNegocio || restaurante.direccion;
+    }
+
+    guardarRestaurantesRegistrados(restaurantes);
+
+    return restaurante;
+}
+
+function prepararUsuarioCocinero(usuario) {
+    if (usuario.rol !== "cocinero") {
+        return usuario;
+    }
+
+    const restaurante =
+        crearOActualizarRestauranteDelUsuario(usuario);
+
+    usuario.restauranteId =
+        restaurante.id;
+
+    return usuario;
+}
+
+function asegurarRestauranteParaCocinero(usuario) {
+    const usuarioPreparado =
+        prepararUsuarioCocinero(usuario);
+
+    const usuariosRegistrados =
+        obtenerUsuariosRegistrados();
+
+    const usuariosActualizados =
+        usuariosRegistrados.map((item) => {
+            if (item.correo === usuarioPreparado.correo) {
+                return usuarioPreparado;
+            }
+
+            return item;
+        });
+
+    guardarUsuariosRegistrados(usuariosActualizados);
+
+    return usuarioPreparado;
+}
+
+
+// =====================
+// CONFIGURACIÓN DE REGISTRO
+// =====================
+
 function configurarRegistroPorRol(rol) {
-    rolSeleccionado = rol;
+    rolSeleccionado =
+        rol;
 
     tarjetaRegistro.classList.remove("registro-cliente");
     tarjetaRegistro.classList.remove("registro-cocinero");
 
     if (rolSeleccionado === "cliente") {
-        tituloRegistro.textContent = "Ingrese sus datos";
-        iconoRegistroRol.src = "/Assests/Icons/consumidor.png";
-        iconoRegistroRol.alt = "Consumidor";
+        tituloRegistro.textContent =
+            "Ingrese sus datos";
+
+        iconoRegistroRol.src =
+            ICONO_CONSUMIDOR;
+
+        iconoRegistroRol.alt =
+            "Consumidor";
 
         tarjetaRegistro.classList.add("registro-cliente");
-        grupoDireccionNegocio.style.display = "none";
+
+        grupoDireccionNegocio.style.display =
+            "none";
     }
 
     if (rolSeleccionado === "cocinero") {
-        tituloRegistro.textContent = "Ingrese sus datos";
-        iconoRegistroRol.src = "/Assests/Icons/chef.png";
-        iconoRegistroRol.alt = "Cocinero";
+        tituloRegistro.textContent =
+            "Ingrese sus datos";
+
+        iconoRegistroRol.src =
+            ICONO_COCINERO;
+
+        iconoRegistroRol.alt =
+            "Cocinero";
 
         tarjetaRegistro.classList.add("registro-cocinero");
-        grupoDireccionNegocio.style.display = "block";
+
+        grupoDireccionNegocio.style.display =
+            "block";
     }
 
     limpiarMensajes();
     limpiarFormularioRegistro();
     mostrarPantalla(pantallaRegistro);
 }
-/*tomar en cuenta el window*/
+
+
+// =====================
+// REDIRECCIONES
+// =====================
+
 function redirigirSegunRol(usuario) {
     if (usuario.rol === "cliente") {
-        window.location.href = "../../Navegación/pages/home.html";
+        window.location.href =
+            RUTA_HOME_CLIENTE;
+
         return;
     }
 
     if (usuario.rol === "cocinero") {
         window.location.href =
-            "../../Gestion operativa de la cocina/pages/pedidos_entrantes.html";
+            RUTA_PANEL_COCINERO;
+
         return;
     }
+
+    window.location.href =
+        RUTA_LANDING;
 }
-/*tomar en cuenta el window*/
-btnCrearCuenta.addEventListener("click", function () {
-    limpiarMensajes();
-    mostrarPantalla(pantallaRol);
-});
 
-btnConsumidor.addEventListener("click", function () {
-    configurarRegistroPorRol("cliente");
-});
+function volverAlLanding() {
+    window.location.href =
+        RUTA_LANDING;
+}
 
-btnCocinero.addEventListener("click", function () {
-    configurarRegistroPorRol("cocinero");
-});
 
-volverLogin.addEventListener("click", function () {
-    limpiarMensajes();
-    mostrarPantalla(pantallaLogin);
-});
+// =====================
+// REGISTRO
+// =====================
 
-volverRol.addEventListener("click", function () {
-    limpiarMensajes();
-    mostrarPantalla(pantallaRol);
-});
-
-btnGuardarCuenta.addEventListener("click", function () {
+function guardarCuenta() {
     limpiarMensajes();
 
-    const nombre = nombreCliente.value.trim();
-    const correo = correoCliente.value.trim().toLowerCase();
-    const telefono = telefonoCliente.value.trim();
-    const direccion = direccionNegocio.value.trim();
-    const password = passwordCliente.value.trim();
+    const nombre =
+        nombreCliente.value.trim();
 
-    let formularioValido = true;
+    const correo =
+        correoCliente.value.trim().toLowerCase();
+
+    const telefono =
+        telefonoCliente.value.trim();
+
+    const direccion =
+        direccionNegocio.value.trim();
+
+    const password =
+        passwordCliente.value.trim();
+
+    let formularioValido =
+        true;
 
     if (nombre === "") {
-        errorNombre.textContent = "Ingrese su nombre completo";
-        formularioValido = false;
+        errorNombre.textContent =
+            "Ingrese su nombre completo";
+
+        formularioValido =
+            false;
     }
 
     if (correo === "") {
-        errorCorreo.textContent = "Ingrese su correo electrónico";
-        formularioValido = false;
+        errorCorreo.textContent =
+            "Ingrese su correo electrónico";
+
+        formularioValido =
+            false;
     } else if (!validarCorreo(correo)) {
-        errorCorreo.textContent = "Ingrese un correo electrónico válido";
-        formularioValido = false;
+        errorCorreo.textContent =
+            "Ingrese un correo electrónico válido";
+
+        formularioValido =
+            false;
     }
 
     if (telefono === "") {
-        errorTelefono.textContent = "Ingrese su teléfono o celular";
-        formularioValido = false;
+        errorTelefono.textContent =
+            "Ingrese su teléfono o celular";
+
+        formularioValido =
+            false;
     }
 
     if (rolSeleccionado === "cocinero" && direccion === "") {
-        errorDireccionNegocio.textContent = "Ingrese la dirección de su negocio";
-        formularioValido = false;
+        errorDireccionNegocio.textContent =
+            "Ingrese la dirección de su negocio";
+
+        formularioValido =
+            false;
     }
 
     if (password === "") {
-        errorPassword.textContent = "Ingrese una contraseña";
-        formularioValido = false;
+        errorPassword.textContent =
+            "Ingrese una contraseña";
+
+        formularioValido =
+            false;
     }
 
     if (rolSeleccionado === "") {
-        mensajeSugerencia.textContent = "Seleccione un rol antes de crear la cuenta.";
-        formularioValido = false;
+        mensajeSugerencia.textContent =
+            "Seleccione un rol antes de crear la cuenta.";
+
+        formularioValido =
+            false;
     }
 
     if (!formularioValido) {
         return;
     }
 
-    const usuariosRegistrados = obtenerUsuariosRegistrados();
+    const usuariosRegistrados =
+        obtenerUsuariosRegistrados();
 
-    const correoExiste = usuariosRegistrados.some(function (usuario) {
-        return usuario.correo === correo;
-    });
+    const correoExiste =
+        usuariosRegistrados.some((usuario) => {
+            return usuario.correo === correo;
+        });
 
     if (correoExiste) {
-        errorCorreo.textContent = "Este correo ya está en uso";
-        mensajeSugerencia.textContent = "Ya tienes una cuenta registrada. Puedes iniciar sesión.";
+        errorCorreo.textContent =
+            "Este correo ya está en uso";
+
+        mensajeSugerencia.textContent =
+            "Ya tienes una cuenta registrada. Puedes iniciar sesión.";
+
         return;
     }
 
-    const nuevoUsuario = {
+    let nuevoUsuario = {
         id: Date.now(),
         nombre: nombre,
         correo: correo,
@@ -233,6 +566,9 @@ btnGuardarCuenta.addEventListener("click", function () {
         rol: rolSeleccionado,
         fechaRegistro: new Date().toLocaleDateString()
     };
+
+    nuevoUsuario =
+        prepararUsuarioCocinero(nuevoUsuario);
 
     usuariosRegistrados.push(nuevoUsuario);
 
@@ -244,38 +580,134 @@ btnGuardarCuenta.addEventListener("click", function () {
 
     mostrarPantalla(pantallaBienvenido);
 
-    setTimeout(function () {
+    setTimeout(() => {
         redirigirSegunRol(nuevoUsuario);
-    }, 1800);
-});
+    }, 1500);
+}
 
-btnIniciarSesionLogin.addEventListener("click", function () {
+
+// =====================
+// LOGIN
+// =====================
+
+function iniciarSesion() {
     limpiarMensajes();
 
-    const correo = correoLogin.value.trim().toLowerCase();
-    const password = passwordLogin.value.trim();
+    const correo =
+        correoLogin.value.trim().toLowerCase();
+
+    const password =
+        passwordLogin.value.trim();
 
     if (correo === "" || password === "") {
-        mensajeLogin.textContent = "Ingrese su correo y contraseña.";
+        mensajeLogin.textContent =
+            "Ingrese su correo y contraseña.";
+
         return;
     }
 
-    const usuariosRegistrados = obtenerUsuariosRegistrados();
+    const usuariosRegistrados =
+        obtenerUsuariosRegistrados();
 
-    const usuarioEncontrado = usuariosRegistrados.find(function (usuario) {
-        return usuario.correo === correo && usuario.password === password;
-    });
+    const usuarioEncontrado =
+        usuariosRegistrados.find((usuario) => {
+            return (
+                usuario.correo === correo &&
+                usuario.password === password
+            );
+        });
 
-    if (usuarioEncontrado === undefined) {
-        mensajeLogin.textContent = "Correo o contraseña incorrectos.";
+    if (!usuarioEncontrado) {
+        mensajeLogin.textContent =
+            "Correo o contraseña incorrectos.";
+
         return;
     }
 
-    guardarUsuarioActivo(usuarioEncontrado);
+    const usuarioListo =
+        asegurarRestauranteParaCocinero(usuarioEncontrado);
+
+    guardarUsuarioActivo(usuarioListo);
     inicializarPlatosSiNoExisten();
 
-    redirigirSegunRol(usuarioEncontrado);
+    redirigirSegunRol(usuarioListo);
+}
+
+
+// =====================
+// EVENTOS
+// =====================
+
+if (btnVolverLanding) {
+    btnVolverLanding.addEventListener("click", () => {
+        volverAlLanding();
+    });
+}
+
+if (logoLogin) {
+    logoLogin.style.cursor =
+        "pointer";
+
+    logoLogin.addEventListener("click", () => {
+        volverAlLanding();
+    });
+}
+
+if (logoBienvenido) {
+    logoBienvenido.style.cursor =
+        "pointer";
+
+    logoBienvenido.addEventListener("click", () => {
+        volverAlLanding();
+    });
+}
+
+btnCrearCuenta.addEventListener("click", () => {
+    limpiarMensajes();
+    mostrarPantalla(pantallaRol);
 });
+
+btnConsumidor.addEventListener("click", () => {
+    configurarRegistroPorRol("cliente");
+});
+
+btnCocinero.addEventListener("click", () => {
+    configurarRegistroPorRol("cocinero");
+});
+
+volverLogin.addEventListener("click", () => {
+    limpiarMensajes();
+    limpiarFormularioLogin();
+    mostrarPantalla(pantallaLogin);
+});
+
+volverRol.addEventListener("click", () => {
+    limpiarMensajes();
+    mostrarPantalla(pantallaRol);
+});
+
+btnGuardarCuenta.addEventListener("click", () => {
+    guardarCuenta();
+});
+
+btnIniciarSesionLogin.addEventListener("click", () => {
+    iniciarSesion();
+});
+
+if (formLogin) {
+    formLogin.addEventListener("submit", (e) => {
+        e.preventDefault();
+        iniciarSesion();
+    });
+}
+
+if (formRegistro) {
+    formRegistro.addEventListener("submit", (e) => {
+        e.preventDefault();
+        guardarCuenta();
+    });
+}
+
 
 // =====================
 // ABRIR REGISTRO DESDE LANDING
@@ -284,10 +716,18 @@ btnIniciarSesionLogin.addEventListener("click", function () {
 const parametrosURL =
     new URLSearchParams(window.location.search);
 
-if (parametrosURL.get("accion") === "registro") {
+const accion =
+    parametrosURL.get("accion");
 
+if (accion === "registro") {
     limpiarMensajes();
-
     mostrarPantalla(pantallaRol);
+}
 
+if (accion === "registro-cliente") {
+    configurarRegistroPorRol("cliente");
+}
+
+if (accion === "registro-cocinero") {
+    configurarRegistroPorRol("cocinero");
 }

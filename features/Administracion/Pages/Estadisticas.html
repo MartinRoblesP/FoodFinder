@@ -1,33 +1,35 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-PE">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FoodFinder - Estadísticas</title>
-
     <link rel="stylesheet" href="../../../styles.css">
+    <title>FoodFinder - Estadísticas</title>
 </head>
 
 <body>
-
     <header>
         <section class="cabecera_plataforma">
-
-            <img
-                src="../../../Assests/Icons/FF_Logo_Coci.png"
-                alt="Logo FoodFinder Cocinero"
-                width="179"
-                height="33">
+            <a
+                href="../../Gestion operativa de la cocina/pages/pedidos_entrantes.html"
+                id="btn-logo-panel">
+                <img
+                    src="../../../Assests/Icons/FF_Logo_Coci.png"
+                    alt="Logo FoodFinder Cocinero"
+                    width="179"
+                    height="33">
+            </a>
 
             <div class="usuario_bloque">
-
                 <a
                     id="btn_Dashboard"
                     href="../../Gestion operativa de la cocina/pages/pedidos_entrantes.html">
                     Dashboard
                 </a>
 
-                <a href="../../Gestion operativa de la cocina/pages/configuracion.html">
+                <a
+                    id="btn-perfil-panel"
+                    href="../../Gestion operativa de la cocina/pages/configuracion.html">
                     <img
                         src="../../../Assests/Icons/perfil.png"
                         alt="Perfil"
@@ -35,17 +37,19 @@
                         height="39">
                 </a>
 
+                <a
+                    id="linkSalir"
+                    href="#"
+                    style="margin-left: 12px; text-decoration: none; font-weight: 600;">
+                    Salir
+                </a>
             </div>
-
         </section>
     </header>
 
     <div id="contenedor-principal">
-
         <section id="sidebar">
-
             <nav id="navPlatos">
-
                 <h5>PANEL DE GESTIÓN</h5>
 
                 <div class="btn">
@@ -76,10 +80,10 @@
                     </a>
                 </div>
 
-                <div class="btn">
-                    <img src="../../../Assests/Icons/estadistica.png" width="29" height="19" alt="Estadísticas">
+                <div class="btn activo">
+                    <img src="../../../Assests/Icons/estadistica.png" width="29" height="19" alt="Estadística">
                     <a href="Estadisticas.html">
-                        Estadísticas
+                        Estadística
                     </a>
                 </div>
 
@@ -89,72 +93,58 @@
                         Configuración
                     </a>
                 </div>
-
             </nav>
-
         </section>
 
-        <main>
-
-            <h1 id="Titulo_Estadistica">
-                Estadísticas del negocio
-            </h1>
+        <main class="Contenido_Misplatos">
+            <h1 id="Titulo_Estadistica">Estadísticas del negocio</h1>
 
             <section class="cards_estadisticos">
-
                 <div id="Ventas_hoy">
-                    <h6>VENTAS REGISTRADAS</h6>
+                    <h6>VENTAS HOY</h6>
                     <h2 id="valorVentasHoy">S/ 0.00</h2>
-                    <p id="variacionVentas">Según pedidos finalizados</p>
+                    <p id="variacionVentas">▲ 0% vs ayer</p>
                 </div>
 
                 <div id="Pedidos_hoy">
-                    <h6>PEDIDOS FINALIZADOS</h6>
+                    <h6>PEDIDOS HOY</h6>
                     <h2 id="valorPedidosHoy">0</h2>
-                    <p id="variacionPedidos">Historial del restaurante</p>
+                    <p id="variacionPedidos">▲ 0% vs ayer</p>
                 </div>
 
                 <div id="Ticket_promedio">
                     <h6>TICKET PROMEDIO</h6>
                     <h2 id="valorTicketPromedio">S/ 0.00</h2>
-                    <p id="variacionTicket">Promedio por pedido</p>
+                    <p id="variacionTicket">▲ 0% vs ayer</p>
                 </div>
-
             </section>
 
             <section class="card_ventasDiarias">
-
                 <div id="card1">
-                    <h6>Ventas por pedido</h6>
+                    <h6>Ventas por día (S/)</h6>
                     <div id="graficoVentasDia" class="grafico-barras"></div>
                 </div>
 
                 <div id="card2">
-                    <h6>Platos más vendidos</h6>
+                    <h6>Platos más vendidos hoy</h6>
                     <div id="platosMasVendidosDia"></div>
                 </div>
-
             </section>
 
             <section class="card_ventasMensuales">
-
                 <div id="card1">
-                    <h6>Resumen mensual estimado</h6>
+                    <h6>Ventas por mes (S/)</h6>
                     <div id="graficoVentasMes" class="grafico-barras"></div>
                 </div>
 
                 <div id="card2">
-                    <h6>Pedidos recientes</h6>
+                    <h6>Platos más vendidos del mes</h6>
                     <div id="platosMasVendidosMes"></div>
                 </div>
-
             </section>
-
         </main>
-
     </div>
 
     <script src="../js/Estadisticas.js" defer></script>
-
 </body>
 </html>

@@ -1,45 +1,158 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    const accesoPermitido =
+        protegerCheckout();
+
+    if (!accesoPermitido) {
+        return;
+    }
+
     renderizarResumenPedido();
-
-    const btnVolver =
-        document.querySelector(".btn-secondary");
-
-    if (btnVolver) {
-
-        btnVolver.addEventListener("click", () => {
-
-            window.location.href =
-                "Carrito_compras1.html";
-
-        });
-
-    }
-
-    const btnConfirmar =
-        document.getElementById("btn-confirmar-pedido") ||
-        buscarBotonPorTexto("Confirmar");
-
-    if (btnConfirmar) {
-
-        btnConfirmar.addEventListener("click", (e) => {
-
-            e.preventDefault();
-
-            confirmarPedido(btnConfirmar);
-
-        });
-
-    }
+    configurarMetodosPago();
+    configurarNavegacionPago();
 
 });
 
-function renderizarResumenPedido() {
 
-    const carrito =
-        JSON.parse(
-            localStorage.getItem("foodfinder_cart")
+// =====================
+// SESIÓN CHECKOUT
+// =====================
+
+function obtenerUsuarioActivo() {
+    try {
+        return JSON.parse(
+            localStorage.getItem("usuarioActivo")
+        );
+    } catch (error) {
+        return null;
+    }
+}
+
+function protegerCheckout() {
+    const usuarioActivo =
+        obtenerUsuarioActivo();
+
+    if (!usuarioActivo) {
+        alert("Debes iniciar sesión para realizar un pedido.");
+
+        window.location.href =
+            "../../Gestion de pedido/Pages/cuenta-cliente.html";
+
+        return false;
+    }
+
+    if (usuarioActivo.rol !== "cliente") {
+        alert("El checkout está disponible solo para consumidores.");
+
+        window.location.href =
+            "../../Gestion operativa de la cocina/pages/pedidos_entrantes.html";
+
+        return false;
+    }
+
+    return true;
+}
+
+
+// =====================
+// LOCALSTORAGE
+// =====================
+
+function obtenerDatos(key) {
+    try {
+        return JSON.parse(
+            localStorage.getItem(key)
         ) || [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function guardarDatos(key, data) {
+    localStorage.setItem(
+        key,
+        JSON.stringify(data)
+    );
+}
+
+function obtenerCarrito() {
+    return obtenerDatos("foodfinder_cart");
+}
+
+function obtenerPedidosActivos() {
+    return obtenerDatos("pedidosActivos");
+}
+
+function guardarPedidosActivos(pedidos) {
+    guardarDatos(
+        "pedidosActivos",
+        pedidos
+    );
+}
+
+function obtenerPlatosRegistrados() {
+    return obtenerDatos("platos_data");
+}
+
+function guardarPlatosRegistrados(platos) {
+    guardarDatos(
+        "platos_data",
+        platos
+    );
+}
+
+
+// =====================
+// UTILIDADES
+// =====================
+
+function escaparHTML(texto) {
+    return String(texto || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+function normalizarTexto(texto) {
+    return String(texto || "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+}
+
+function obtenerMetodoPagoSeleccionado() {
+    const radio =
+        document.querySelector('input[name="payment"]:checked');
+
+    if (!radio) {
+        return "card";
+    }
+
+    return radio.value;
+}
+
+function obtenerNombreMetodoPago(valor) {
+    const metodos = {
+        card: "Tarjeta de crédito/débito",
+        cash: "Efectivo al delivery",
+        yape: "Yape / Plin",
+        transfer: "Transferencia"
+    };
+
+    return metodos[valor] || "Método de pago";
+}
+
+
+// =====================
+// RESUMEN DE PEDIDO
+// =====================
+
+function renderizarResumenPedido() {
+    const carrito =
+        obtenerCarrito();
 
     const contenedor =
         document.getElementById("order-items") ||
@@ -53,7 +166,6 @@ function renderizarResumenPedido() {
     contenedor.innerHTML = "";
 
     if (carrito.length === 0) {
-
         contenedor.innerHTML = `
             <p style="padding: 15px;">
                 No hay productos en el carrito.
@@ -67,7 +179,6 @@ function renderizarResumenPedido() {
     let subtotal = 0;
 
     carrito.forEach((producto) => {
-
         const cantidad =
             Number(producto.cantidad) || 1;
 
@@ -79,10 +190,18 @@ function renderizarResumenPedido() {
 
         subtotal += totalProducto;
 
+        const restauranteNombre =
+            producto.restauranteNombre ||
+            "FoodFinder";
+
         const itemHTML = `
             <div class="order-item">
                 <span>
-                    ${cantidad}x ${producto.nombre}
+                    ${cantidad}x ${escaparHTML(producto.nombre)}
+
+                    <small style="display:block; color:#7A8793;">
+                        ${escaparHTML(restauranteNombre)}
+                    </small>
                 </span>
 
                 <span class="price">
@@ -95,15 +214,12 @@ function renderizarResumenPedido() {
             "beforeend",
             itemHTML
         );
-
     });
 
     actualizarTotales(subtotal);
-
 }
 
 function actualizarTotales(subtotal) {
-
     const delivery =
         subtotal > 0 ? 3.50 : 0;
 
@@ -114,7 +230,6 @@ function actualizarTotales(subtotal) {
         document.querySelectorAll(".total-row");
 
     if (filasTotales.length >= 3) {
-
         filasTotales[0]
             .querySelectorAll("span")[1]
             .textContent =
@@ -129,76 +244,225 @@ function actualizarTotales(subtotal) {
             .querySelectorAll("span")[1]
             .textContent =
             `S/ ${total.toFixed(2)}`;
-
     }
-
 }
 
-function confirmarPedido(btnConfirmar) {
 
-    const carrito =
-        JSON.parse(
-            localStorage.getItem("foodfinder_cart")
-        ) || [];
+// =====================
+// MÉTODOS DE PAGO
+// =====================
 
-    if (carrito.length === 0) {
+function configurarMetodosPago() {
+    const opciones =
+        document.querySelectorAll(".payment-option");
 
-        alert("No hay productos en el carrito.");
-        return;
+    const camposTarjeta =
+        document.getElementById("camposTarjeta");
 
+    const mensajeMetodoPago =
+        document.getElementById("mensajeMetodoPago");
+
+    opciones.forEach((opcion) => {
+        opcion.addEventListener("click", () => {
+            opciones.forEach((item) => {
+                item.classList.remove("selected");
+            });
+
+            opcion.classList.add("selected");
+
+            const radio =
+                opcion.querySelector('input[name="payment"]');
+
+            if (!radio) {
+                return;
+            }
+
+            radio.checked =
+                true;
+
+            if (radio.value === "card") {
+                if (camposTarjeta) {
+                    camposTarjeta.style.display =
+                        "";
+                }
+
+                if (mensajeMetodoPago) {
+                    mensajeMetodoPago.style.display =
+                        "none";
+                }
+
+                return;
+            }
+
+            if (camposTarjeta) {
+                camposTarjeta.style.display =
+                    "none";
+            }
+
+            if (mensajeMetodoPago) {
+                mensajeMetodoPago.style.display =
+                    "";
+            }
+        });
+    });
+}
+
+
+// =====================
+// NAVEGACIÓN PAGO
+// =====================
+
+function configurarNavegacionPago() {
+    const btnVolver =
+        document.getElementById("btnVolverCarrito") ||
+        document.querySelector(".btn-secondary");
+
+    const btnConfirmar =
+        document.getElementById("btn-confirmar-pedido") ||
+        buscarBotonPorTexto("Confirmar");
+
+    const buscadorCheckoutPago =
+        document.getElementById("buscadorCheckoutPago");
+
+    if (btnVolver) {
+        btnVolver.addEventListener("click", () => {
+            window.location.href =
+                "Carrito_compras1.html";
+        });
     }
 
-    btnConfirmar.disabled = true;
-    btnConfirmar.textContent = "Procesando...";
+    if (btnConfirmar) {
+        btnConfirmar.addEventListener("click", (e) => {
+            e.preventDefault();
+            confirmarPedido(btnConfirmar);
+        });
+    }
 
-    const pedidosActivos =
-        JSON.parse(
-            localStorage.getItem("pedidosActivos")
-        ) || [];
+    if (buscadorCheckoutPago) {
+        buscadorCheckoutPago.addEventListener("click", () => {
+            alert("Para buscar más restaurantes o platos, vuelve al Home.");
+        });
+    }
+}
+
+
+// =====================
+// AGRUPAR POR RESTAURANTE
+// =====================
+
+function agruparCarritoPorRestaurante(carrito) {
+    const grupos = {};
+
+    carrito.forEach((producto) => {
+        const restauranteId =
+            producto.restauranteId ||
+            "rest_static_rincon";
+
+        const ownerEmail =
+            producto.ownerEmail ||
+            "static@foodfinder.local";
+
+        const restauranteNombre =
+            producto.restauranteNombre ||
+            "El Rincón del Sabor";
+
+        const clave =
+            restauranteId + "|" + ownerEmail;
+
+        if (!grupos[clave]) {
+            grupos[clave] = {
+                restauranteId,
+                ownerEmail,
+                restauranteNombre,
+                items: []
+            };
+        }
+
+        grupos[clave].items.push(producto);
+    });
+
+    return Object.values(grupos);
+}
+
+function calcularSubtotalGrupo(items) {
+    return items.reduce((total, producto) => {
+        const precio =
+            Number(producto.precio) || 0;
+
+        const cantidad =
+            Number(producto.cantidad) || 1;
+
+        return total + precio * cantidad;
+    }, 0);
+}
+
+function calcularCantidadGrupo(items) {
+    return items.reduce((total, producto) => {
+        const cantidad =
+            Number(producto.cantidad) || 1;
+
+        return total + cantidad;
+    }, 0);
+}
+
+function crearPedidoDesdeGrupo(grupo, indice) {
+    const usuarioActivo =
+        obtenerUsuarioActivo();
 
     const subtotal =
-        carrito.reduce((acumulado, producto) => {
-
-            const precio =
-                Number(producto.precio) || 0;
-
-            const cantidad =
-                Number(producto.cantidad) || 1;
-
-            return acumulado + precio * cantidad;
-
-        }, 0);
+        calcularSubtotalGrupo(grupo.items);
 
     const cantidadTotal =
-        carrito.reduce((acumulado, producto) => {
+        calcularCantidadGrupo(grupo.items);
 
-            const cantidad =
-                Number(producto.cantidad) || 1;
-
-            return acumulado + cantidad;
-
-        }, 0);
+    const metodoPago =
+        obtenerMetodoPagoSeleccionado();
 
     const nombresPlatos =
-        carrito
-            .map(producto => producto.nombre)
+        grupo.items
+            .map((producto) => {
+                const cantidad =
+                    Number(producto.cantidad) || 1;
+
+                return `${cantidad}x ${producto.nombre}`;
+            })
             .join(", ");
 
-    const nuevoPedido = {
+    const itemsPedido =
+        grupo.items.map((producto) => {
+            return {
+                platoId: producto.platoId || "",
+                nombre: producto.nombre,
+                precio: Number(producto.precio) || 0,
+                cantidad: Number(producto.cantidad) || 1,
+                imagen: producto.imagen || ""
+            };
+        });
 
+    return {
         id:
             "#" +
             Date.now()
                 .toString()
-                .slice(-4),
+                .slice(-4) +
+            String(indice + 1),
 
-        plato: nombresPlatos,
+        plato:
+            nombresPlatos,
 
-        cliente: "Cliente Demo",
+        cliente:
+            usuarioActivo.nombre ||
+            "Cliente Demo",
 
-        cantidad: cantidadTotal,
+        clienteEmail:
+            usuarioActivo.correo ||
+            "",
 
-        estado: "preparando",
+        cantidad:
+            cantidadTotal,
+
+        estado:
+            "preparando",
 
         hora:
             new Date()
@@ -210,70 +474,218 @@ function confirmarPedido(btnConfirmar) {
                     }
                 ),
 
-        total: subtotal
+        subtotal:
+            subtotal,
 
+        total:
+            subtotal,
+
+        metodoPago:
+            metodoPago,
+
+        metodoPagoNombre:
+            obtenerNombreMetodoPago(metodoPago),
+
+        restauranteId:
+            grupo.restauranteId,
+
+        ownerEmail:
+            grupo.ownerEmail,
+
+        restauranteNombre:
+            grupo.restauranteNombre,
+
+        items:
+            itemsPedido,
+
+        fecha:
+            new Date().toISOString()
     };
+}
 
-    pedidosActivos.push(nuevoPedido);
 
-    localStorage.setItem(
-        "pedidosActivos",
-        JSON.stringify(pedidosActivos)
-    );
+// =====================
+// STOCK AUTOMÁTICO
+// =====================
+
+function buscarPlatoParaStock(platos, producto) {
+    if (producto.platoId) {
+        const porId =
+            platos.find((plato) => {
+                return String(plato.id) === String(producto.platoId);
+            });
+
+        if (porId) {
+            return porId;
+        }
+    }
+
+    return platos.find((plato) => {
+        const mismoRestaurante =
+            plato.restauranteId === producto.restauranteId ||
+            plato.ownerEmail === producto.ownerEmail;
+
+        const mismoNombre =
+            normalizarTexto(plato.nombre) === normalizarTexto(producto.nombre);
+
+        return mismoRestaurante && mismoNombre;
+    });
+}
+
+function validarStockAntesDeConfirmar(carrito) {
+    const platos =
+        obtenerPlatosRegistrados();
+
+    for (const producto of carrito) {
+        const plato =
+            buscarPlatoParaStock(platos, producto);
+
+        if (!plato) {
+            continue;
+        }
+
+        const cantidadComprada =
+            Number(producto.cantidad) || 1;
+
+        const stockActual =
+            Number(plato.stock ?? plato.cantidad ?? 0);
+
+        if (stockActual < cantidadComprada) {
+            alert(
+                `No hay stock suficiente para "${producto.nombre}". Stock disponible: ${stockActual}.`
+            );
+
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function actualizarStockPlatosDesdeCarrito(carrito) {
+    const platos =
+        obtenerPlatosRegistrados();
+
+    if (platos.length === 0) {
+        return;
+    }
+
+    let huboCambios =
+        false;
+
+    carrito.forEach((producto) => {
+        const plato =
+            buscarPlatoParaStock(platos, producto);
+
+        if (!plato) {
+            return;
+        }
+
+        const cantidadComprada =
+            Number(producto.cantidad) || 1;
+
+        const stockActual =
+            Number(plato.stock ?? plato.cantidad ?? 0);
+
+        const nuevoStock =
+            Math.max(
+                0,
+                stockActual - cantidadComprada
+            );
+
+        plato.stock =
+            nuevoStock;
+
+        plato.disponible =
+            nuevoStock > 0;
+
+        if (nuevoStock <= 0) {
+            plato.estado =
+                "agotado";
+        } else {
+            plato.estado =
+                "disponible";
+        }
+
+        huboCambios =
+            true;
+    });
+
+    if (huboCambios) {
+        guardarPlatosRegistrados(platos);
+    }
+}
+
+
+// =====================
+// CONFIRMAR PEDIDO
+// =====================
+
+function confirmarPedido(btnConfirmar) {
+    const carrito =
+        obtenerCarrito();
+
+    if (carrito.length === 0) {
+        alert("No hay productos en el carrito.");
+        return;
+    }
+
+    const stockValido =
+        validarStockAntesDeConfirmar(carrito);
+
+    if (!stockValido) {
+        return;
+    }
+
+    btnConfirmar.disabled =
+        true;
+
+    btnConfirmar.textContent =
+        "Procesando...";
+
+    actualizarStockPlatosDesdeCarrito(carrito);
+
+    const pedidosActivos =
+        obtenerPedidosActivos();
+
+    const gruposPorRestaurante =
+        agruparCarritoPorRestaurante(carrito);
+
+    const nuevosPedidos =
+        gruposPorRestaurante.map((grupo, index) => {
+            return crearPedidoDesdeGrupo(grupo, index);
+        });
+
+    nuevosPedidos.forEach((pedido) => {
+        pedidosActivos.push(pedido);
+    });
+
+    guardarPedidosActivos(pedidosActivos);
 
     localStorage.removeItem("foodfinder_cart");
 
-        alert(
-            "Pedido confirmado. Tu comida está en camino."
-        );
+    alert(
+        "Pedido confirmado. Tu comida está en camino."
+    );
 
-        window.location.href =
-         "../../Navegación/pages/home.html";
-
+    window.location.href =
+        "../../Navegación/pages/home.html";
 }
 
-function buscarBotonPorTexto(texto) {
 
+// =====================
+// UTILIDAD BOTONES
+// =====================
+
+function buscarBotonPorTexto(texto) {
     const botones =
         document.querySelectorAll("button");
 
     return Array
         .from(botones)
-        .find(boton =>
-            boton.textContent
+        .find((boton) => {
+            return boton.textContent
                 .toLowerCase()
-                .includes(texto.toLowerCase())
-        );
-
+                .includes(texto.toLowerCase());
+        });
 }
-
-
-// =====================
-// VALIDACIÓN DE SESIÓN CHECKOUT
-// =====================
-
-function obtenerUsuarioActivo() {
-    return JSON.parse(
-        localStorage.getItem("usuarioActivo")
-    );
-}
-
-function protegerCheckout() {
-    const usuarioActivo = obtenerUsuarioActivo();
-
-    if (!usuarioActivo) {
-        alert("Debes iniciar sesión para realizar un pedido.");
-        window.location.href =
-            "../../Gestion de pedido/Pages/cuenta-cliente.html";
-        return;
-    }
-
-    if (usuarioActivo.rol !== "cliente") {
-        alert("El checkout está disponible solo para consumidores.");
-        window.location.href =
-            "../../Gestion operativa de la cocina/pages/pedidos_entrantes.html";
-        return;
-    }
-}
-
-protegerCheckout();

@@ -32,9 +32,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const seccionComoFunciona =
         document.querySelector(".FlujoOperaciones_producto");
 
-    const seccionTestimonios =
-        document.querySelector(".Seccion_Testimonios");
-
     const botonCrearCuentaCTA =
         document.querySelector(".Closer_CTA button");
 

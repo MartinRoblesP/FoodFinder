@@ -1,36 +1,191 @@
+// ==========================================
+// inventario.js
+// Inventario por restaurante/emprendedor
+// localStorage + restauranteId + ownerEmail
+// Navegación completa del panel
+// ==========================================
+
 document.addEventListener("DOMContentLoaded", function () {
 
     // =========================
     // ELEMENTOS
     // =========================
-    const tbody = document.querySelector("#tbodyInventario");
-    const btnAgregar = document.querySelector("#btnAgregarInsumo");
-    const buscador = document.querySelector("#buscadorInventario");
 
-    const filtroTodos = document.querySelector("#filtroTodos");
-    const filtroDisponible = document.querySelector("#filtroDisponible");
-    const filtroStockBajo = document.querySelector("#filtroStockBajo");
-    const filtroAgotado = document.querySelector("#filtroAgotado");
+    const tbody =
+        document.querySelector("#tbodyInventario");
 
-    const filtrosCategoria = document.querySelectorAll(".filtro_categoria");
+    const btnAgregar =
+        document.querySelector("#btnAgregarInsumo");
 
-    const totalInsumos = document.querySelector("#totalInsumos");
-    const stockOk = document.querySelector("#stockOk");
-    const stockBajo = document.querySelector("#stockBajo");
-    const stockAgotado = document.querySelector("#stockAgotado");
+    const buscador =
+        document.querySelector("#buscadorInventario");
+
+    const filtroTodos =
+        document.querySelector("#filtroTodos");
+
+    const filtroDisponible =
+        document.querySelector("#filtroDisponible");
+
+    const filtroStockBajo =
+        document.querySelector("#filtroStockBajo");
+
+    const filtroAgotado =
+        document.querySelector("#filtroAgotado");
+
+    const filtrosEstado =
+        document.querySelectorAll(".filtro_estado");
+
+    const filtrosCategoria =
+        document.querySelectorAll(".filtro_categoria");
+
+    const totalInsumos =
+        document.querySelector("#totalInsumos");
+
+    const stockOk =
+        document.querySelector("#stockOk");
+
+    const stockBajo =
+        document.querySelector("#stockBajo");
+
+    const stockAgotado =
+        document.querySelector("#stockAgotado");
+
 
     // =========================
-    // LOCAL STORAGE
+    // KEYS
     // =========================
-    const KEY = "inventario_data";
+
+    const KEY_INVENTARIO =
+        "inventario_data";
+
+    const KEY_RESTAURANTES =
+        "foodfinder_restaurantes";
+
+
+    // =========================
+    // LOCALSTORAGE Y SESIÓN
+    // =========================
+
+    function getData(key) {
+        try {
+            return JSON.parse(
+                localStorage.getItem(key)
+            ) || [];
+        } catch (error) {
+            return [];
+        }
+    }
+
+    function saveData(key, data) {
+        localStorage.setItem(
+            key,
+            JSON.stringify(data)
+        );
+    }
+
+    function obtenerUsuarioActivo() {
+        try {
+            return JSON.parse(
+                localStorage.getItem("usuarioActivo")
+            );
+        } catch (error) {
+            return null;
+        }
+    }
+
+    const usuarioActivo =
+        obtenerUsuarioActivo();
+
+    if (!usuarioActivo) {
+        alert("Debes iniciar sesión para acceder al panel.");
+
+        window.location.href =
+            "../../Gestion de pedido/Pages/cuenta-cliente.html";
+
+        return;
+    }
+
+    if (usuarioActivo.rol !== "cocinero") {
+        alert("Esta sección es solo para emprendedores gastronómicos.");
+
+        window.location.href =
+            "../../Navegación/pages/home.html";
+
+        return;
+    }
+
+
+    // =========================
+    // RESTAURANTE ACTIVO
+    // =========================
+
+    function obtenerRestauranteActivo() {
+        const restaurantes =
+            getData(KEY_RESTAURANTES);
+
+        let restaurante =
+            restaurantes.find((item) => {
+                return (
+                    item.id === usuarioActivo.restauranteId ||
+                    item.ownerEmail === usuarioActivo.correo
+                );
+            });
+
+        if (!restaurante) {
+            restaurante = {
+                id: usuarioActivo.restauranteId || "rest_" + usuarioActivo.id,
+                ownerEmail: usuarioActivo.correo,
+                ownerName: usuarioActivo.nombre,
+                nombre: "Restaurante de " + usuarioActivo.nombre.split(" ")[0],
+                cocina: "Emprendimiento gastronómico",
+                descripcion: "Restaurante registrado en FoodFinder.",
+                direccion: usuarioActivo.direccionNegocio || "Dirección pendiente",
+                distrito: "Lima",
+                telefono: usuarioActivo.telefono || "",
+                horario: "Lun–Dom 12:00pm – 10:00pm",
+                estado: "Abierto",
+                rating: 4.8,
+                reviews: 0,
+                imagen: "../../../Assests/Img/El rincon del sabor.jpg",
+                fechaRegistro: new Date().toLocaleDateString()
+            };
+
+            restaurantes.push(restaurante);
+
+            saveData(
+                KEY_RESTAURANTES,
+                restaurantes
+            );
+
+            usuarioActivo.restauranteId =
+                restaurante.id;
+
+            localStorage.setItem(
+                "usuarioActivo",
+                JSON.stringify(usuarioActivo)
+            );
+        }
+
+        return restaurante;
+    }
+
+    const restauranteActual =
+        obtenerRestauranteActivo();
+
+
+    // =========================
+    // DATA
+    // =========================
+
+    let todosLosInsumos = [];
     let inventario = [];
 
-    let filtroEstado = "todos";
-    let categoriaActual = "Todas";
+    let filtroEstado =
+        "todos";
 
-    // =========================
-    // CATEGORÍAS (IMPORTANTE)
-    // =========================
+    let categoriaActual =
+        "Todas";
+
     const categorias = [
         "Carnes y Pescados",
         "Tubérculos",
@@ -41,95 +196,240 @@ document.addEventListener("DOMContentLoaded", function () {
         "Lácteos y Derivados"
     ];
 
-    // =========================
-    // DATA INICIAL
-    // =========================
     const datosIniciales = [
-        { id: 1, nombre: "Leche de Coco", categoria: "Lácteos y Derivados", cantidad: 0 },
-        { id: 2, nombre: "Papa Amarilla", categoria: "Tubérculos", cantidad: 3 },
-        { id: 3, nombre: "Ajo", categoria: "Verduras y Hierbas", cantidad: 1 },
-        { id: 4, nombre: "Filete de Salmón", categoria: "Carnes y Pescados", cantidad: 15 },
-        { id: 5, nombre: "Pechuga de Pollo", categoria: "Carnes y Pescados", cantidad: 8 }
+        { nombre: "Leche de Coco", categoria: "Lácteos y Derivados", cantidad: 0 },
+        { nombre: "Papa Amarilla", categoria: "Tubérculos", cantidad: 3 },
+        { nombre: "Ajo", categoria: "Verduras y Hierbas", cantidad: 1 },
+        { nombre: "Filete de Salmón", categoria: "Carnes y Pescados", cantidad: 15 },
+        { nombre: "Pechuga de Pollo", categoria: "Carnes y Pescados", cantidad: 8 }
     ];
 
+
     // =========================
-    // INIT
+    // FILTRO POR RESTAURANTE
     // =========================
+
+    function perteneceAlRestaurante(item) {
+        return (
+            item.restauranteId === restauranteActual.id ||
+            item.ownerEmail === restauranteActual.ownerEmail
+        );
+    }
+
+    function crearInsumosIniciales() {
+        return datosIniciales.map((item, index) => {
+            return {
+                id: "insumo_" + Date.now() + "_" + index,
+                restauranteId: restauranteActual.id,
+                ownerEmail: restauranteActual.ownerEmail,
+                restauranteNombre: restauranteActual.nombre,
+                nombre: item.nombre,
+                categoria: item.categoria,
+                cantidad: item.cantidad,
+                fechaRegistro: new Date().toLocaleDateString()
+            };
+        });
+    }
+
     function cargar() {
-        const data = localStorage.getItem(KEY);
-        inventario = data ? JSON.parse(data) : datosIniciales;
-        guardar();
+        todosLosInsumos =
+            getData(KEY_INVENTARIO);
+
+        inventario =
+            todosLosInsumos.filter(perteneceAlRestaurante);
+
+        if (inventario.length === 0) {
+            inventario =
+                crearInsumosIniciales();
+
+            guardar();
+        }
     }
 
     function guardar() {
-        localStorage.setItem(KEY, JSON.stringify(inventario));
+        const insumosOtrosRestaurantes =
+            todosLosInsumos.filter((item) => {
+                return !perteneceAlRestaurante(item);
+            });
+
+        todosLosInsumos = [
+            ...insumosOtrosRestaurantes,
+            ...inventario
+        ];
+
+        saveData(
+            KEY_INVENTARIO,
+            todosLosInsumos
+        );
     }
 
+
     // =========================
-    // ESTADO
+    // UTILIDADES
     // =========================
+
+    function escaparHTML(texto) {
+        return String(texto || "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+    function normalizarTexto(texto) {
+        return String(texto || "")
+            .trim()
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
+    }
+
     function estado(item) {
-        if (item.cantidad <= 0) return "agotado";
-        if (item.cantidad <= 3) return "bajo";
+        const cantidad =
+            Number(item.cantidad || 0);
+
+        if (cantidad <= 0) {
+            return "agotado";
+        }
+
+        if (cantidad <= 3) {
+            return "bajo";
+        }
+
         return "ok";
     }
+
+    function obtenerBadgeEstado(item) {
+        const est =
+            estado(item);
+
+        if (est === "ok") {
+            return `<span class="badge_disponible">✔ Disponible</span>`;
+        }
+
+        if (est === "bajo") {
+            return `<span class="badge_stock_bajo">⚠ Stock bajo</span>`;
+        }
+
+        return `<span class="badge_agotado">❌ Agotado</span>`;
+    }
+
+    function obtenerClaseCantidad(item) {
+        const est =
+            estado(item);
+
+        if (est === "bajo") {
+            return "cantidad_amarillo";
+        }
+
+        if (est === "agotado") {
+            return "cantidad_rojo";
+        }
+
+        return "cantidad_normal";
+    }
+
 
     // =========================
     // RENDER
     // =========================
+
     function render(texto = "") {
+        if (!tbody) {
+            return;
+        }
 
-        tbody.innerHTML = "";
+        tbody.innerHTML =
+            "";
 
-        let data = inventario.filter(i => {
+        const textoBusqueda =
+            normalizarTexto(texto);
 
-            const okTexto = i.nombre.toLowerCase().includes(texto.toLowerCase());
+        const data =
+            inventario.filter((item) => {
+                const okTexto =
+                    normalizarTexto(item.nombre)
+                        .includes(textoBusqueda);
 
-            const okCategoria =
-                categoriaActual === "Todas" ||
-                i.categoria === categoriaActual;
+                const okCategoria =
+                    categoriaActual === "Todas" ||
+                    item.categoria === categoriaActual;
 
-            const est = estado(i);
+                const est =
+                    estado(item);
 
-            let okEstado = true;
+                let okEstado =
+                    true;
 
-            if (filtroEstado === "disponible") okEstado = est === "ok";
-            if (filtroEstado === "bajo") okEstado = est === "bajo";
-            if (filtroEstado === "agotado") okEstado = est === "agotado";
+                if (filtroEstado === "disponible") {
+                    okEstado = est === "ok";
+                }
 
-            return okTexto && okCategoria && okEstado;
-        });
+                if (filtroEstado === "bajo") {
+                    okEstado = est === "bajo";
+                }
 
-        data.forEach(i => {
+                if (filtroEstado === "agotado") {
+                    okEstado = est === "agotado";
+                }
 
-            const est = estado(i);
+                return okTexto && okCategoria && okEstado;
+            });
 
-            let badge = "";
-            let cantidadClass = "cantidad_normal";
+        if (data.length === 0) {
+            tbody.innerHTML = `
+                <tr class="tabla_fila">
+                    <td class="tabla_td" colspan="5">
+                        No hay insumos para mostrar.
+                    </td>
+                </tr>
+            `;
 
-            if (est === "ok") badge = `<span class="badge_disponible">✔ Disponible</span>`;
-            if (est === "bajo") {
-                badge = `<span class="badge_stock_bajo">⚠ Stock bajo</span>`;
-                cantidadClass = "cantidad_amarillo";
-            }
-            if (est === "agotado") {
-                badge = `<span class="badge_agotado">❌ Agotado</span>`;
-                cantidadClass = "cantidad_rojo";
-            }
+            actualizarResumen();
+            return;
+        }
 
-            const row = document.createElement("tr");
+        data.forEach((item) => {
+            const row =
+                document.createElement("tr");
+
             row.classList.add("tabla_fila");
 
             row.innerHTML = `
                 <td class="tabla_td tabla_insumo">
-                    <span class="insumo_icono">📦</span> ${i.nombre}
+                    <span class="insumo_icono">📦</span>
+                    ${escaparHTML(item.nombre)}
                 </td>
-                <td class="tabla_td">${i.categoria}</td>
-                <td class="tabla_td"><span class="${cantidadClass}">${i.cantidad}</span></td>
-                <td class="tabla_td">${badge}</td>
+
+                <td class="tabla_td">
+                    ${escaparHTML(item.categoria)}
+                </td>
+
+                <td class="tabla_td">
+                    <span class="${obtenerClaseCantidad(item)}">
+                        ${Number(item.cantidad || 0)}
+                    </span>
+                </td>
+
+                <td class="tabla_td">
+                    ${obtenerBadgeEstado(item)}
+                </td>
+
                 <td class="tabla_td tabla_acciones">
-                    <button class="btn_editar" data-id="${i.id}">✏ Editar</button>
-                    <button class="btn_eliminar" data-id="${i.id}">🗑</button>
+                    <button
+                        type="button"
+                        class="btn_editar"
+                        data-id="${escaparHTML(item.id)}">
+                        ✏ Editar
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn_eliminar"
+                        data-id="${escaparHTML(item.id)}">
+                        🗑
+                    </button>
                 </td>
             `;
 
@@ -140,222 +440,382 @@ document.addEventListener("DOMContentLoaded", function () {
         eventos();
     }
 
+
     // =========================
     // RESUMEN
     // =========================
+
     function actualizarResumen() {
-        totalInsumos.textContent = inventario.length;
-        stockOk.textContent = inventario.filter(i => estado(i) === "ok").length;
-        stockBajo.textContent = inventario.filter(i => estado(i) === "bajo").length;
-        stockAgotado.textContent = inventario.filter(i => estado(i) === "agotado").length;
+        if (totalInsumos) {
+            totalInsumos.textContent =
+                inventario.length;
+        }
+
+        if (stockOk) {
+            stockOk.textContent =
+                inventario.filter((item) => estado(item) === "ok").length;
+        }
+
+        if (stockBajo) {
+            stockBajo.textContent =
+                inventario.filter((item) => estado(item) === "bajo").length;
+        }
+
+        if (stockAgotado) {
+            stockAgotado.textContent =
+                inventario.filter((item) => estado(item) === "agotado").length;
+        }
     }
 
+
     // =========================
-    // MODAL (AGREGAR / EDITAR)
+    // MODAL
     // =========================
+
     function modal(item = null) {
+        const div =
+            document.createElement("div");
 
-        const div = document.createElement("div");
-        div.className = "modal_bg";
+        div.className =
+            "modal_bg";
 
-        let opciones = categorias.map(c =>
-            `<option value="${c}" ${item?.categoria === c ? "selected" : ""}>${c}</option>`
-        ).join("");
+        const opciones =
+            categorias.map((categoria) => {
+                return `
+                    <option
+                        value="${escaparHTML(categoria)}"
+                        ${item?.categoria === categoria ? "selected" : ""}>
+                        ${escaparHTML(categoria)}
+                    </option>
+                `;
+            }).join("");
 
         div.innerHTML = `
             <div class="modal_box">
                 <h3>${item ? "Editar insumo" : "Agregar insumo"}</h3>
 
-                <input id="m_nombre" placeholder="Nombre" value="${item ? item.nombre : ""}">
+                <label style="font-size: 13px; font-weight: 600;">
+                    Nombre del insumo
+                </label>
+
+                <input
+                    id="m_nombre"
+                    placeholder="Nombre"
+                    value="${item ? escaparHTML(item.nombre) : ""}">
+
+                <label style="font-size: 13px; font-weight: 600; margin-top: 8px;">
+                    Categoría
+                </label>
 
                 <select id="m_categoria">
-                    <option disabled selected>Selecciona categoría</option>
+                    <option value="" disabled ${item ? "" : "selected"}>
+                        Selecciona categoría
+                    </option>
                     ${opciones}
                 </select>
 
-                <input id="m_cantidad" type="number" placeholder="Cantidad" value="${item ? item.cantidad : ""}">
+                <label style="font-size: 13px; font-weight: 600; margin-top: 8px;">
+                    Cantidad actual
+                </label>
+
+                <input
+                    id="m_cantidad"
+                    type="number"
+                    min="0"
+                    placeholder="Cantidad"
+                    value="${item ? Number(item.cantidad || 0) : ""}">
 
                 <div class="modal_actions">
-                    <button id="m_cancelar">Cancelar</button>
-                    <button id="m_guardar">Guardar</button>
+                    <button id="m_cancelar" type="button">
+                        Cancelar
+                    </button>
+
+                    <button id="m_guardar" type="button">
+                        Guardar
+                    </button>
                 </div>
             </div>
         `;
 
         document.body.appendChild(div);
 
-        document.querySelector("#m_cancelar").onclick = () => div.remove();
+        document.querySelector("#m_cancelar").onclick =
+            function () {
+                div.remove();
+            };
 
-        document.querySelector("#m_guardar").onclick = () => {
+        document.querySelector("#m_guardar").onclick =
+            function () {
+                const nombre =
+                    document.querySelector("#m_nombre").value.trim();
 
-            const nombre = document.querySelector("#m_nombre").value;
-            const categoria = document.querySelector("#m_categoria").value;
-            const cantidad = parseInt(document.querySelector("#m_cantidad").value);
+                const categoria =
+                    document.querySelector("#m_categoria").value;
 
-            if (!nombre || !categoria) return;
+                const cantidad =
+                    parseInt(
+                        document.querySelector("#m_cantidad").value
+                    );
 
-            if (item) {
-                item.nombre = nombre;
-                item.categoria = categoria;
-                item.cantidad = cantidad;
-            } else {
-                inventario.push({
-                    id: Date.now(),
-                    nombre,
-                    categoria,
-                    cantidad
-                });
-            }
+                if (
+                    !nombre ||
+                    !categoria ||
+                    isNaN(cantidad) ||
+                    cantidad < 0
+                ) {
+                    alert("Completa nombre, categoría y cantidad con valores válidos.");
+                    return;
+                }
 
-            guardar();
-            div.remove();
-            render();
-        };
+                if (item) {
+                    item.nombre =
+                        nombre;
+
+                    item.categoria =
+                        categoria;
+
+                    item.cantidad =
+                        cantidad;
+                } else {
+                    inventario.push({
+                        id: "insumo_" + Date.now(),
+                        restauranteId: restauranteActual.id,
+                        ownerEmail: restauranteActual.ownerEmail,
+                        restauranteNombre: restauranteActual.nombre,
+                        nombre,
+                        categoria,
+                        cantidad,
+                        fechaRegistro: new Date().toLocaleDateString()
+                    });
+                }
+
+                guardar();
+                div.remove();
+                cargar();
+                render(buscador ? buscador.value : "");
+            };
     }
+
 
     // =========================
     // EVENTOS TABLA
     // =========================
-    function eventos() {
 
-        document.querySelectorAll(".btn_eliminar").forEach(b => {
-            b.onclick = () => {
-                const id = Number(b.dataset.id);
-                inventario = inventario.filter(i => i.id !== id);
-                guardar();
-                render(buscador.value);
-            };
+    function eventos() {
+        document.querySelectorAll(".btn_eliminar").forEach((boton) => {
+            boton.onclick =
+                function () {
+                    const id =
+                        boton.dataset.id;
+
+                    const item =
+                        inventario.find((insumo) => {
+                            return String(insumo.id) === String(id);
+                        });
+
+                    if (!item) {
+                        return;
+                    }
+
+                    const confirmar =
+                        confirm(`¿Deseas eliminar el insumo "${item.nombre}"?`);
+
+                    if (!confirmar) {
+                        return;
+                    }
+
+                    inventario =
+                        inventario.filter((insumo) => {
+                            return String(insumo.id) !== String(id);
+                        });
+
+                    guardar();
+                    cargar();
+                    render(buscador ? buscador.value : "");
+                };
         });
 
-        document.querySelectorAll(".btn_editar").forEach(b => {
-            b.onclick = () => {
-                const id = Number(b.dataset.id);
-                const item = inventario.find(i => i.id === id);
-                modal(item);
-            };
+        document.querySelectorAll(".btn_editar").forEach((boton) => {
+            boton.onclick =
+                function () {
+                    const id =
+                        boton.dataset.id;
+
+                    const item =
+                        inventario.find((insumo) => {
+                            return String(insumo.id) === String(id);
+                        });
+
+                    modal(item);
+                };
         });
     }
 
-    // =========================
-    // FILTROS ESTADO
-    // =========================
-    filtroTodos.onclick = () => { filtroEstado = "todos"; render(buscador.value); };
-    filtroDisponible.onclick = () => { filtroEstado = "disponible"; render(buscador.value); };
-    filtroStockBajo.onclick = () => { filtroEstado = "bajo"; render(buscador.value); };
-    filtroAgotado.onclick = () => { filtroEstado = "agotado"; render(buscador.value); };
 
     // =========================
-    // FILTROS CATEGORÍA
+    // FILTROS
     // =========================
-    filtrosCategoria.forEach(btn => {
 
-        btn.onclick = () => {
+    function activarFiltroEstado(botonActivo) {
+        filtrosEstado.forEach((boton) => {
+            boton.classList.remove("filtro_estado_activo");
+        });
 
-            filtrosCategoria.forEach(b => b.classList.remove("filtro_categoria_activo"));
-            btn.classList.add("filtro_categoria_activo");
+        if (botonActivo) {
+            botonActivo.classList.add("filtro_estado_activo");
+        }
+    }
 
-            categoriaActual = btn.textContent.trim();
-            render(buscador.value);
-        };
+    if (filtroTodos) {
+        filtroTodos.onclick =
+            function () {
+                filtroEstado = "todos";
+                activarFiltroEstado(filtroTodos);
+                render(buscador ? buscador.value : "");
+            };
+    }
+
+    if (filtroDisponible) {
+        filtroDisponible.onclick =
+            function () {
+                filtroEstado = "disponible";
+                activarFiltroEstado(filtroDisponible);
+                render(buscador ? buscador.value : "");
+            };
+    }
+
+    if (filtroStockBajo) {
+        filtroStockBajo.onclick =
+            function () {
+                filtroEstado = "bajo";
+                activarFiltroEstado(filtroStockBajo);
+                render(buscador ? buscador.value : "");
+            };
+    }
+
+    if (filtroAgotado) {
+        filtroAgotado.onclick =
+            function () {
+                filtroEstado = "agotado";
+                activarFiltroEstado(filtroAgotado);
+                render(buscador ? buscador.value : "");
+            };
+    }
+
+    filtrosCategoria.forEach((btn) => {
+        btn.onclick =
+            function () {
+                filtrosCategoria.forEach((boton) => {
+                    boton.classList.remove("filtro_categoria_activo");
+                });
+
+                btn.classList.add("filtro_categoria_activo");
+
+                categoriaActual =
+                    btn.textContent.trim();
+
+                render(buscador ? buscador.value : "");
+            };
     });
 
-    // =========================
-    // BUSCADOR
-    // =========================
-    buscador.oninput = () => render(buscador.value);
+    if (buscador) {
+        buscador.oninput =
+            function () {
+                render(buscador.value);
+            };
+    }
 
-    // =========================
-    // AGREGAR
-    // =========================
-    btnAgregar.onclick = () => modal();
+    if (btnAgregar) {
+        btnAgregar.onclick =
+            function () {
+                modal();
+            };
+    }
+
+
+    // =====================
+    // NAVEGACIÓN SUPERIOR
+    // =====================
+
+    function configurarNavegacionPanel() {
+        const btnDashboard =
+            document.getElementById("btn_dashboard") ||
+            document.getElementById("btnDashboard") ||
+            document.getElementById("btn_Dashboard");
+
+        const btnLogoPanel =
+            document.getElementById("btn-logo-panel");
+
+        const btnBuscarPanel =
+            document.getElementById("btn-buscar-panel");
+
+        const btnPerfilPanel =
+            document.getElementById("btn-perfil-panel");
+
+        const btnSalir =
+            document.getElementById("btn-salir");
+
+        if (btnLogoPanel) {
+            btnLogoPanel.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                window.location.href =
+                    "pedidos_entrantes.html";
+            });
+        }
+
+        if (btnDashboard) {
+            btnDashboard.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                window.location.href =
+                    "pedidos_entrantes.html";
+            });
+        }
+
+        if (btnBuscarPanel) {
+            btnBuscarPanel.addEventListener("click", function () {
+                alert(
+                    "Usa el buscador del inventario para encontrar insumos o navega desde el menú lateral."
+                );
+            });
+        }
+
+        if (btnPerfilPanel) {
+            btnPerfilPanel.addEventListener("click", function () {
+                window.location.href =
+                    "configuracion.html";
+            });
+        }
+
+        if (btnSalir) {
+            btnSalir.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                const confirmar =
+                    confirm("¿Deseas cerrar sesión?");
+
+                if (!confirmar) {
+                    return;
+                }
+
+                localStorage.removeItem("usuarioActivo");
+
+                alert("Sesión cerrada correctamente.");
+
+                window.location.href =
+                    "../../../index.html";
+            });
+        }
+    }
+
 
     // =========================
     // START
     // =========================
+
     cargar();
     render();
-    
-    // =====================
-    // NAVEGACIÓN SUPERIOR PANEL RESTAURANTE
-    // =====================
+    configurarNavegacionPanel();
 
-    const usuarioActivo = JSON.parse(
-        localStorage.getItem("usuarioActivo")
-    );
-
-    if (!usuarioActivo) {
-        alert("Debes iniciar sesión para acceder al panel.");
-        window.location.href =
-            "../../Gestion de pedido/Pages/cuenta-cliente.html";
-        return;
-    }
-
-    if (usuarioActivo.rol !== "cocinero") {
-        alert("Esta sección es solo para emprendedores gastronómicos.");
-        window.location.href =
-            "../../Navegación/pages/home.html";
-        return;
-    }
-
-    const btnDashboard =
-        document.getElementById("btnDashboard") ||
-        document.getElementById("btn_Dashboard") ||
-        document.getElementById("btn_dashboard");
-
-    if (btnDashboard) {
-
-        btnDashboard.addEventListener("click", (e) => {
-
-            e.preventDefault();
-
-            window.location.href =
-                "pedidos_entrantes.html";
-
-        });
-
-    }
-
-    const btnPerfil =
-        document.getElementById("btn-perfil") ||
-        document.getElementById("btnPerfil") ||
-        document.querySelector('img[alt="usuario"]') ||
-        document.querySelector('img[alt="Perfil"]') ||
-        document.querySelector('img[alt="perfil"]');
-
-    if (btnPerfil) {
-
-        btnPerfil.style.cursor = "pointer";
-
-        btnPerfil.addEventListener("click", (e) => {
-
-            e.preventDefault();
-
-            window.location.href =
-                "configuracion.html";
-
-        });
-
-    }
-
-    const btnSalir =
-        document.getElementById("btn-salir") ||
-        document.getElementById("btnSalir") ||
-        document.getElementById("linkSalir");
-
-    if (btnSalir) {
-
-        btnSalir.addEventListener("click", (e) => {
-
-            e.preventDefault();
-
-            localStorage.removeItem("usuarioActivo");
-
-            alert("Sesión cerrada correctamente.");
-
-            window.location.href =
-                "../../../index.html";
-
-        });
-
-    }
 });
