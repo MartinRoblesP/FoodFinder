@@ -1,18 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es-PE">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/styles.css">
-    <title>Document</title>
+    <link rel="stylesheet" href="../../../styles.css">
+    <title>FoodFinder - Estadísticas</title>
 </head>
+
 <body>
     <header>
         <section class="cabecera_plataforma">
-            <img src="/Assests/Icons/FF_Logo_Coci.png" alt="logo_consumidor" width="179.31" height="33">
+            <a
+                href="../../Gestion operativa de la cocina/pages/pedidos_entrantes.html"
+                id="btn-logo-panel">
+                <img
+                    src="../../../Assests/Icons/FF_Logo_Coci.png"
+                    alt="Logo FoodFinder Cocinero"
+                    width="179"
+                    height="33">
+            </a>
+
             <div class="usuario_bloque">
-                <a id="btn_Dashboard">Dashboard</a>
-                <img src="/Assests/Icons/perfil.png" width="29" height="39">
+                <a
+                    id="btn_Dashboard"
+                    href="../../Gestion operativa de la cocina/pages/pedidos_entrantes.html">
+                    Dashboard
+                </a>
+
+                <a
+                    id="btn-perfil-panel"
+                    href="../../Gestion operativa de la cocina/pages/configuracion.html">
+                    <img
+                        src="../../../Assests/Icons/perfil.png"
+                        alt="Perfil"
+                        width="29"
+                        height="39">
+                </a>
+
+                <a
+                    id="linkSalir"
+                    href="#"
+                    style="margin-left: 12px; text-decoration: none; font-weight: 600;">
+                    Salir
+                </a>
             </div>
         </section>
     </header>
@@ -20,78 +50,101 @@
     <div id="contenedor-principal">
         <section id="sidebar">
             <nav id="navPlatos">
-            <h5>PANEL DE GESTIÓN</h5>
+                <h5>PANEL DE GESTIÓN</h5>
+
                 <div class="btn">
-                    <img src="/Assests/Icons/home.png" width="29.98" height="19">            
-                    <a>Resumen</a>
+                    <img src="../../../Assests/Icons/home.png" width="29" height="19" alt="Resumen">
+                    <a href="../../Gestion operativa de la cocina/pages/pedidos_entrantes.html">
+                        Resumen
+                    </a>
                 </div>
+
                 <div class="btn">
-                    <img src="/Assests/Icons/campana.png"  width="29.98" height="19">
-                    <a>Pedidos</a>
+                    <img src="../../../Assests/Icons/campana.png" width="29" height="19" alt="Pedidos">
+                    <a href="../../Gestion operativa de la cocina/pages/pedidos_entrantes.html">
+                        Pedidos
+                    </a>
                 </div>
+
                 <div class="btn">
-                    <img src="/Assests/icons/Mis platos.png" width="29.98" height="19">
-                    <a>Mis Platos</a>
+                    <img src="../../../Assests/Icons/Mis platos.png" width="29" height="19" alt="Mis Platos">
+                    <a href="../../Gestion operativa de la cocina/pages/mis_platos.html">
+                        Mis Platos
+                    </a>
                 </div>
+
                 <div class="btn">
-                    <img src="/Assests/icons/caja.png"  width="29.98" height="19">
-                    <a>Inventario</a> 
+                    <img src="../../../Assests/Icons/caja.png" width="29" height="19" alt="Inventario">
+                    <a href="../../Gestion operativa de la cocina/pages/Inventario.html">
+                        Inventario
+                    </a>
                 </div>
-                <div class="btn">
-                    <img src="/Assests/icons/estadistica.png" width="29.98" height="19">
-                    <a>Estadística</a>
+
+                <div class="btn activo">
+                    <img src="../../../Assests/Icons/estadistica.png" width="29" height="19" alt="Estadística">
+                    <a href="Estadisticas.html">
+                        Estadística
+                    </a>
                 </div>
+
                 <div class="btn">
-                    <img src="/Assests/Icons/ajuste.png"  width="29.98" height="19">
-                    <a>Configuración</a>
-                </div>  
+                    <img src="../../../Assests/Icons/ajuste.png" width="29" height="19" alt="Configuración">
+                    <a href="../../Gestion operativa de la cocina/pages/configuracion.html">
+                        Configuración
+                    </a>
+                </div>
             </nav>
         </section>
 
-        <main>
+        <main class="Contenido_Misplatos">
             <h1 id="Titulo_Estadistica">Estadísticas del negocio</h1>
+
             <section class="cards_estadisticos">
                 <div id="Ventas_hoy">
                     <h6>VENTAS HOY</h6>
                     <h2 id="valorVentasHoy">S/ 0.00</h2>
                     <p id="variacionVentas">▲ 0% vs ayer</p>
                 </div>
-                <div  id="Pedidos_hoy">
+
+                <div id="Pedidos_hoy">
                     <h6>PEDIDOS HOY</h6>
                     <h2 id="valorPedidosHoy">0</h2>
                     <p id="variacionPedidos">▲ 0% vs ayer</p>
                 </div>
-                <div  id="Ticket_promedio">
+
+                <div id="Ticket_promedio">
                     <h6>TICKET PROMEDIO</h6>
                     <h2 id="valorTicketPromedio">S/ 0.00</h2>
                     <p id="variacionTicket">▲ 0% vs ayer</p>
                 </div>
             </section>
-            
-            <!--card grafico-->
+
             <section class="card_ventasDiarias">
                 <div id="card1">
-                    <h6>Ventas por dia (s/)</h6>
+                    <h6>Ventas por día (S/)</h6>
                     <div id="graficoVentasDia" class="grafico-barras"></div>
                 </div>
+
                 <div id="card2">
-                    <h6>Platos mas vendidos</h6>
+                    <h6>Platos más vendidos hoy</h6>
                     <div id="platosMasVendidosDia"></div>
                 </div>
             </section>
-            <!--card grafico-->
+
             <section class="card_ventasMensuales">
                 <div id="card1">
-                    <h6>Ventas por mes (s/)</h6>
+                    <h6>Ventas por mes (S/)</h6>
                     <div id="graficoVentasMes" class="grafico-barras"></div>
                 </div>
+
                 <div id="card2">
-                    <h6>Platos más vendidos</h6>
+                    <h6>Platos más vendidos del mes</h6>
                     <div id="platosMasVendidosMes"></div>
                 </div>
             </section>
-        </main>  
-        </div>
-    <script src="/features/Administracion/js/Estadisticas.js"></script>
+        </main>
+    </div>
+
+    <script src="../js/Estadisticas.js" defer></script>
 </body>
 </html>
