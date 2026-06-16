@@ -274,4 +274,74 @@ document.addEventListener("DOMContentLoaded", function () {
     // =========================
     cargar();
     render();
+
+    // =====================
+// NAVEGACIÓN PANEL RESTAURANTE
+// =====================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const botonesDashboard =
+        document.querySelectorAll(
+            "#btnDashboard, #btn_Dashboard, #btn_dashboard, .btn_dashboard"
+        );
+
+    botonesDashboard.forEach((boton) => {
+
+        boton.addEventListener("click", (e) => {
+
+            e.preventDefault();
+
+            window.location.href =
+                "pedidos_entrantes.html";
+
+        });
+
+    });
+
+    const posiblesPerfiles =
+        Array.from(
+            document.querySelectorAll("a, button")
+        ).filter(elemento =>
+            elemento.textContent
+                .toLowerCase()
+                .includes("perfil")
+        );
+
+    posiblesPerfiles.forEach((elemento) => {
+
+        elemento.addEventListener("click", (e) => {
+
+            e.preventDefault();
+
+            window.location.href =
+                "configuracion.html";
+
+        });
+
+    });
+
+    const posiblesSalir =
+        Array.from(
+            document.querySelectorAll("a, button")
+        ).filter(elemento =>
+            elemento.textContent
+                .toLowerCase()
+                .includes("salir")
+        );
+
+    posiblesSalir.forEach((elemento) => {
+
+        elemento.addEventListener("click", (e) => {
+
+            e.preventDefault();
+
+            window.location.href =
+                "../../../index.html";
+
+        });
+
+    });
+
+});
 });

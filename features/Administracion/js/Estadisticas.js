@@ -1,145 +1,252 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const platos = JSON.parse(localStorage.getItem("platos")) || [];
+document.addEventListener("DOMContentLoaded", () => {
 
-    const valorVentasHoy = document.getElementById("valorVentasHoy");
-    const valorPedidosHoy = document.getElementById("valorPedidosHoy");
-    const valorTicketPromedio = document.getElementById("valorTicketPromedio");
+    const pedidosHistorial =
+        JSON.parse(localStorage.getItem("pedidosHistorial")) || [];
 
-    const graficoVentasDia = document.querySelector(".card_ventasDiarias #card1");
-    const platosMasVendidosDia = document.querySelector(".card_ventasDiarias #card2");
+    const pedidosActivos =
+        JSON.parse(localStorage.getItem("pedidosActivos")) || [];
 
-    const graficoVentasMes = document.querySelector(".card_ventasMensuales #card1");
-    const platosMasVendidosMes = document.querySelector(".card_ventasMensuales #card2");
-    
-    function convertirNumero(valor) {
-        return parseFloat(String(valor).replace("S/", "").trim()) || 0;
-    }
+    const valorVentasHoy =
+        document.getElementById("valorVentasHoy");
+
+    const valorPedidosHoy =
+        document.getElementById("valorPedidosHoy");
+
+    const valorTicketPromedio =
+        document.getElementById("valorTicketPromedio");
+
+    const graficoVentasDia =
+        document.getElementById("graficoVentasDia");
+
+    const graficoVentasMes =
+        document.getElementById("graficoVentasMes");
+
+    const platosMasVendidosDia =
+        document.getElementById("platosMasVendidosDia");
+
+    const platosMasVendidosMes =
+        document.getElementById("platosMasVendidosMes");
 
     function calcularVentasTotales() {
-        let total = 0;
 
-        platos.forEach(function (plato) {
-            const precio = convertirNumero(plato.precio);
-            const pedidos = parseInt(plato.pedidos) || 0;
+        return pedidosHistorial.reduce((total, pedido) => {
 
-            total += precio * pedidos;
-        });
+            return total + Number(pedido.total || 0);
 
-        return total;
+        }, 0);
+
     }
 
-    function calcularPedidosTotales() {
-        let total = 0;
+    function calcularCantidadPedidos() {
 
-        platos.forEach(function (plato) {
-            total += parseInt(plato.pedidos) || 0;
-        });
+        return pedidosHistorial.length;
 
-        return total;
+    }
+
+    function calcularTicketPromedio() {
+
+        const cantidadPedidos =
+            calcularCantidadPedidos();
+
+        if (cantidadPedidos === 0) {
+            return 0;
+        }
+
+        return calcularVentasTotales() / cantidadPedidos;
+
     }
 
     function pintarCards() {
-        const ventas = calcularVentasTotales();
-        const pedidos = calcularPedidosTotales();
-        const ticketPromedio = pedidos > 0 ? ventas / pedidos : 0;
 
-        valorVentasHoy.textContent = "S/ " + ventas.toFixed(2);
-        valorPedidosHoy.textContent = pedidos;
-        valorTicketPromedio.textContent = "S/ " + ticketPromedio.toFixed(2);
+        const ventas =
+            calcularVentasTotales();
+
+        const pedidos =
+            calcularCantidadPedidos();
+
+        const ticket =
+            calcularTicketPromedio();
+
+        valorVentasHoy.textContent =
+            `S/ ${ventas.toFixed(2)}`;
+
+        valorPedidosHoy.textContent =
+            pedidos;
+
+        valorTicketPromedio.textContent =
+            `S/ ${ticket.toFixed(2)}`;
+
     }
 
-    function crearGraficoBarras(contenedor, datos, labels) {
-    const titulo = contenedor.querySelector("h6").outerHTML;
-    contenedor.innerHTML = titulo;
+    function obtenerPlatosVendidos() {
 
-    const cajaGrafico = document.createElement("div");
-    cajaGrafico.classList.add("grafico-barras");
+        const resumen = {};
 
-    const maximo = Math.max(...datos, 1);
+        pedidosHistorial.forEach((pedido) => {
 
-    datos.forEach(function (valor, index) {
-        const altura = valor > 0 ? (valor / maximo) * 90 : 5;
+            const cantidadPedido =
+                Number(pedido.cantidad || 1);
 
-        const barraContenedor = document.createElement("div");
-        barraContenedor.classList.add("barra-contenedor");
+            const platos =
+                String(pedido.plato || "")
+                    .split(",")
+                    .map(plato => plato.trim())
+                    .filter(plato => plato.length > 0);
 
-        barraContenedor.innerHTML = `
-            <div class="barra" title="S/ ${valor.toFixed(2)}" style="height: ${altura}px;"></div>
-            <span class="label-barra">${labels[index]}</span>
-        `;
+            platos.forEach((plato) => {
 
-        cajaGrafico.appendChild(barraContenedor);
-    });
+                if (!resumen[plato]) {
+                    resumen[plato] = 0;
+                }
 
-    contenedor.appendChild(cajaGrafico);
-    }
+                resumen[plato] += cantidadPedido;
 
-    function pintarVentasPorDia() {
-        const ventasTotales = calcularVentasTotales();
+            });
 
-        const ventasDias = [
-            ventasTotales * 0.45,
-            ventasTotales * 0.70,
-            ventasTotales * 0.40,
-            ventasTotales * 0.85,
-            ventasTotales * 0.60,
-            ventasTotales,
-            ventasTotales * 0.75,
-            ventasTotales * 0.55,
-            ventasTotales * 0.90,
-            ventasTotales * 0.65,
-            ventasTotales * 0.98,
-            ventasTotales * 0.98
-        ];
-
-        const labels = ["L", "M", "MI", "J", "V", "S", "D", "L", "M", "MI", "J", "V"];
-
-        crearGraficoBarras(graficoVentasDia, ventasDias, labels);
-    }
-
-    function pintarVentasPorMes() {
-        const ventasTotales = calcularVentasTotales();
-
-        const ventasMeses = [
-            ventasTotales * 0.45,
-            ventasTotales * 0.70,
-            ventasTotales * 0.42,
-            ventasTotales * 0.85,
-            ventasTotales * 0.60,
-            ventasTotales,
-            ventasTotales * 0.75,
-            ventasTotales * 0.55,
-            ventasTotales * 0.88,
-            ventasTotales * 0.65,
-            ventasTotales,
-            ventasTotales
-        ];
-
-        const labels = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
-
-        crearGraficoBarras(graficoVentasMes, ventasMeses, labels);
-    }
-
-    function pintarPlatosMasVendidos(contenedor) {
-        const titulo = contenedor.querySelector("h6").outerHTML;
-        contenedor.innerHTML = titulo;
-
-        const platosOrdenados = [...platos].sort(function (a, b) {
-            return (parseInt(b.pedidos) || 0) - (parseInt(a.pedidos) || 0);
         });
 
-        const totalPedidos = calcularPedidosTotales();
+        return Object.entries(resumen)
+            .map(([nombre, cantidad]) => ({
+                nombre,
+                cantidad
+            }))
+            .sort((a, b) => b.cantidad - a.cantidad);
 
-        if (platosOrdenados.length === 0 || totalPedidos === 0) {
-            contenedor.innerHTML = titulo + "<p>No hay ventas registradas todavía.</p>";
+    }
+
+    function crearGraficoBarras(contenedor, datos, etiquetas) {
+
+        contenedor.innerHTML = "";
+
+        if (datos.length === 0) {
+
+            contenedor.innerHTML = `
+                <p style="padding: 12px;">
+                    No hay datos suficientes para mostrar el gráfico.
+                </p>
+            `;
+
             return;
-            }
 
-        platosOrdenados.slice(0, 4).forEach(function (plato) {
-            const pedidos = parseInt(plato.pedidos) || 0;
-            const porcentaje = totalPedidos > 0 ? (pedidos / totalPedidos) * 100 : 0;
+        }
 
-            const item = document.createElement("div");
+        const maximo =
+            Math.max(...datos, 1);
+
+        datos.forEach((valor, index) => {
+
+            const altura =
+                valor > 0
+                    ? (valor / maximo) * 90
+                    : 5;
+
+            const barraContenedor =
+                document.createElement("div");
+
+            barraContenedor.classList.add("barra-contenedor");
+
+            barraContenedor.innerHTML = `
+                <div
+                    class="barra"
+                    title="S/ ${valor.toFixed(2)}"
+                    style="height: ${altura}px;">
+                </div>
+
+                <span class="label-barra">
+                    ${etiquetas[index]}
+                </span>
+            `;
+
+            contenedor.appendChild(barraContenedor);
+
+        });
+
+    }
+
+    function pintarVentasPorPedido() {
+
+        const datos =
+            pedidosHistorial
+                .slice(-8)
+                .map(pedido =>
+                    Number(pedido.total || 0)
+                );
+
+        const etiquetas =
+            pedidosHistorial
+                .slice(-8)
+                .map((pedido, index) =>
+                    pedido.id || `P${index + 1}`
+                );
+
+        crearGraficoBarras(
+            graficoVentasDia,
+            datos,
+            etiquetas
+        );
+
+    }
+
+    function pintarResumenMensualEstimado() {
+
+        const ventas =
+            calcularVentasTotales();
+
+        const datos =
+            ventas > 0
+                ? [
+                    ventas * 0.45,
+                    ventas * 0.60,
+                    ventas * 0.75,
+                    ventas
+                ]
+                : [];
+
+        const etiquetas =
+            ["Sem 1", "Sem 2", "Sem 3", "Actual"];
+
+        crearGraficoBarras(
+            graficoVentasMes,
+            datos,
+            etiquetas
+        );
+
+    }
+
+    function pintarPlatosMasVendidos() {
+
+        const platos =
+            obtenerPlatosVendidos();
+
+        platosMasVendidosDia.innerHTML = "";
+
+        if (platos.length === 0) {
+
+            platosMasVendidosDia.innerHTML = `
+                <p style="padding: 12px;">
+                    No hay platos vendidos todavía.
+                </p>
+            `;
+
+            return;
+
+        }
+
+        const total =
+            platos.reduce((suma, plato) => {
+                return suma + plato.cantidad;
+            }, 0);
+
+        platos.slice(0, 5).forEach((plato) => {
+
+            const porcentaje =
+                total > 0
+                    ? (plato.cantidad / total) * 100
+                    : 0;
+
+            const item =
+                document.createElement("div");
+
             item.classList.add("item-plato");
 
             item.innerHTML = `
@@ -147,18 +254,84 @@ document.addEventListener("DOMContentLoaded", function () {
                     <span>${plato.nombre}</span>
                     <strong>${porcentaje.toFixed(0)}%</strong>
                 </div>
+
                 <div class="linea-fondo">
-                    <div class="linea-verde" style="width: ${porcentaje}%;"></div>
+                    <div
+                        class="linea-verde"
+                        style="width: ${porcentaje}%;">
+                    </div>
                 </div>
             `;
 
-            contenedor.appendChild(item);
+            platosMasVendidosDia.appendChild(item);
+
         });
+
+    }
+
+    function pintarPedidosRecientes() {
+
+        platosMasVendidosMes.innerHTML = "";
+
+        if (pedidosHistorial.length === 0) {
+
+            platosMasVendidosMes.innerHTML = `
+                <p style="padding: 12px;">
+                    No hay pedidos finalizados.
+                </p>
+            `;
+
+            return;
+
+        }
+
+        pedidosHistorial
+            .slice(-4)
+            .reverse()
+            .forEach((pedido) => {
+
+                const item =
+                    document.createElement("div");
+
+                item.classList.add("item-plato");
+
+                item.innerHTML = `
+                    <div class="info-plato">
+                        <span>${pedido.id} - ${pedido.plato}</span>
+                        <strong>S/ ${Number(pedido.total || 0).toFixed(2)}</strong>
+                    </div>
+
+                    <div class="linea-fondo">
+                        <div
+                            class="linea-verde"
+                            style="width: 100%;">
+                        </div>
+                    </div>
+                `;
+
+                platosMasVendidosMes.appendChild(item);
+
+            });
+
+    }
+
+    function mostrarAvisoSiNoHayHistorial() {
+
+        if (pedidosHistorial.length === 0 && pedidosActivos.length > 0) {
+
+            console.info(
+                "Hay pedidos activos, pero todavía no hay pedidos finalizados para estadísticas."
+            );
+
+        }
+
     }
 
     pintarCards();
-    pintarVentasPorDia();
-    pintarVentasPorMes();
-    pintarPlatosMasVendidos(platosMasVendidosDia);
-    pintarPlatosMasVendidos(platosMasVendidosMes);
+    pintarVentasPorPedido();
+    pintarResumenMensualEstimado();
+    pintarPlatosMasVendidos();
+    pintarPedidosRecientes();
+    mostrarAvisoSiNoHayHistorial();
+
 });

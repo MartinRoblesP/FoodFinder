@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../../../styles.css">
+
+    <title>Document</title>
+</head>
+
+<body class="cuerpo_MisPlatos">
+    <header class="Superior_Misplatos">
+        <section class="cabecera_plataforma">
+            <img src="../../../Assests/Icons/FF_Logo_Coci.png" alt="logo_consumidor" width="179.31" height="33">
+            <div class="usuario_bloque">
+                <a id="btn_Dashboard">Dashboard</a>
+                <img src="../../../Assests/Icons/perfil.png" width="29" height="39">
+            </div>
+        </section>
+    </header>
+
+    <div class="contenedor-principal">
+       <section id="sidebar">
+    <nav id="navPlatos">
+        <h5>PANEL DEL GESTIÓN</h5>
+
+        <div class="btn">
+            <img src="../../../Assests/Icons/home.png" width="29.98" height="19">            
+            <a>Resumen</a>
+        </div>
+
+        <div class="btn">
+            <img src="../../../Assests/Icons/campana.png" width="29.98" height="19">
+            <a>Pedidos entrantes</a>
+        </div>
+
+        <div class="btn activo">
+            <img src="../../../Assests/icons/Mis platos.png" width="29.98" height="19">
+            <a>Mis Platos</a>
+        </div>
+
+        <div class="btn">
+            <img src="../../../Assests/icons/caja.png" width="29.98" height="19">
+            <a>Inventario</a> 
+        </div>
+
+        <div class="btn">
+            <img src="../../../Assests/icons/estadistica.png" width="29.98" height="19">
+            <a>Estadística</a>
+        </div>
+
+        <div class="btn">
+            <img src="../../../Assests/Icons/ajuste.png" width="29.98" height="19">
+            <a>Configuración</a>
+        </div>  
+    </nav>
+</section>
+
+<main class="Contenido_Misplatos">
+    <div class="main-header">
+        <h1>Mis platos</h1>
+        <button id="btn_Agregar">+ Agregar plato</button>
+    </div>
+
+    <div class="tabla-container">
+        <table class="tabla_platos">
+            <thead>
+                <tr>
+                    <th>PLATOS</th>
+                    <th>PRECIO</th>
+                    <th>STOCK</th>
+                    <th>ESTADO</th>
+                    <th>PEDIDOS</th>
+                    <th>ACCIONES</th>
+                </tr>
+            </thead>
+
+            <tbody id="contenedor-platos">
+                <tr>
+                    <td>Seco de pollo</td>
+                    <td>S/ 30</td>
+                    <td>15</td>
+                    <td><span class="badge con-stock">Con stock</span></td>
+                    <td>7</td>
+                    <td>
+                        <div class="acciones-celda">
+                            <button class="btn-editar">✏️ Editar</button>
+                            <button class="btn-eliminar">🗑️</button>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Locro de zapallo</td>
+                    <td>S/ 15</td>
+                    <td>8</td>
+                    <td><span class="badge con-stock">Con stock</span></td>
+                    <td>8</td>
+                    <td>
+                        <div class="acciones-celda">
+                            <button class="btn-editar">✏️ Editar</button>
+                            <button class="btn-eliminar">🗑️</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="fondo_card">
+        <div class="card_NewDish">
+            <div id="Crear_plato">
+                <h1>Añada su plato</h1>
+
+                <input type="file" id="foto-plato" accept="image/png" class="visually-hidden">
+
+                <label for="foto-plato" class="upload-label">
+                    <div id="plus-icon">
+                        <span>+</span>
+                    </div>
+                </label>
+            </div>
+
+            <span class="label-text">Ingrese foto del plato</span>
+
+            <div class="datos_plato">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre">
+
+                <label for="Precio">Precio:</label>
+                <input type="number" id="Precio" name="precio">
+
+                <label for="Stock">Stock:</label>
+                <input type="number" id="Stock" name="stock">
+
+                <label for="Descripcion">Descripción:</label>
+                <input type="text" id="Descripcion" name="descripcion">
+
+                <button type="submit">Añadir</button>
+                <button type="button" id="btnCancelarPlato">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!--Aqui inicia el modal de crear plato-->
+    
+    <script src="/carpetaPlatos/MisPlatos.js"></script>
+</body>
+</html>

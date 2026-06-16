@@ -1,153 +1,238 @@
-// ==========================================
-// configuracion.js (MEJORADO)
-// Épica 4 - Configuración del restaurante
-// UX mejorado + localStorage + validaciones
-// ==========================================
-
 document.addEventListener("DOMContentLoaded", function () {
 
-    // ============================
-    // ELEMENTOS
-    // ============================
-    var nombre = document.querySelector("#nombre_restaurante");
-    var descripcion = document.querySelector("#descripcion");
-    var telefono = document.querySelector("#telefono");
+    /* ── Claves de localStorage ── */
+    var CLAVE_INFO     = "config_info_restaurante";
+    var CLAVE_HORARIOS = "config_horarios";
 
-    var guardarDatos = document.querySelectorAll(".btn_guardar")[0];
-    var guardarHorarios = document.querySelectorAll(".btn_guardar")[1];
+    /* ── Referencias DOM ── */
+    var inputNombre      = document.getElementById("nombre-restaurante");
+    var inputDescripcion = document.getElementById("descripcion");
+    var inputTelefono    = document.getElementById("telefono");
+    var btnGuardarInfo   = document.getElementById("btn-guardar-info");
+    var btnActualizar    = document.getElementById("btn-actualizar-horarios");
+    var btnFoto          = document.getElementById("btn-foto");
+    var btnLogo          = document.getElementById("btn-logo");
+    var inputFoto        = document.getElementById("input-foto");
+    var inputLogo        = document.getElementById("input-logo");
+    var toast            = document.getElementById("toast");
 
-    var toggleLV = document.querySelector("#toggle_lv");
-    var toggleSab = document.querySelector("#toggle_sab");
-    var toggleDom = document.querySelector("#toggle_dom");
+    var horarios = [
+        {
+            toggle: document.getElementById("toggle-lv"),
+            inicio: document.getElementById("lv-inicio"),
+            fin:    document.getElementById("lv-fin")
+        },
+        {
+            toggle: document.getElementById("toggle-sa"),
+            inicio: document.getElementById("sa-inicio"),
+            fin:    document.getElementById("sa-fin")
+        },
+        {
+            toggle: document.getElementById("toggle-do"),
+            inicio: document.getElementById("do-inicio"),
+            fin:    document.getElementById("do-fin")
+        }
+    ];
 
-    var horarios = document.querySelectorAll(".horario_input");
-
-    // ============================
-    // SISTEMA DE MENSAJES (UI)
-    // ============================
-    function mostrarMensaje(texto, tipo) {
-
-        var msg = document.createElement("div");
-        msg.textContent = texto;
-
-        msg.className = "msg_toast " + (tipo === "error" ? "msg_error" : "msg_success");
-
-        document.body.appendChild(msg);
-
+    /* ── Toast helper ── */
+    function mostrarToast(mensaje) {
+        toast.textContent = mensaje;
+        toast.classList.add("visible");
         setTimeout(function () {
-            msg.classList.add("msg_show");
-        }, 10);
-
-        setTimeout(function () {
-            msg.classList.remove("msg_show");
-
-            setTimeout(function () {
-                msg.remove();
-            }, 300);
-
+            toast.classList.remove("visible");
         }, 2500);
     }
 
-    // ============================
-    // CARGAR CONFIGURACIÓN
-    // ============================
-    var datosGuardados = localStorage.getItem("configuracion_restaurante");
-
-    if (datosGuardados) {
-        var datos = JSON.parse(datosGuardados);
-
-        nombre.value = datos.nombre || "";
-        descripcion.value = datos.descripcion || "";
-        telefono.value = datos.telefono || "";
+    /* ── Cargar info del restaurante desde localStorage ── */
+    function cargarInfo() {
+        var datos = JSON.parse(localStorage.getItem(CLAVE_INFO));
+        if (datos) {
+            inputNombre.value      = datos.nombre      || "";
+            inputDescripcion.value = datos.descripcion || "";
+            inputTelefono.value    = datos.telefono    || "";
+        }
     }
 
-    // ============================
-    // CARGAR HORARIOS
-    // ============================
-    var horariosGuardados = localStorage.getItem("horarios_restaurante");
+    /* ── Guardar info del restaurante ── */
+    btnGuardarInfo.addEventListener("click", function () {
+        var nombre      = inputNombre.value.trim();
+        var descripcion = inputDescripcion.value.trim();
+        var telefono    = inputTelefono.value.trim();
 
-    if (horariosGuardados) {
+        inputNombre.classList.remove("campo-error");
+        inputDescripcion.classList.remove("campo-error");
+        inputTelefono.classList.remove("campo-error");
 
-        var d = JSON.parse(horariosGuardados);
+        var valido = true;
 
-        horarios[0].value = d.lv_inicio;
-        horarios[1].value = d.lv_fin;
+        if (nombre === "") {
+            inputNombre.classList.add("campo-error");
+            valido = false;
+        }
+        if (descripcion === "") {
+            inputDescripcion.classList.add("campo-error");
+            valido = false;
+        }
+        if (telefono === "") {
+            inputTelefono.classList.add("campo-error");
+            valido = false;
+        }
 
-        horarios[2].value = d.sab_inicio;
-        horarios[3].value = d.sab_fin;
-
-        horarios[4].value = d.dom_inicio;
-        horarios[5].value = d.dom_fin;
-
-        toggleLV.checked = d.lv_cerrado;
-        toggleSab.checked = d.sab_cerrado;
-        toggleDom.checked = d.dom_cerrado;
-    }
-
-    // ============================
-    // GUARDAR INFO RESTAURANTE
-    // ============================
-    guardarDatos.addEventListener("click", function () {
-
-        if (nombre.value.trim() === "") {
-            mostrarMensaje("El nombre del restaurante es obligatorio", "error");
+        if (!valido) {
+            mostrarToast("Por favor, completa todos los campos.");
             return;
         }
 
-        var info = {
-            nombre: nombre.value,
-            descripcion: descripcion.value,
-            telefono: telefono.value
-        };
+        localStorage.setItem(CLAVE_INFO, JSON.stringify({
+            nombre:      nombre,
+            descripcion: descripcion,
+            telefono:    telefono
+        }));
 
-        localStorage.setItem("configuracion_restaurante", JSON.stringify(info));
-
-        mostrarMensaje("Información guardada correctamente", "success");
+        mostrarToast("¡Información guardada correctamente!");
     });
 
-    // ============================
-    // GUARDAR HORARIOS
-    // ============================
-    guardarHorarios.addEventListener("click", function () {
-
-        var horario = {
-            lv_inicio: horarios[0].value,
-            lv_fin: horarios[1].value,
-
-            sab_inicio: horarios[2].value,
-            sab_fin: horarios[3].value,
-
-            dom_inicio: horarios[4].value,
-            dom_fin: horarios[5].value,
-
-            lv_cerrado: toggleLV.checked,
-            sab_cerrado: toggleSab.checked,
-            dom_cerrado: toggleDom.checked
-        };
-
-        localStorage.setItem("horarios_restaurante", JSON.stringify(horario));
-
-        mostrarMensaje("Horarios actualizados correctamente", "success");
+    /* ── Limpiar error al escribir ── */
+    [inputNombre, inputDescripcion, inputTelefono].forEach(function (el) {
+        el.addEventListener("input", function () {
+            el.classList.remove("campo-error");
+        });
     });
 
-    // ============================
-    // DESHABILITAR HORARIOS
-    // ============================
-    function actualizarEstado() {
+    /* ── Botones adjuntar (abren el input file) ── */
+    btnFoto.addEventListener("click", function () {
+        inputFoto.click();
+    });
 
-        horarios[0].disabled = toggleLV.checked;
-        horarios[1].disabled = toggleLV.checked;
+    btnLogo.addEventListener("click", function () {
+        inputLogo.click();
+    });
 
-        horarios[2].disabled = toggleSab.checked;
-        horarios[3].disabled = toggleSab.checked;
+    inputFoto.addEventListener("change", function () {
+        if (inputFoto.files.length > 0) {
+            btnFoto.textContent = inputFoto.files[0].name;
+        }
+    });
 
-        horarios[4].disabled = toggleDom.checked;
-        horarios[5].disabled = toggleDom.checked;
+    inputLogo.addEventListener("change", function () {
+        if (inputLogo.files.length > 0) {
+            btnLogo.textContent = inputLogo.files[0].name;
+        }
+    });
+
+    /* ── Toggle "Cerrado": deshabilita inputs de hora ── */
+    function aplicarEstadoCerrado(item) {
+        var cerrado      = item.toggle.checked;
+        item.inicio.disabled = cerrado;
+        item.fin.disabled    = cerrado;
     }
 
-    toggleLV.addEventListener("change", actualizarEstado);
-    toggleSab.addEventListener("change", actualizarEstado);
-    toggleDom.addEventListener("change", actualizarEstado);
+    horarios.forEach(function (item) {
+        item.toggle.addEventListener("change", function () {
+            aplicarEstadoCerrado(item);
+        });
+    });
 
-    actualizarEstado();
+    /* ── Cargar horarios guardados desde localStorage ── */
+    function cargarHorarios() {
+        var datos = JSON.parse(localStorage.getItem(CLAVE_HORARIOS));
+        if (!datos) return;
+
+        var claves = ["lv", "sa", "do"];
+        claves.forEach(function (clave, i) {
+            if (datos[clave]) {
+                horarios[i].inicio.value   = datos[clave].inicio  || horarios[i].inicio.value;
+                horarios[i].fin.value      = datos[clave].fin     || horarios[i].fin.value;
+                horarios[i].toggle.checked = datos[clave].cerrado || false;
+                aplicarEstadoCerrado(horarios[i]);
+            }
+        });
+    }
+
+    /* ── Guardar horarios ── */
+    btnActualizar.addEventListener("click", function () {
+        var datos = {
+            lv: { inicio: horarios[0].inicio.value, fin: horarios[0].fin.value, cerrado: horarios[0].toggle.checked },
+            sa: { inicio: horarios[1].inicio.value, fin: horarios[1].fin.value, cerrado: horarios[1].toggle.checked },
+            do: { inicio: horarios[2].inicio.value, fin: horarios[2].fin.value, cerrado: horarios[2].toggle.checked }
+        };
+
+        localStorage.setItem(CLAVE_HORARIOS, JSON.stringify(datos));
+        mostrarToast("¡Horarios actualizados correctamente!");
+    });
+
+    /* ── Inicializar ── */
+    cargarInfo();
+    cargarHorarios();
+
+    // =====================
+// NAVEGACIÓN PANEL RESTAURANTE
+// =====================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const botonesDashboard =
+        document.querySelectorAll(
+            "#btnDashboard, #btn_Dashboard, #btn_dashboard, .btn_dashboard"
+        );
+
+    botonesDashboard.forEach((boton) => {
+
+        boton.addEventListener("click", (e) => {
+
+            e.preventDefault();
+
+            window.location.href =
+                "pedidos_entrantes.html";
+
+        });
+
+    });
+
+    const posiblesPerfiles =
+        Array.from(
+            document.querySelectorAll("a, button")
+        ).filter(elemento =>
+            elemento.textContent
+                .toLowerCase()
+                .includes("perfil")
+        );
+
+    posiblesPerfiles.forEach((elemento) => {
+
+        elemento.addEventListener("click", (e) => {
+
+            e.preventDefault();
+
+            window.location.href =
+                "configuracion.html";
+
+        });
+
+    });
+
+    const posiblesSalir =
+        Array.from(
+            document.querySelectorAll("a, button")
+        ).filter(elemento =>
+            elemento.textContent
+                .toLowerCase()
+                .includes("salir")
+        );
+
+    posiblesSalir.forEach((elemento) => {
+
+        elemento.addEventListener("click", (e) => {
+
+            e.preventDefault();
+
+            window.location.href =
+                "../../../index.html";
+
+        });
+
+    });
+
+});
+
 });

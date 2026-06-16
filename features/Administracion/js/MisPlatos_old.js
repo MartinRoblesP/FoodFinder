@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const contenedorPlatos = document.getElementById("contenedor-platos");
 
     const btnSubmitPlato = document.querySelector('.datos_plato button[type="submit"]');
-    const btnCancelar = document.querySelector('.datos_plato button[type="button"]');
+    const btnCancelar = document.querySelector('.datos_plato button[type="button"], .datos_plato button[type="cancelar"]');
 
     const inputNombre = document.getElementById("nombre");
     const inputPrecio = document.getElementById("Precio");
@@ -17,17 +17,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
     fondoCard.style.display = "none";
 
+    // CORREGIDO: Guarda fielmente cada propiedad en el LocalStorage
     function guardarLocalStorage() {
         const platos = [];
 
         document.querySelectorAll("#contenedor-platos tr").forEach(function (fila) {
-            platos.push({
-                nombre: fila.children[0].textContent,
-                precio: fila.children[1].textContent.replace("S/ ", ""),
-                stock: fila.children[2].textContent,
-                descripcion: fila.dataset.descripcion || "",
-                pedidos: fila.children[4].textContent
-            });
+            const celdas = fila.children;
+            if (celdas.length >= 5) {
+                platos.push({
+                    nombre: celdas[0].textContent.trim(),
+                    precio: celdas[1].textContent.replace("S/ ", "").trim(),
+                    stock: celdas[2].textContent.trim(),
+                    descripcion: fila.dataset.descripcion || "",
+                    pedidos: celdas[4].textContent.trim() || "0"
+                });
+            }
         });
 
         localStorage.setItem("platos", JSON.stringify(platos));
@@ -42,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             nuevaFila.innerHTML = `
                 <td>${plato.nombre}</td>
-                <td>S/ ${plato.precio}</td>
+                <td>S/ ${parseFloat(plato.precio).toFixed(2)}</td>
                 <td>${plato.stock}</td>
                 <td></td>
                 <td>${plato.pedidos || 0}</td>
@@ -106,6 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
         limpiarFormulario();
     });
 
+    // Quitar borde rojo dinámicamente mientras el usuario escribe
     [inputNombre, inputPrecio, inputStock, inputDescripcion].forEach(function (input) {
         input.addEventListener("input", function () {
             input.classList.remove("campo-error");
@@ -134,25 +139,20 @@ document.addEventListener("DOMContentLoaded", function () {
         const stock = inputStock.value.trim();
         const descripcion = inputDescripcion.value.trim();
 
-        inputNombre.classList.remove("campo-error");
-        inputPrecio.classList.remove("campo-error");
-        inputStock.classList.remove("campo-error");
-        inputDescripcion.classList.remove("campo-error");
-        plusIcon.classList.remove("campo-error");
-
         let formularioValido = true;
 
+        // Validaciones rigurosas agregando la clase de error
         if (nombre === "") {
             inputNombre.classList.add("campo-error");
             formularioValido = false;
         }
 
-        if (precio === "") {
+        if (precio === "" || parseFloat(precio) < 0) {
             inputPrecio.classList.add("campo-error");
             formularioValido = false;
         }
 
-        if (stock === "") {
+        if (stock === "" || parseInt(stock) < 0) {
             inputStock.classList.add("campo-error");
             formularioValido = false;
         }
@@ -167,32 +167,23 @@ document.addEventListener("DOMContentLoaded", function () {
             formularioValido = false;
         }
 
-        if (inputFoto.files.length > 0) {
-            const archivo = inputFoto.files[0];
-
-            if (archivo.type !== "image/png") {
-                plusIcon.classList.add("campo-error");
-                alert("Solo se admiten imágenes PNG");
-                formularioValido = false;
-            }
-        }
-
         if (!formularioValido) {
-            alert("Por favor, complete correctamente todos los campos.");
+            alert("Por favor, complete correctamente todos los campos marcados.");
             return;
         }
 
         const stockNumero = parseInt(stock) || 0;
+        const precioNumero = parseFloat(precio) || 0;
 
         if (filaEditando !== null) {
+            // Modo Edición
             const celdas = filaEditando.children;
 
             celdas[0].textContent = nombre;
-            celdas[1].textContent = "S/ " + precio;
+            celdas[1].textContent = "S/ " + precioNumero.toFixed(2);
             celdas[2].textContent = stockNumero;
 
             actualizarEstado(celdas[3], stockNumero);
-
             filaEditando.dataset.descripcion = descripcion;
 
             guardarLocalStorage();
@@ -202,12 +193,13 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+        // Modo Creación (Nuevo Plato)
         const nuevaFila = document.createElement("tr");
         nuevaFila.dataset.descripcion = descripcion;
 
         nuevaFila.innerHTML = `
             <td>${nombre}</td>
-            <td>S/ ${precio}</td>
+            <td>S/ ${precioNumero.toFixed(2)}</td>
             <td>${stockNumero}</td>
             <td></td>
             <td>0</td>
@@ -221,22 +213,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
         actualizarEstado(nuevaFila.children[3], stockNumero);
         contenedorPlatos.appendChild(nuevaFila);
-        guardarLocalStorage();
+        
+        guardarLocalStorage(); // Guarda de inmediato los cambios del nuevo elemento
 
         fondoCard.style.display = "none";
         limpiarFormulario();
     });
 
+    // Delegación de eventos para botones de la tabla
     contenedorPlatos.addEventListener("click", function (event) {
         if (event.target.classList.contains("btn-eliminar")) {
-            const fila = event.target.closest("tr");
-            fila.remove();
-            guardarLocalStorage();
+            if(confirm("¿Está seguro de que desea eliminar este plato?")) {
+                const fila = event.target.closest("tr");
+                fila.remove();
+                guardarLocalStorage();
+            }
         }
 
         if (event.target.classList.contains("btn-editar")) {
             filaEditando = event.target.closest("tr");
-
             const celdas = filaEditando.children;
 
             inputNombre.value = celdas[0].textContent;

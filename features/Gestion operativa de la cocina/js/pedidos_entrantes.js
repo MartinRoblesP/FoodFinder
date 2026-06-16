@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <td class="tabla_td">${p.plato}</td>
                 <td class="tabla_td">${p.cliente}</td>
                 <td class="tabla_td">${p.cantidad}</td>
-                <td class="tabla_td">S/ --</td>
+                <td class="tabla_td">S/ ${Number(p.total || 0).toFixed(2)}</td>
                 <td class="tabla_td">${p.hora}</td>
             `;
 
@@ -196,5 +196,44 @@ document.addEventListener("DOMContentLoaded", function () {
 
     renderActivos();
     renderHistorial();
+
+// =====================
+// DASHBOARD
+// =====================
+
+    const btnDashboard =
+        document.getElementById("btn_dashboard");
+
+    if (btnDashboard) {
+
+        btnDashboard.addEventListener("click", () => {
+
+            alert(
+                "Dashboard en construcción"
+            );
+
+        });
+
+    }
+// =====================
+// SALIR
+// =====================
+
+const btnSalir =
+    document.getElementById("btn-salir");
+
+if (btnSalir) {
+
+    btnSalir.addEventListener("click", (e) => {
+
+        e.preventDefault();
+
+        window.location.href =
+        "../../../index.html";
+
+    });
+
+}
+
 
 });
