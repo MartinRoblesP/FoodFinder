@@ -4868,16 +4868,18 @@ body{
 }
 
 
-.dashboard_logo{
+.dashboard_logo {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+    text-decoration: none; 
+    flex-shrink: 0; /* Evita que el contenedor se exprima */
+}
 
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    text-decoration:none;
-
+.dashboard_logo img {
+    height: 35px;        /* Controla el tamaño vertical en base al alto de tu navbar (60px) */
+    width: auto;         /* Mantiene la proporción original de la imagen sin comprimirla */ 
+    flex-shrink: 0;      /* Fuerza a la imagen a no hacerse más pequeña */
 }
 
 
@@ -4914,17 +4916,23 @@ body{
 
     color:#777777;
 
+    background: transparent; /* Quita el fondo gris por defecto del botón */
+    border: none;            /* Asegura que no tenga bordes */
+    cursor: pointer;
+
 }
 
 
-.dashboard_nav_derecha{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:20px;
-
+.dashboard_nav_derecha {
+    display: flex;
+    align-items: center;      /* Alineación vertical al centro */
+    justify-content: center;   /* Centra horizontalmente si es necesario */
+    gap: 20px;
+    background: transparent;
+    
+    /* SOLUCIÓN: Forzar la altura y heredar la alineación del navbar */
+    height: 60px;             /* Emparejado exactamente con el alto del navbar */
+    align-self: center;       /* Obliga al contenedor a centrarse en el navbar */
 }
 
 
@@ -4932,24 +4940,20 @@ body{
                 BOTÓN DASHBOARD
 ==================================================*/
 
-.btn_dashboard{
+.btn_dashboard {
+    background: #4CAF50; 
+    color: white; 
+    border: none; 
+    border-radius: 50px; 
+    padding: 10px 20px; 
+    cursor: pointer; 
+    font-weight: 600; 
 
-    background:#4CAF50;
-
-    color:white;
-
-    border:none;
-
-    border-radius:50px;
-
-    padding:10px 20px;
-
-    cursor:pointer;
-
-    font-weight:600;
-
-    transition:.2s;
-
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 42px;            /* Define una altura fija idéntica a su padding original */
+    box-sizing: border-box;  /* Evita que el padding altere la altura */
 }
 
 .btn_dashboard:hover{
@@ -4963,20 +4967,19 @@ body{
                 ICONOS NAVBAR
 ==================================================*/
 
-.nav_icono_link{
+.nav_icono_link {
+    display: flex;           /*  */
+    flex-direction: column;  /*  */
+    align-items: center;     /*  */
+    text-decoration: none;   /*  */
+    color: #1C2B39;          /*  */
+    transition: .2s;         /*  */
+    background: transparent; 
+    border: none;
+    cursor: pointer;
 
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:center;
-
-    text-decoration:none;
-
-    color:#1C2B39;
-
-    transition:.2s;
-
+    /* CORRECCIÓN PRINCIPAL */
+    justify-content: center; /* Centra el bloque de icono + texto en su propio espacio */
 }
 
 .nav_icono_link:hover{
