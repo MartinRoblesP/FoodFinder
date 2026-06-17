@@ -10,7 +10,7 @@
     
     <header class="navbar">
         <div class="navbar-left">
-            <img src="../../../Assests/icons/FF_Logo_Consu.png" alt="FoodFinder Logo" class="logo-completo-consumidor">
+            <img src="../../../Assests/Icons/FF_Logo_Consu.png" alt="FoodFinder Logo" class="logo-completo-consumidor">
         </div>
         
         <div class="navbar-center">
@@ -18,10 +18,16 @@
         </div>
         
         <div class="navbar-right">
-            <button class="btn-active-orders">Mis Pedidos</button>
+            <a href="../../Gestion de pedido/Pages/detalles-cliente.html" class="btn-active-orders"> Mis Pedidos </a>
             <div class="nav-icons">
+                
+                <a href="../../Gestión pago/pages/Carrito_compras1.html">
                 <img src="../../../Assests/Icons/carrito.png" alt="Carrito de compras" class="icon">
-                <img src="../../../Assests/Icons/perfil.png" alt="Perfil" class="icon">
+                </a>
+
+                <a href="../../Gestion de pedido/Pages/cuenta-cliente.html">
+                    <img src="../../../Assests/Icons/perfil.png" alt="Perfil" class="icon">
+                </a>
             </div>
         </div>
     </header>
@@ -72,18 +78,19 @@
         </section>
 
         <section class="catalog-section">
-            <div class="section-header">
+            <div class="section-header">    
                 <div>
                     <h2 class="section-title">Restaurantes cerca de ti</h2>
                     <p class="section-subtitle">Basado en tu ubicación · Stock actualizado en tiempo real</p>
                 </div>
-                <a href="#" class="see-all">Ver más →</a>
+
+                <button type="button" class="see-all" id="btn-ver-mas-restaurantes"> Ver más → </button> 
             </div>
 
             <div class="restaurant-grid">
                 <article class="resto-card">
                     <div class="resto-img-wrapper">
-                        <img src="../../../Assests/img/osaka-sushi-bar.jpg" alt="Osaka Sushi Bar">
+                        <img src="../../../Assests/Img/osaka-sushi-bar.jpg" alt="Osaka Sushi Bar">
                         <span class="badge-open"><span class="dot"></span> Abierto</span>
                     </div>
                     <div class="resto-info">
@@ -107,7 +114,7 @@
 
                 <article class="resto-card">
                     <div class="resto-img-wrapper">
-                        <img src="../../../Assests/img/green bowl.jpg" alt="Green Bowl">
+                        <img src="../../../Assests/Img/Green Bowl.jpg" alt="Green Bowl">
                         <span class="badge-open"><span class="dot"></span> Abierto</span>
                     </div>
                     <div class="resto-info">
@@ -130,7 +137,7 @@
 
                 <article class="resto-card">
                     <div class="resto-img-wrapper">
-                        <img src="../../../Assests/img/el rincon del sabor.jpg" alt="El Rincón del Sabor">
+                        <img src="../../../Assests/Img/El rincon del sabor.jpg" alt="El Rincón del Sabor">
                         <span class="badge-open"><span class="dot"></span> Abierto</span>
                     </div>
                     <div class="resto-info">
@@ -155,12 +162,11 @@
                     <h2 class="section-title">Platos destacados</h2>
                     <p class="section-subtitle">Descubre nuevos platos · Stock actualizado en tiempo real</p>
                 </div>
-                <a href="#" class="see-all">Ver más →</a>
             </div>
 
             <div class="plates-grid">
                 <article class="plate-card">
-                    <img src="../../../Assests/img/ceviche clasico.jpg" alt="Ceviche Clásico" class="plate-img">
+                    <img src="../../../Assests/Img/Ceviche clasico.jpg" alt="Ceviche Clásico" class="plate-img">
                     <div class="plate-details">
                         <h4>Ceviche Clásico</h4>
                         <p class="plate-resto">El Rincón del Sabor</p>
@@ -174,7 +180,7 @@
 
                 <article class="plate-card sold-out">
                     <div class="img-container">
-                        <img src="../../../Assests/img/tagliatelle carbonara.jpg" alt="Tagliatelle" class="plate-img">
+                        <img src="../../../Assests/Img/tagliatelle carbonara.jpg" alt="Tagliatelle" class="plate-img">
                         <span class="badge-status error">Agotado</span>
                     </div>
                     <div class="plate-details">
@@ -190,7 +196,7 @@
 
                 <article class="plate-card">
                     <div class="img-container">
-                        <img src="../../../Assests/img/pollo chimichurri.jpg" alt="Pollo" class="plate-img">
+                        <img src="../../../Assests/Img/pollo chimichurri.jpg" alt="Pollo" class="plate-img">
                         <span class="badge-status promo">🏷 Promo</span>
                     </div>
                     <div class="plate-details">
@@ -209,7 +215,7 @@
 
                 <article class="plate-card">
                     <div class="img-container">
-                        <img src="../../../Assests/img/smash burger doble.jpg" alt="Burger" class="plate-img">
+                        <img src="../../../Assests/Img/smash burger doble.jpg" alt="Burger" class="plate-img">
                         <span class="badge-status warning">Stock bajo</span>
                     </div>
                     <div class="plate-details">
@@ -226,5 +232,6 @@
         </section>
 
     </main>
+    <script src="../js/catalogo.js" defer></script>
 </body>
 </html>
