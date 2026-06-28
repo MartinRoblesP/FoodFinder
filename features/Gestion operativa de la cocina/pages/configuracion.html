@@ -3,148 +3,302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración - FoodFinder</title>
     <link rel="icon" href="../../../Assests/Icons/LogoPrincipal.svg" type="image/svg+xml">
     <link rel="stylesheet" href="../../../styles.css">
-    <title>Configuración - FoodFinder</title>
 </head>
+
 <body class="dashboard_body">
 
-    <header class="dashboard_navbar">
-        <a href="#" class="dashboard_logo">
-            <img src="../../../Assests/Icons/LogoPrincipal.svg" alt="Logo FoodFinder" width="32" height="32">
-            <span class="logo_texto"><span class="logo_food">Food</span><span class="logo_finder">Finder</span></span>
-        </a>
+<header class="dashboard_navbar">
+    <a href="pedidos_entrantes.html" class="dashboard_logo" id="btn-logo-panel">
+    <img
+        src="../../../Assests/Icons/FF_Logo_Coci.png"
+        alt="Logo FoodFinder">
+    </a>
 
-        <nav class="dashboard_nav_derecha">
-            <button id="btnDashboard" class="btn_dashboard">Dashboard</button>
+    <button
+        type="button"
+        class="navbar_lupa"
+        id="btn-buscar-panel"
+        style="border: none; cursor: pointer;">
+        <span class="nav_icono">&#128269;</span>
+    </button>
 
-            <a href="#" class="nav_icono_link" id="linkPerfil">
-                <span class="nav_icono">&#128100;</span>
-                <span class="nav_icono_label">Perfil</span>
+    <nav class="dashboard_nav_derecha">
+        <button
+            type="button"
+            class="btn_dashboard"
+            id="btn_dashboard">
+            Dashboard
+        </button>
+
+        <button
+            type="button"
+            class="nav_icono_link"
+            id="btn-perfil-panel"
+            style="border: none; background: transparent; cursor: pointer;">
+            <span class="nav_icono">&#128100;</span>
+            <span class="nav_icono_label">Perfil</span>
+        </button>
+
+        <button
+            type="button"
+            class="nav_icono_link"
+            id="btn-salir"
+            style="border: none; background: transparent; cursor: pointer;">
+            <span class="nav_icono">&#128682;</span>
+            <span class="nav_icono_label">Salir</span>
+        </button>
+    </nav>
+</header>
+
+<div class="dashboard_layout">
+
+    <aside class="dashboard_sidebar">
+        <p class="sidebar_titulo">PANEL DE GESTIÓN</p>
+
+        <nav class="sidebar_nav">
+            <a href="pedidos_entrantes.html" class="sidebar_item">
+                <span class="sidebar_icono">&#127968;</span>
+                Resumen
             </a>
 
-            <a href="#" class="nav_icono_link" id="linkSalir">
-                <span class="nav_icono">&#128682;</span>
-                <span class="nav_icono_label">Salir</span>
+            <a href="pedidos_entrantes.html" class="sidebar_item">
+                <span class="sidebar_icono">&#128276;</span>
+                Pedidos entrantes
+            </a>
+
+            <a href="mis_platos.html" class="sidebar_item">
+                <span class="sidebar_icono">&#127860;</span>
+                Mis Platos
+            </a>
+
+            <a href="Inventario.html" class="sidebar_item">
+                <span class="sidebar_icono">&#128230;</span>
+                Inventario
+            </a>
+
+            <a href="../../Administracion/Pages/Estadisticas.html" class="sidebar_item">
+                <span class="sidebar_icono">&#128202;</span>
+                Estadísticas
+            </a>
+
+            <a href="configuracion.html" class="sidebar_item sidebar_item_activo">
+                <span class="sidebar_icono">&#9881;</span>
+                Configuración
             </a>
         </nav>
-    </header>
+    </aside>
 
-    <div class="dashboard_layout">
+    <main class="dashboard_contenido">
+        <div class="pagina_cabecera">
+            <div>
+                <h1 class="dashboard_titulo_pagina">Configuración</h1>
+                <p class="dashboard_subtitulo_descripcion">
+                    Actualiza la información pública de tu restaurante.
+                </p>
+            </div>
+        </div>
 
-        <aside class="dashboard_sidebar">
-            <p class="sidebar_titulo">PANEL DE GESTIÓN</p>
+        <div class="config-sections-wrapper">
 
-            <nav class="sidebar_nav">
-                <a href="#" class="sidebar_item"><span class="sidebar_icono">&#127968;</span>Resumen</a>
-                <a href="#" class="sidebar_item"><span class="sidebar_icono">&#128276;</span>Pedidos entrantes</a>
-                <a href="#" class="sidebar_item"><span class="sidebar_icono">&#127860;</span>Mis Platos</a>
-                <a href="#" class="sidebar_item"><span class="sidebar_icono">&#128230;</span>Inventario</a>
-                <a href="#" class="sidebar_item"><span class="sidebar_icono">&#128202;</span>Estadísticas</a>
-                <a href="configuracion.html" class="sidebar_item sidebar_item_activo">
-                    <span class="sidebar_icono">&#9881;</span>Configuración
-                </a>
-            </nav>
-        </aside>
+            <section class="config-section">
+                <h2 class="config-section-titulo">Información del restaurante</h2>
 
-        <main class="dashboard_contenido">
-
-            <h1 class="dashboard_titulo_pagina">Configuración</h1>
-
-            <section class="config_card">
-                <h2 class="config_card_titulo">Información del restaurante</h2>
-
-                <div class="config_campo">
-                    <label class="config_label" for="nombre_restaurante">Nombre del restaurante</label>
-                    <input id="nombre_restaurante" class="config_input" type="text" value="El Rincón del Sabor">
+                <div class="form-field">
+                    <label class="form-label" for="nombre-restaurante">
+                        Nombre del restaurante
+                    </label>
+                    <input class="form-input" type="text" id="nombre-restaurante">
                 </div>
 
-                <div class="config_campo">
-                    <label class="config_label" for="descripcion">Descripción</label>
-                    <textarea id="descripcion" class="config_textarea">Sabores peruanos auténticos...</textarea>
+                <div class="form-field">
+                    <label class="form-label" for="cocina-restaurante">
+                        Tipo de cocina
+                    </label>
+                    <input
+                        class="form-input"
+                        type="text"
+                        id="cocina-restaurante"
+                        placeholder="Ejemplo: Criolla, marina, saludable, italiana...">
                 </div>
 
-                <div class="config_fila_inferior">
-                    <div class="config_campo config_campo_telefono">
-                        <label class="config_label" for="telefono">Teléfono</label>
-                        <input id="telefono" class="config_input" type="tel" placeholder="+51 999 999 999">
-                    </div>
+                <div class="form-field">
+                    <label class="form-label" for="descripcion">
+                        Descripción
+                    </label>
+                    <textarea class="form-input textarea" id="descripcion" rows="3"></textarea>
+                </div>
 
-                    <div class="config_adjuntar_grupo">
-                        <div class="config_adjuntar_item">
-                            <p class="config_label">Añadir/actualizar foto del restaurante</p>
-                            <button id="btnAdjuntarFoto" class="btn_adjuntar">Adjuntar foto</button>
+                <div class="form-field">
+                    <label class="form-label" for="direccion-restaurante">
+                        Dirección
+                    </label>
+                    <input class="form-input" type="text" id="direccion-restaurante">
+                </div>
+
+                <div class="form-field">
+                    <label class="form-label" for="distrito-restaurante">
+                        Distrito
+                    </label>
+                    <input class="form-input" type="text" id="distrito-restaurante">
+                </div>
+
+                <div class="form-field">
+                    <label class="form-label" for="telefono">
+                        Teléfono
+                    </label>
+                    <input
+                        class="form-input"
+                        type="tel"
+                        id="telefono"
+                        placeholder="+51 999 999 999">
+                </div>
+
+                <div class="form-field">
+                    <label class="form-label" for="estado-restaurante">
+                        Estado del restaurante
+                    </label>
+
+                    <select class="form-input" id="estado-restaurante">
+                        <option value="Abierto">Abierto</option>
+                        <option value="Cerrado">Cerrado</option>
+                    </select>
+                </div>
+
+                <div class="fila-inferior">
+                    <div class="adjuntar-grupo">
+                        <div class="adjuntar-item">
+                            <label class="adjuntar-label">
+                                Foto del restaurante
+                            </label>
+
+                            <button
+                                type="button"
+                                class="btn-adjuntar"
+                                id="btn-foto">
+                                Adjuntar foto
+                            </button>
+
+                            <input
+                                type="file"
+                                id="input-foto"
+                                accept="image/*"
+                                style="display:none;">
+
+                            <img
+                                id="preview-foto"
+                                alt="Vista previa foto restaurante"
+                                style="display:none; max-width:160px; margin-top:10px; border-radius:12px;">
                         </div>
 
-                        <div class="config_adjuntar_item">
-                            <p class="config_label">Añadir/actualizar logo del restaurante</p>
-                            <button id="btnAdjuntarLogo" class="btn_adjuntar">Adjuntar logo</button>
+                        <div class="adjuntar-item">
+                            <label class="adjuntar-label">
+                                Logo del restaurante
+                            </label>
+
+                            <button
+                                type="button"
+                                class="btn-adjuntar"
+                                id="btn-logo">
+                                Adjuntar logo
+                            </button>
+
+                            <input
+                                type="file"
+                                id="input-logo"
+                                accept="image/*"
+                                style="display:none;">
+
+                            <img
+                                id="preview-logo"
+                                alt="Vista previa logo restaurante"
+                                style="display:none; max-width:90px; margin-top:10px; border-radius:12px;">
                         </div>
                     </div>
                 </div>
 
-                <button id="btnGuardarConfiguracion" class="btn_guardar">Guardar cambios</button>
+                <button
+                    type="button"
+                    class="btn-guardar"
+                    id="btn-guardar-info">
+                    Guardar cambios
+                </button>
             </section>
 
-            <section class="config_card">
-                <h2 class="config_card_titulo">Horario de atención</h2>
+            <section class="config-section">
+                <h2 class="config-section-titulo">Horario de atención</h2>
 
-                <div class="horario_fila">
-                    <span class="horario_dia">Lunes — Viernes</span>
+                <div class="horario-fila">
+                    <span class="horario-dia">Lunes — Viernes</span>
 
-                    <div class="horario_horas">
-                        <input id="horaInicioLV" class="horario_input" type="time" value="08:00">
-                        <span class="horario_guion">—</span>
-                        <input id="horaFinLV" class="horario_input" type="time" value="22:00">
+                    <div class="horario-inputs">
+                        <input class="horario-time" type="time" id="lv-inicio" value="08:00">
+                        <span class="separador-hora">—</span>
+                        <input class="horario-time" type="time" id="lv-fin" value="22:00">
                     </div>
 
-                    <div class="toggle_grupo">
-                        <input type="checkbox" id="toggle_lv" class="toggle_checkbox">
-                        <label for="toggle_lv" class="toggle_label"></label>
-                        <span class="toggle_texto">Cerrado</span>
-                    </div>
-                </div>
-
-                <div class="horario_fila">
-                    <span class="horario_dia">Sábado</span>
-
-                    <div class="horario_horas">
-                        <input id="horaInicioSabado" class="horario_input" type="time" value="09:00">
-                        <span class="horario_guion">—</span>
-                        <input id="horaFinSabado" class="horario_input" type="time" value="22:00">
-                    </div>
-
-                    <div class="toggle_grupo">
-                        <input type="checkbox" id="toggle_sab" class="toggle_checkbox">
-                        <label for="toggle_sab" class="toggle_label"></label>
-                        <span class="toggle_texto">Cerrado</span>
+                    <div class="cerrado-toggle">
+                        <label class="toggle-switch">
+                            <input class="toggle-input" type="checkbox" id="toggle-lv">
+                            <span class="toggle-track"></span>
+                        </label>
+                        <span class="cerrado-texto">Cerrado</span>
                     </div>
                 </div>
 
-                <div class="horario_fila">
-                    <span class="horario_dia">Domingo</span>
+                <div class="horario-fila">
+                    <span class="horario-dia">Sábado</span>
 
-                    <div class="horario_horas">
-                        <input id="horaInicioDomingo" class="horario_input" type="time" value="10:00">
-                        <span class="horario_guion">—</span>
-                        <input id="horaFinDomingo" class="horario_input" type="time" value="20:00">
+                    <div class="horario-inputs">
+                        <input class="horario-time" type="time" id="sa-inicio" value="09:00">
+                        <span class="separador-hora">—</span>
+                        <input class="horario-time" type="time" id="sa-fin" value="22:00">
                     </div>
 
-                    <div class="toggle_grupo">
-                        <input type="checkbox" id="toggle_dom" class="toggle_checkbox">
-                        <label for="toggle_dom" class="toggle_label"></label>
-                        <span class="toggle_texto">Cerrado</span>
+                    <div class="cerrado-toggle">
+                        <label class="toggle-switch">
+                            <input class="toggle-input" type="checkbox" id="toggle-sa">
+                            <span class="toggle-track"></span>
+                        </label>
+                        <span class="cerrado-texto">Cerrado</span>
                     </div>
                 </div>
 
-                <button id="btnActualizarHorarios" class="btn_guardar">Actualizar horarios</button>
+                <div class="horario-fila">
+                    <span class="horario-dia">Domingo</span>
+
+                    <div class="horario-inputs">
+                        <input class="horario-time" type="time" id="do-inicio" value="10:00">
+                        <span class="separador-hora">—</span>
+                        <input class="horario-time" type="time" id="do-fin" value="20:00">
+                    </div>
+
+                    <div class="cerrado-toggle">
+                        <label class="toggle-switch">
+                            <input class="toggle-input" type="checkbox" id="toggle-do">
+                            <span class="toggle-track"></span>
+                        </label>
+                        <span class="cerrado-texto">Cerrado</span>
+                    </div>
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-actualizar"
+                    id="btn-actualizar-horarios">
+                    Actualizar horarios
+                </button>
             </section>
 
-        </main>
+        </div>
+    </main>
+</div>
 
-    </div>
+<div class="toast" id="toast"></div>
 
-    <script src="../js/configuracion.js" defer></script>
+<script src="../js/configuracion.js" defer></script>
 
 </body>
 </html>
