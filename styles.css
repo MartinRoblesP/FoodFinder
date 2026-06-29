@@ -1624,27 +1624,27 @@ html {
     .nav-pedidos {
         gap: 18px;
     }
-    .btn-mis-pedidos {
+    .cabecera-pedidos .btn-mis-pedidos {
         padding: 12px 30px;
     }
-    .btn-icono-nav img {
+    .cabecera-pedidos .btn-icono-nav img {
         width: 36px;
         height: 36px;
     }
     .contenedor-pedidos-cliente {
         padding: 35px 18px;
     }
-    .titulo-seccion-pedido h2 {
+    .contenedor-pedidos-cliente .titulo-seccion-pedido h2 {
         font-size: 26px;
     }
-    .titulo-seccion-pedido p {
+    .contenedor-pedidos-cliente .titulo-seccion-pedido p {
         font-size: 16px;
     }
-    .tarjeta-tabla-pedido {
+    .contenedor-pedidos-cliente .tarjeta-tabla-pedido {
         overflow-x: auto;
     }
 
-    .tabla-pedidos {
+    .contenedor-pedidos-cliente .tabla-pedidos {
     min-width: 950px;
 }
 } 

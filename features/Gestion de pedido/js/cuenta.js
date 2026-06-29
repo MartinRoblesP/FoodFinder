@@ -4,6 +4,10 @@
 // Cliente + Cocinero + restaurante propio
 // ==========================================
 
+const SUPABASE_URL = "https://emqlgfmibvxdyipxubul.supabase.co";
+const SUPABASE_KEY = "sb_publishable_sdiAONM5AeOf56mRe78fiw_YkP3uN46";
+
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // =====================
 // ELEMENTOS
@@ -459,7 +463,7 @@ function volverAlLanding() {
 // REGISTRO
 // =====================
 
-function guardarCuenta() {
+async function guardarCuenta() {
     limpiarMensajes();
 
     const nombre =
@@ -538,51 +542,56 @@ function guardarCuenta() {
         return;
     }
 
-    const usuariosRegistrados =
-        obtenerUsuariosRegistrados();
+    const { data: usuarioExistente, error: errorConsulta } = await supabaseClient
+    .from("usuarios")
+    .select("*")
+    .eq("correo", correo)
+    .maybeSingle();
 
-    const correoExiste =
-        usuariosRegistrados.some((usuario) => {
-            return usuario.correo === correo;
-        });
+    if (errorConsulta) {
+    mensajeSugerencia.textContent = errorConsulta.message;
+    console.log("ERROR COMPLETO:", errorConsulta);
+    return;
+    }
 
-    if (correoExiste) {
-        errorCorreo.textContent =
-            "Este correo ya está en uso";
-
-        mensajeSugerencia.textContent =
-            "Ya tienes una cuenta registrada. Puedes iniciar sesión.";
-
+    if (usuarioExistente) {
+        errorCorreo.textContent = "Este correo ya está en uso";
+        mensajeSugerencia.textContent = "Ya tienes una cuenta registrada. Puedes iniciar sesión.";
         return;
     }
 
     let nuevoUsuario = {
-        id: Date.now(),
         nombre: nombre,
         correo: correo,
         telefono: telefono,
-        direccionNegocio: rolSeleccionado === "cocinero" ? direccion : "",
+        direccion_negocio: rolSeleccionado === "cocinero" ? direccion : "",
         password: password,
         rol: rolSeleccionado,
-        fechaRegistro: new Date().toLocaleDateString()
+        fecha_registro: new Date().toISOString()
     };
 
-    nuevoUsuario =
-        prepararUsuarioCocinero(nuevoUsuario);
+    const { data, error } = await supabaseClient
+        .from("usuarios")
+        .insert([nuevoUsuario])
+        .select()
+        .single();
 
-    usuariosRegistrados.push(nuevoUsuario);
+    if (error) {
+        mensajeSugerencia.textContent = "No se pudo guardar la cuenta.";
+        console.error(error);
+        return;
+    }
 
-    guardarUsuariosRegistrados(usuariosRegistrados);
-    guardarUsuarioActivo(nuevoUsuario);
+    guardarUsuarioActivo(data);
     inicializarPlatosSiNoExisten();
 
-    limpiarFormularioRegistro();
+        limpiarFormularioRegistro();
 
-    mostrarPantalla(pantallaBienvenido);
+        mostrarPantalla(pantallaBienvenido);
 
-    setTimeout(() => {
-        redirigirSegunRol(nuevoUsuario);
-    }, 1500);
+        setTimeout(() => {
+            redirigirSegunRol(data);
+        }, 1500);
 }
 
 
@@ -590,7 +599,7 @@ function guardarCuenta() {
 // LOGIN
 // =====================
 
-function iniciarSesion() {
+async function iniciarSesion() {
     limpiarMensajes();
 
     const correo =
@@ -606,31 +615,28 @@ function iniciarSesion() {
         return;
     }
 
-    const usuariosRegistrados =
-        obtenerUsuariosRegistrados();
+    const { data: usuarioEncontrado, error } = await supabaseClient
+        .from("usuarios")
+        .select("*")
+        .eq("correo", correo)
+        .eq("password", password)
+        .maybeSingle();
 
-    const usuarioEncontrado =
-        usuariosRegistrados.find((usuario) => {
-            return (
-                usuario.correo === correo &&
-                usuario.password === password
-            );
-        });
-
-    if (!usuarioEncontrado) {
-        mensajeLogin.textContent =
-            "Correo o contraseña incorrectos.";
-
+    if (error) {
+        mensajeLogin.textContent = "Error al consultar la base de datos.";
+        console.error(error);
         return;
     }
 
-    const usuarioListo =
-        asegurarRestauranteParaCocinero(usuarioEncontrado);
+    if (!usuarioEncontrado) {
+    mensajeLogin.textContent = "Correo o contraseña incorrectos.";
+    return;
+}
 
-    guardarUsuarioActivo(usuarioListo);
-    inicializarPlatosSiNoExisten();
+guardarUsuarioActivo(usuarioEncontrado);
+inicializarPlatosSiNoExisten();
 
-    redirigirSegunRol(usuarioListo);
+redirigirSegunRol(usuarioEncontrado);
 }
 
 
