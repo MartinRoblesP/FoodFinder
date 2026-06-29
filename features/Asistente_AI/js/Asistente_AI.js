@@ -3,7 +3,7 @@
 // ==========================================
 // REEMPLAZA ESTOS VALORES CON LOS DE TU PROYECTO
 
-const SUPABASE_URL = "https://emqlgfmibvxdyipxubul.supabase.co"; 
+const SUPABASE_URL = "https://emqlgfmibvxdyipxubul.supabase.co/rest/v1/"; 
 const SUPABASE_ANON_KEY = "sb_publishable_sdiAONM5AeOf56mRe78fiw_YkP3uN46"; 
 
 let supabaseClient = null;
