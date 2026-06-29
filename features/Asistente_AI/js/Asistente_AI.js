@@ -1,14 +1,10 @@
-// ==========================================
-// CONFIGURACIÓN DE SUPABASE 
-// ==========================================
-// REEMPLAZA ESTOS VALORES CON LOS DE TU PROYECTO
-
-const SUPABASE_URL = "https://emqlgfmibvxdyipxubul.supabase.co/rest/v1/"; 
+//https://emqlgfmibvxdyipxubul.supabase.co/rest/v1/
+const SUPABASE_URL = "https://emqlgfmibvxdyipxubul.supabase.co"; 
 const SUPABASE_ANON_KEY = "sb_publishable_sdiAONM5AeOf56mRe78fiw_YkP3uN46"; 
 
 let supabaseClient = null;
 
-// Validamos si la librería de Supabase cargó correctamente
+//validacion de libreria
 if (typeof supabase !== 'undefined') {
     supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 } else {
@@ -82,17 +78,11 @@ async function obtenerContextoBD() {
     if (!supabaseClient) {
         return {
             usuarios: [],
-            platos: [],
-            pedidos: [],
-            inventario: []
         };
     }
 
     const contexto = {
         usuarios: [],
-        platos: [],
-        pedidos: [],
-        inventario: []
     };
 
     try {
@@ -105,40 +95,6 @@ async function obtenerContextoBD() {
         } else {
             console.warn("No se pudieron obtener usuarios:", errorUsuarios);
         }
-
-        // Cuando crees estas tablas en Supabase, puedes descomentar estas consultas.
-
-        /*
-        const { data: platos, error: errorPlatos } = await supabaseClient
-            .from("platos")
-            .select("*");
-
-        if (!errorPlatos && platos) {
-            contexto.platos = platos;
-        } else {
-            console.warn("No se pudieron obtener platos:", errorPlatos);
-        }
-
-        const { data: pedidos, error: errorPedidos } = await supabaseClient
-            .from("pedidos")
-            .select("*");
-
-        if (!errorPedidos && pedidos) {
-            contexto.pedidos = pedidos;
-        } else {
-            console.warn("No se pudieron obtener pedidos:", errorPedidos);
-        }
-
-        const { data: inventario, error: errorInventario } = await supabaseClient
-            .from("inventario")
-            .select("*");
-
-        if (!errorInventario && inventario) {
-            contexto.inventario = inventario;
-        } else {
-            console.warn("No se pudo obtener inventario:", errorInventario);
-        }
-        */
 
     } catch (error) {
         console.error("Error consultando Supabase:", error);
