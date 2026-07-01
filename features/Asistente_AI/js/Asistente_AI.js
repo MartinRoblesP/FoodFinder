@@ -75,25 +75,29 @@ function guardarApiKey() {
 // ==========================================
 
 async function obtenerContextoBD() {
-    if (!supabaseClient) {
-        return {
-            usuarios: [],
-        };
-    }
+    const usuarioActivo = JSON.parse(localStorage.getItem("usuarioActivo"));
 
     const contexto = {
-        usuarios: [],
+        usuarioActivo: usuarioActivo || null,
+        restaurante: null,
+        usuarios: []
     };
 
-    try {
-        const { data: usuarios, error: errorUsuarios } = await supabaseClient
-            .from("usuarios")
-            .select("id, nombre, correo, telefono, rol, direccion_negocio, fecha_registro");
+    if (!supabaseClient || !usuarioActivo) {
+        return contexto;
+    }
 
-        if (!errorUsuarios && usuarios) {
-            contexto.usuarios = usuarios;
+    try {
+        const { data: restaurante, error: errorRestaurante } = await supabaseClient
+            .from("restaurantes")
+            .select("*")
+            .eq("usuario_id", usuarioActivo.id)
+            .maybeSingle();
+
+        if (errorRestaurante) {
+            console.error("Error al obtener restaurante:", errorRestaurante);
         } else {
-            console.warn("No se pudieron obtener usuarios:", errorUsuarios);
+            contexto.restaurante = restaurante;
         }
 
     } catch (error) {
@@ -102,7 +106,6 @@ async function obtenerContextoBD() {
 
     return contexto;
 }
-
 // ==========================================
 // FUNCIÓN PARA ENVIAR CONSULTA A GPT
 // ==========================================
@@ -132,27 +135,25 @@ async function enviarConsultaIA(event) {
 
         const contexto = await obtenerContextoBD();
 
-        const promptConContexto = `
-Eres el asistente de FoodFinder, una plataforma web relacionada con gastronomía, usuarios, pedidos e inventario.
+       const promptConContexto = `
+Eres el asistente privado de FoodFinder para un cocinero/emprendedor gastronómico.
 
-Actualmente la base de datos puede contener esta información:
+Tu usuario actual es:
+${JSON.stringify(contexto.usuarioActivo, null, 2)}
 
-Usuarios registrados:
-${JSON.stringify(contexto.usuarios)}
+Información del restaurante del usuario actual:
+${JSON.stringify(contexto.restaurante, null, 2)}
 
-Platos:
-${JSON.stringify(contexto.platos)}
-
-Pedidos:
-${JSON.stringify(contexto.pedidos)}
-
-Inventario:
-${JSON.stringify(contexto.inventario)}
-
-Importante:
-- Si una sección está vacía [], significa que todavía no hay datos registrados o que esa tabla aún no ha sido creada.
-- No inventes datos que no estén en la base de datos.
-- Responde de forma clara, amable y útil.
+Reglas importantes:
+- Responde como si hablaras directamente con el dueño del restaurante.
+- Usa expresiones como "tu restaurante", "tu negocio", "tus datos".
+- No respondas con información de otros restaurantes.
+- No digas "restaurantes registrados" como si fuera una lista global, salvo que el usuario lo pida y tenga permiso.
+- Si el usuario pregunta "¿qué restaurantes están registrados?", interpreta que se refiere a su propio restaurante.
+- Si no existe restaurante asociado a este usuario, responde: "Todavía no tienes un restaurante registrado en tu cuenta".
+- No inventes datos.
+- No muestres contraseñas ni información sensible.
+- Si falta información, indica claramente qué dato falta.
 
 Consulta del usuario:
 ${mensajeUsuario}
