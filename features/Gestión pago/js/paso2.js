@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderizarResumenPedido();
     configurarMetodosPago();
     configurarNavegacionPago();
-
+    configurarCamposTarjeta();
 });
 
 
@@ -737,4 +737,48 @@ function buscarBotonPorTexto(texto) {
                 .toLowerCase()
                 .includes(texto.toLowerCase());
         });
+}
+function configurarCamposTarjeta() {
+    const numeroTarjeta =
+        document.getElementById("numeroTarjeta");
+
+    const vencimientoTarjeta =
+        document.getElementById("vencimientoTarjeta");
+
+    const cvvTarjeta =
+        document.getElementById("cvvTarjeta");
+
+    if (numeroTarjeta) {
+        numeroTarjeta.addEventListener("input", () => {
+            let valor = numeroTarjeta.value
+                .replace(/\D/g, "")
+                .slice(0, 16);
+
+            numeroTarjeta.value = valor
+                .replace(/(.{4})/g, "$1 ")
+                .trim();
+        });
+    }
+
+    if (vencimientoTarjeta) {
+        vencimientoTarjeta.addEventListener("input", () => {
+            let valor = vencimientoTarjeta.value
+                .replace(/\D/g, "")
+                .slice(0, 4);
+
+            if (valor.length >= 3) {
+                valor = valor.slice(0, 2) + "/" + valor.slice(2);
+            }
+
+            vencimientoTarjeta.value = valor;
+        });
+    }
+
+    if (cvvTarjeta) {
+        cvvTarjeta.addEventListener("input", () => {
+            cvvTarjeta.value = cvvTarjeta.value
+                .replace(/\D/g, "")
+                .slice(0, 3);
+        });
+    }
 }

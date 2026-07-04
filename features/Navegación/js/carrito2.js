@@ -738,35 +738,35 @@ function obtenerProductoDesdeMenuCard(boton) {
         return null;
     }
 
+    const platoId =
+        tarjeta.dataset.platoId || "";
+
+    const platos =
+        obtenerPlatosRegistrados();
+
+    const platoOriginal =
+        platos.find((plato) => {
+            return String(plato.id) === String(platoId);
+        });
+
     const nombreElemento =
         tarjeta.querySelector("h4");
-
-    const precioElemento =
-        tarjeta.querySelector(".current-price");
-
-    if (!nombreElemento || !precioElemento) {
-        return null;
-    }
-
-    const nombre =
-        nombreElemento.textContent.trim();
-
-    const precioTexto =
-        precioElemento.textContent;
-
-    const precio =
-        parseFloat(
-            precioTexto.replace(/[^0-9.]/g, "")
-        );
 
     const imgElement =
         tarjeta.querySelector("img");
 
+    const nombre =
+        platoOriginal
+            ? obtenerNombrePlato(platoOriginal)
+            : nombreElemento.textContent.trim();
+
+    const precio =
+        platoOriginal
+            ? obtenerPrecioPlato(platoOriginal)
+            : 0;
+
     const imagen =
         imgElement ? imgElement.src : "";
-
-    const platoId =
-        tarjeta.dataset.platoId || "";
 
     const restauranteId =
         tarjeta.dataset.restauranteId ||
