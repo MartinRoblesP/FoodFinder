@@ -7128,3 +7128,48 @@ textarea:focus{
     border-radius: 8px;
     border: 2px solid #E5E7EB;
 }
+.chat_acciones_container {
+    display: flex; 
+    gap: 8px; 
+    align-items: center;
+}
+
+.chat_botones_grupo {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.chat_acciones_container input {
+    flex-grow: 1;
+}
+
+/* Mejora para asegurar centrado de íconos en los botones */
+.chat_botones_grupo button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+@media (max-width: 768px) {
+    .chat_acciones_container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .chat_acciones_container input {
+        width: 100%; /* Asegura que el input use todo el ancho disponible */
+    }
+    
+    .chat_botones_grupo {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .chat_botones_grupo button {
+        width: 100%;
+        justify-content: center; /* Centra el contenido en pantallas chicas */
+    }
+}

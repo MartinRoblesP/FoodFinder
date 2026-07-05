@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../../../Assests/Icons/LogoPrincipal.svg" type="image/svg+xml">
     <link rel="stylesheet" href="../../../styles.css">
+    
+    <link rel="stylesheet" href="Asistente_AI.css">
+    
     <title>Asistente IA - FoodFinder</title>
 </head>
 
@@ -112,7 +115,7 @@
                     id="openai-key" 
                     placeholder="sk-..." 
                     autocomplete="off" 
-                    style="width: 100%; padding: 10px; border: 1px solid #D1D5DB; border-radius: 6px; font-size: 14px; outline: none;"
+                    style="width: 100%; padding: 10px; border: 1px solid #D1D5DB; border-radius: 6px; font-size: 14px; outline: none; box-sizing: border-box;"
                 />
                 <p style="color: #6B7280; font-size: 12px; margin-top: 6px;">
                     🔒 Tu clave se guarda localmente en el almacenamiento de tu navegador (localStorage) y nunca toca nuestro servidor.
@@ -123,31 +126,35 @@
         <section class="tabla_card" style="padding: 20px;">
             <div id="chat-responses" style="min-height: 280px; max-height: 420px; overflow-y: auto; border: 1px solid #E5E7EB; padding: 16px; margin-bottom: 16px; border-radius: 6px; background-color: #F9FAFB; font-size: 14px; line-height: 1.5;">
                 <p style="color: #9CA3AF; font-style: italic; text-align: center; margin-top: 20px;">
-                    Configura tu API Key en el cuadro superior para empezar a consultar con el modelo gpt-4o-mini o generar imágenes.                 </p>
+                    Configura tu API Key en el cuadro superior para empezar a consultar con el modelo gpt-4o-mini o generar imágenes.
+                </p>
             </div>
 
-                        <div style="display: flex; gap: 8px; align-items: center;">
+            <div class="chat_acciones_container">
                 <input 
                     type="text" 
                     id="chat-message" 
                     placeholder="Pregúntale a la IA o describe la imagen que quieres..." 
-                    style="flex-grow: 1; padding: 12px; border: 1px solid #D1D5DB; border-radius: 6px; font-size: 14px; outline: none; height: 100%;"
+                    style="padding: 12px; border: 1px solid #D1D5DB; border-radius: 6px; font-size: 14px; outline: none; box-sizing: border-box; height: 100%;"
                 />
-                                <button 
-                    type="button" 
-                    onclick="enviarConsultaIA()" 
-                    class="btn_agregar" 
-                    style="margin: 0; white-space: nowrap; height: 100%; padding: 10px 18px;">
-                    <span style="font-size: 1.1em;">&#10148;</span> Enviar consulta
-                </button>
                 
-                <button 
-                    type="button" 
-                    id="btn-generar-imagen"
-                    class="btn_agregar" 
-                    style="margin: 0; white-space: nowrap; height: 100%; padding: 10px 18px; background-color: #f97316;">
-                    <span style="font-size: 1.1em;">&#128396;</span> Generar imagen
-                </button>
+                <div class="chat_botones_grupo">
+                    <button 
+                        type="button" 
+                        onclick="enviarConsultaIA()" 
+                        class="btn_agregar" 
+                        style="margin: 0; white-space: nowrap; height: 100%; padding: 10px 18px; display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 1.1em;">&#10148;</span> Enviar consulta
+                    </button>
+                    
+                    <button 
+                        type="button" 
+                        id="btn-generar-imagen"
+                        class="btn_agregar" 
+                        style="margin: 0; white-space: nowrap; height: 100%; padding: 10px 18px; background-color: #f97316; display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 1.1em;">&#128396;</span> Generar imagen
+                    </button>
+                </div>
             </div>
         </section>
 
