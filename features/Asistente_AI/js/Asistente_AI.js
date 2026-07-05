@@ -106,6 +106,33 @@ async function obtenerContextoBD() {
 
     return contexto;
 }
+
+async function construirPromptImagenNegocio(promptUsuario) {
+    const contexto = await obtenerContextoBD();
+
+    return `
+Crea una imagen profesional para el negocio gastronómico del usuario.
+
+Solicitud del usuario:
+${promptUsuario}
+
+Usuario actual:
+${JSON.stringify(contexto.usuarioActivo, null, 2)}
+
+Restaurante del usuario:
+${JSON.stringify(contexto.restaurante, null, 2)}
+
+Reglas:
+- Si pide un plato, genera una imagen realista del plato.
+- Si pide un gráfico, genera un dashboard visual con estadísticas.
+- Si pide ventas, ingresos, costos o ganancias, representa la situación económica del negocio.
+- La imagen debe estar relacionada solo con su restaurante.
+- No uses datos de otros restaurantes.
+- No incluyas contraseñas ni información sensible.
+- Estilo profesional, limpio y útil para menú, publicidad o gestión del negocio.
+- Sin marcas comerciales.
+`;
+}
 // ==========================================
 // FUNCIÓN PARA ENVIAR CONSULTA A GPT
 // ==========================================
@@ -234,53 +261,58 @@ async function generarImagenIA(event) {
         }
 
         chatResponseArea.innerHTML += `<p><b>Tú (Solicitud de imagen):</b> ${promptUsuario}</p>`;
-        chatResponseArea.innerHTML += `<p id="loading"><i>Generando imagen... (Esto puede tomar unos segundos)</i></p>`;
-        chatInput.value = '';
+        chatResponseArea.innerHTML += `<p id="loading"><i>Generando imagen... Esto puede tomar unos segundos.</i></p>`;
+        chatInput.value = "";
         chatResponseArea.scrollTop = chatResponseArea.scrollHeight;
 
-        const respuesta = await fetch('https://api.openai.com/v1/images/generations', {
-            method: 'POST',
+        const promptFinal = await construirPromptImagenNegocio(promptUsuario);
+
+        const respuesta = await fetch("https://api.openai.com/v1/images/generations", {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: 'dall-e-3',
-                prompt: promptUsuario,
+                model: "gpt-image-1",
+                prompt: promptFinal,
                 n: 1,
                 size: "1024x1024"
             })
         });
 
         const data = await respuesta.json();
+        console.log(data);
 
-        const loadingElement = document.getElementById('loading');
+        const loadingElement = document.getElementById("loading");
         if (loadingElement) loadingElement.remove();
 
-        if (respuesta.ok) {
-            const urlImagen = data.data[0].url;
-
+        if (!respuesta.ok) {
             chatResponseArea.innerHTML += `
-                <p><b>Asistente IA:</b> Aquí tienes la imagen generada:</p>
-                <div class="imagen_ia_contenedor">
-                    <img src="${urlImagen}" class="imagen_ia_preview" alt="Imagen generada por IA"/>
-                </div>
-                <hr style="border-top: 1px solid #E5E7EB; margin: 10px 0;">
+                <p style="color: red;"><b>Error:</b> ${data.error?.message || "No se pudo generar la imagen."}</p>
             `;
-        } else {
-            chatResponseArea.innerHTML += `
-                <p style="color: red;"><b>Error:</b> ${data.error.message}</p>
-            `;
+            return;
         }
+
+        const imagenBase64 = data.data[0].b64_json;
+        const urlImagen = `data:image/png;base64,${imagenBase64}`;
+
+        chatResponseArea.innerHTML += `
+            <p><b>Asistente IA:</b> Imagen generada según tu negocio:</p>
+            <div class="imagen_ia_contenedor">
+                <img src="${urlImagen}" class="imagen_ia_preview" alt="Imagen generada por IA">
+            </div>
+            <hr style="border-top: 1px solid #E5E7EB; margin: 10px 0;">
+        `;
 
         chatResponseArea.scrollTop = chatResponseArea.scrollHeight;
 
     } catch (error) {
-        console.error('Error:', error);
+        console.error("Error:", error);
 
-        const loadingElement = document.getElementById('loading');
+        const loadingElement = document.getElementById("loading");
         if (loadingElement) loadingElement.remove();
 
-        alert('Hubo un problema al generar la imagen. Revisa la consola para más detalles.');
+        alert("Hubo un problema al generar la imagen. Revisa la consola.");
     }
 }
