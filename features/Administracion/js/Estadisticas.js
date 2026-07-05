@@ -811,3 +811,19 @@ document.addEventListener("DOMContentLoaded", () => {
     configurarNavegacion();
 
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const btnMenuMobile = document.getElementById("btnMenuMobile");
+    const btnCerrarSidebar = document.getElementById("btnCerrarSidebar");
+    const sidebar = document.querySelector(".dashboard_sidebar");
+
+    if (btnMenuMobile && btnCerrarSidebar && sidebar) {
+        btnMenuMobile.addEventListener("click", () => {
+            sidebar.classList.add("activo");
+        });
+
+        btnCerrarSidebar.addEventListener("click", () => {
+            sidebar.classList.remove("activo");
+        });
+    }
+});

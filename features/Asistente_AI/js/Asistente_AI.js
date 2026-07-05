@@ -316,3 +316,19 @@ async function generarImagenIA(event) {
         alert("Hubo un problema al generar la imagen. Revisa la consola.");
     }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const btnMenuMobile = document.getElementById("btnMenuMobile");
+    const btnCerrarSidebar = document.getElementById("btnCerrarSidebar");
+    const sidebar = document.querySelector(".dashboard_sidebar");
+
+    if (btnMenuMobile && btnCerrarSidebar && sidebar) {
+        btnMenuMobile.addEventListener("click", () => {
+            sidebar.classList.add("activo");
+        });
+
+        btnCerrarSidebar.addEventListener("click", () => {
+            sidebar.classList.remove("activo");
+        });
+    }
+});
