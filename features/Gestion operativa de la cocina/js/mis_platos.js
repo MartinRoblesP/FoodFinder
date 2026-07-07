@@ -54,8 +54,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             return restaurante;
         }
 
-        // Si alguien ya lo crea desde configuracion.js, esto casi nunca
-        // debería ejecutarse, pero lo dejo como respaldo.
         const nuevoRestaurante = {
             nombre: "Restaurante de " + String(usuario.nombre || "Emprendedor").split(" ")[0],
             telefono: usuario.telefono || "",
@@ -197,25 +195,86 @@ document.addEventListener("DOMContentLoaded", async function () {
         return total;
     }
 
-    function leerImagenComoBase64(input, callback) {
+    // =====================
+    // IMAGEN — comprimir y subir a Supabase Storage
+    // =====================
+
+    const BUCKET_IMAGENES = "imagenes_platos";
+
+    function comprimirImagen(archivo) {
+        return new Promise((resolve) => {
+            const lector = new FileReader();
+
+            lector.onload = function () {
+                const imagen = new Image();
+
+                imagen.onload = function () {
+                    const ANCHO_MAXIMO = 800;
+
+                    let ancho = imagen.width;
+                    let alto = imagen.height;
+
+                    if (ancho > ANCHO_MAXIMO) {
+                        alto = Math.round((alto * ANCHO_MAXIMO) / ancho);
+                        ancho = ANCHO_MAXIMO;
+                    }
+
+                    const canvas = document.createElement("canvas");
+                    canvas.width = ancho;
+                    canvas.height = alto;
+
+                    const contexto = canvas.getContext("2d");
+                    contexto.drawImage(imagen, 0, 0, ancho, alto);
+
+                    canvas.toBlob(
+                        (blob) => resolve(blob),
+                        "image/jpeg",
+                        0.7
+                    );
+                };
+
+                imagen.src = lector.result;
+            };
+
+            lector.readAsDataURL(archivo);
+        });
+    }
+
+    async function subirImagenPlato(input) {
         if (!input.files || input.files.length === 0) {
-            callback("");
-            return;
+            return "";
         }
 
         const archivo = input.files[0];
 
         if (!archivo.type.startsWith("image/")) {
             alert("Selecciona una imagen válida.");
-            callback("");
-            return;
+            return "";
         }
 
-        const lector = new FileReader();
-        lector.onload = function () {
-            callback(lector.result);
-        };
-        lector.readAsDataURL(archivo);
+        const blobComprimido = await comprimirImagen(archivo);
+
+        const nombreArchivo =
+            `plato_${Date.now()}_${Math.floor(Math.random() * 10000)}.jpg`;
+
+        const { error: errorSubida } = await supabaseClient
+            .storage
+            .from(BUCKET_IMAGENES)
+            .upload(nombreArchivo, blobComprimido, {
+                contentType: "image/jpeg",
+                upsert: false
+            });
+
+        if (errorSubida) {
+            console.error("Error al subir imagen:", errorSubida);
+            alert("No se pudo subir la imagen del plato.");
+            return "";
+        }
+
+        const { data: urlPublica } =
+            supabaseClient.storage.from(BUCKET_IMAGENES).getPublicUrl(nombreArchivo);
+
+        return urlPublica.publicUrl;
     }
 
     // =====================
@@ -344,7 +403,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             overlay.remove();
         };
 
-        document.getElementById("m_guardar").onclick = function () {
+        document.getElementById("m_guardar").onclick = async function () {
             const nombre = document.getElementById("m_nombre").value.trim();
             const descripcion = document.getElementById("m_descripcion").value.trim();
             const categoria = document.getElementById("m_categoria").value;
@@ -357,66 +416,64 @@ document.addEventListener("DOMContentLoaded", async function () {
                 return;
             }
 
-            leerImagenComoBase64(inputImagen, async function (imagenBase64) {
-                const btnGuardar = document.getElementById("m_guardar");
-                btnGuardar.disabled = true;
-                btnGuardar.textContent = "Guardando...";
+            const btnGuardar = document.getElementById("m_guardar");
+            btnGuardar.disabled = true;
+            btnGuardar.textContent = "Guardando...";
 
-                if (plato) {
-                    const cambios = {
-                        nombre: nombre,
-                        descripcion: descripcion,
-                        categoria: categoria,
-                        precio: precio,
-                        stock: stock
-                    };
+            const urlImagen = await subirImagenPlato(inputImagen);
 
-                    if (imagenBase64) {
-                        cambios.imagen_url = imagenBase64;
-                    }
+            if (plato) {
+                const cambios = {
+                    nombre: nombre,
+                    descripcion: descripcion,
+                    categoria: categoria,
+                    precio: precio,
+                    stock: stock
+                };
 
-                    const { error } = await supabaseClient
-                        .from("platos")
-                        .update(cambios)
-                        .eq("id", plato.id);
-
-                    if (error) {
-                        console.error("Error al actualizar plato:", error);
-                        alert("No se pudo actualizar el plato.");
-                        btnGuardar.disabled = false;
-                        btnGuardar.textContent = "Guardar";
-                        return;
-                    }
-                } else {
-                    console.log("restauranteActual:", restauranteActual); // verificar error
-
-                    const nuevoPlato = {
-                        restaurante_id: restauranteActual.id,
-                        nombre: nombre,
-                        descripcion: descripcion,
-                        categoria: categoria,
-                        precio: precio,
-                        stock: stock,
-                        imagen_url: imagenBase64 || "../../../Assests/Img/Ceviche clasico.jpg"
-                    };
-
-                    const { error } = await supabaseClient
-                        .from("platos")
-                        .insert([nuevoPlato]);
-
-                    if (error) {
-                        console.error("Error al crear plato:", error);
-                        alert("No se pudo guardar el plato: " + error.message + " (" + (error.code || "") + ")");
-                        btnGuardar.disabled = false;
-                        btnGuardar.textContent = "Guardar";
-                        return;
-                    }
+                if (urlImagen) {
+                    cambios.imagen_url = urlImagen;
                 }
 
-                overlay.remove();
-                await cargar();
-                render();
-            });
+                const { error } = await supabaseClient
+                    .from("platos")
+                    .update(cambios)
+                    .eq("id", plato.id);
+
+                if (error) {
+                    console.error("Error al actualizar plato:", error);
+                    alert("No se pudo actualizar el plato.");
+                    btnGuardar.disabled = false;
+                    btnGuardar.textContent = "Guardar";
+                    return;
+                }
+            } else {
+                const nuevoPlato = {
+                    restaurante_id: restauranteActual.id,
+                    nombre: nombre,
+                    descripcion: descripcion,
+                    categoria: categoria,
+                    precio: precio,
+                    stock: stock,
+                    imagen_url: urlImagen || "../../../Assests/Img/Ceviche clasico.jpg"
+                };
+
+                const { error } = await supabaseClient
+                    .from("platos")
+                    .insert([nuevoPlato]);
+
+                if (error) {
+                    console.error("Error al crear plato:", error);
+                    alert("No se pudo guardar el plato.");
+                    btnGuardar.disabled = false;
+                    btnGuardar.textContent = "Guardar";
+                    return;
+                }
+            }
+
+            overlay.remove();
+            await cargar();
+            render();
         };
     }
 
@@ -529,9 +586,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     render();
     configurarNavegacionPanel();
 
-});
-
-document.addEventListener("DOMContentLoaded", () => {
+    // Menú hamburguesa (sidebar móvil)
     const btnMenuMobile = document.getElementById("btnMenuMobile");
     const btnCerrarSidebar = document.getElementById("btnCerrarSidebar");
     const sidebar = document.querySelector(".dashboard_sidebar");
@@ -545,4 +600,5 @@ document.addEventListener("DOMContentLoaded", () => {
             sidebar.classList.remove("activo");
         });
     }
+
 });

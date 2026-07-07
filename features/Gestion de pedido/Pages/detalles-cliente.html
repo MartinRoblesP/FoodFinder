@@ -9,53 +9,37 @@
 
 <body>
 
-    <header class="cabecera-pedidos">
-        <button
-            type="button"
-            class="logo-pedidos"
-            id="btnHomePedidos"
-            style="border: none; background: transparent; cursor: pointer;">
-            <img
-                src="../../../Assests/Icons/Logo_Sin_Fondo.png"
-                alt="Logo FoodFinder"
-                width="42"
-                height="42">
-
-            <h1>
-                Food<span>Finder</span>
-            </h1>
-        </button>
-
-        <nav class="nav-pedidos">
+    <header class="navbar">
+        <div class="navbar-left">
             <button
                 type="button"
-                class="btn-mis-pedidos"
-                id="btnMisPedidosActual">
+                id="btnHomePedidos"
+                style="border: none; background: transparent; cursor: pointer; padding: 0; display: flex; align-items: center;">
+                <img src="../../../Assests/Icons/FF_Logo_Consu.png" alt="FoodFinder Logo" class="logo-completo-consumidor">
+            </button>
+        </div>
+
+        <div class="navbar-right">
+            <button type="button" class="btn-active-orders" id="btnMisPedidosActual">
                 Mis Pedidos
             </button>
 
-            <button
-                type="button"
-                class="btn-icono-nav"
-                id="btnCarrito">
-                <img
-                    src="../../../Assests/Icons/carrito.png"
-                    alt="Carrito de compras"
-                    width="50"
-                    height="50">
-            </button>
+            <div class="nav-icons">
+                <button
+                    type="button"
+                    id="btnCarrito"
+                    style="border: none; background: transparent; cursor: pointer; padding: 0;">
+                    <img src="../../../Assests/Icons/carrito.png" alt="Carrito de compras" class="icon">
+                </button>
 
-            <button
-                type="button"
-                class="btn-icono-nav"
-                id="btnUsuario">
-                <img
-                    src="../../../Assests/Icons/usuario.png"
-                    alt="Perfil del cliente"
-                    width="50"
-                    height="50">
-            </button>
-        </nav>
+                <button
+                    type="button"
+                    id="btnUsuario"
+                    style="border: none; background: transparent; cursor: pointer; padding: 0;">
+                    <img src="../../../Assests/Icons/perfil.png" alt="Perfil del cliente" class="icon">
+                </button>
+            </div>
+        </div>
     </header>
 
     <main class="contenedor-pedidos-cliente">

@@ -2,7 +2,7 @@ const SUPABASE_URL = "https://emqlgfmibvxdyipxubul.supabase.co";
 const SUPABASE_KEY = "sb_publishable_sdiAONM5AeOf56mRe78fiw_YkP3uN46";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
 
     // =====================
     // SESIÓN Y RESTAURANTE ACTIVO
@@ -825,7 +825,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // INICIALIZAR
     // =====================
 
-    cargarInfo();
+    await cargarInfo();
     cargarHorarios();
     configurarNavegacionPanel();
 
