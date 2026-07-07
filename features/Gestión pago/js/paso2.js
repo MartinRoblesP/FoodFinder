@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderizarResumenPedido();
     configurarMetodosPago();
     configurarNavegacionPago();
-
+    configurarCamposTarjeta();
 });
 
 
@@ -418,6 +418,15 @@ function crearPedidoDesdeGrupo(grupo, indice) {
     const metodoPago =
         obtenerMetodoPagoSeleccionado();
 
+    // En la pantalla del checkout se muestra un delivery general de S/ 3.50.
+    // Para evitar duplicar el delivery si hay más de un restaurante,
+    // se asigna solo al primer pedido generado.
+    const delivery =
+        indice === 0 && subtotal > 0 ? 3.50 : 0;
+
+    const total =
+        subtotal + delivery;
+
     const nombresPlatos =
         grupo.items
             .map((producto) => {
@@ -477,8 +486,16 @@ function crearPedidoDesdeGrupo(grupo, indice) {
         subtotal:
             subtotal,
 
+        delivery:
+            delivery,
+
         total:
-            subtotal,
+            total,
+
+        // Por ahora inicia en 0.
+        // Luego puede actualizarse desde Supabase o desde otro módulo.
+        gastos:
+            0,
 
         metodoPago:
             metodoPago,
@@ -621,7 +638,7 @@ function actualizarStockPlatosDesdeCarrito(carrito) {
 // CONFIRMAR PEDIDO
 // =====================
 
-function confirmarPedido(btnConfirmar) {
+async function confirmarPedido(btnConfirmar) {
     const carrito =
         obtenerCarrito();
 
@@ -660,13 +677,45 @@ function confirmarPedido(btnConfirmar) {
         pedidosActivos.push(pedido);
     });
 
+    // 1. Guarda el pedido en localStorage, como ya funcionaba antes.
     guardarPedidosActivos(pedidosActivos);
 
+    // 2. Registra la venta en Supabase, en la tabla transacciones.
+    let transaccionRegistrada =
+        false;
+
+    if (window.FoodFinderTransacciones) {
+        const resultado =
+            await window.FoodFinderTransacciones
+                .registrarTransaccionesDesdePedidos(nuevosPedidos);
+
+        transaccionRegistrada =
+            resultado.ok;
+
+        if (!resultado.ok) {
+            console.warn(
+                "El pedido se guardó localmente, pero no se registró en Supabase.",
+                resultado.error
+            );
+        }
+    } else {
+        console.warn(
+            "El módulo FoodFinderTransacciones no está cargado."
+        );
+    }
+
+    // 3. Limpia el carrito.
     localStorage.removeItem("foodfinder_cart");
 
-    alert(
-        "Pedido confirmado. Tu comida está en camino."
-    );
+    if (transaccionRegistrada) {
+        alert(
+            "Pedido confirmado. La venta también fue registrada en Supabase."
+        );
+    } else {
+        alert(
+            "Pedido confirmado. Sin embargo, la transacción no se pudo registrar en Supabase."
+        );
+    }
 
     window.location.href =
         "../../Navegación/pages/home.html";
@@ -688,4 +737,48 @@ function buscarBotonPorTexto(texto) {
                 .toLowerCase()
                 .includes(texto.toLowerCase());
         });
+}
+function configurarCamposTarjeta() {
+    const numeroTarjeta =
+        document.getElementById("numeroTarjeta");
+
+    const vencimientoTarjeta =
+        document.getElementById("vencimientoTarjeta");
+
+    const cvvTarjeta =
+        document.getElementById("cvvTarjeta");
+
+    if (numeroTarjeta) {
+        numeroTarjeta.addEventListener("input", () => {
+            let valor = numeroTarjeta.value
+                .replace(/\D/g, "")
+                .slice(0, 16);
+
+            numeroTarjeta.value = valor
+                .replace(/(.{4})/g, "$1 ")
+                .trim();
+        });
+    }
+
+    if (vencimientoTarjeta) {
+        vencimientoTarjeta.addEventListener("input", () => {
+            let valor = vencimientoTarjeta.value
+                .replace(/\D/g, "")
+                .slice(0, 4);
+
+            if (valor.length >= 3) {
+                valor = valor.slice(0, 2) + "/" + valor.slice(2);
+            }
+
+            vencimientoTarjeta.value = valor;
+        });
+    }
+
+    if (cvvTarjeta) {
+        cvvTarjeta.addEventListener("input", () => {
+            cvvTarjeta.value = cvvTarjeta.value
+                .replace(/\D/g, "")
+                .slice(0, 3);
+        });
+    }
 }

@@ -1,4 +1,8 @@
-document.addEventListener("DOMContentLoaded", function () {
+const SUPABASE_URL = "https://emqlgfmibvxdyipxubul.supabase.co";
+const SUPABASE_KEY = "sb_publishable_sdiAONM5AeOf56mRe78fiw_YkP3uN46";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+document.addEventListener("DOMContentLoaded", async function () {
 
     // =====================
     // SESIÓN Y RESTAURANTE ACTIVO
@@ -335,107 +339,88 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // =====================
-    // CARGAR INFORMACIÓN
+    // CARGAR INFORMACIÓN DESDE SUPABASE
     // =====================
 
-    function cargarInfo() {
-        let datos =
-            obtenerJSON(CLAVE_INFO);
+    async function cargarInfo() {
+        if (!usuarioActivo) return;
 
-        if (!datos) {
-            datos = {
-                restauranteId: restauranteActual.id,
-                ownerEmail: restauranteActual.ownerEmail,
-                nombre: restauranteActual.nombre || "",
-                cocina: restauranteActual.cocina || "",
-                descripcion: restauranteActual.descripcion || "",
-                direccion: restauranteActual.direccion || "",
-                distrito: restauranteActual.distrito || "",
-                telefono: restauranteActual.telefono || "",
-                estado: restauranteActual.estado || "Abierto",
-                imagen: restauranteActual.imagen || "",
-                logo: restauranteActual.logo || ""
-            };
+        // Intentamos traer el restaurante asociado al usuario desde Supabase
+        const { data: restaurante, error } = await supabaseClient
+            .from("restaurantes")
+            .select("*")
+            .eq("usuario_id", usuarioActivo.id)
+            .maybeSingle();
+
+        if (error) {
+            console.error("Error al cargar de BD:", error);
         }
 
-        if (inputNombre) {
-            inputNombre.value =
-                datos.nombre || "";
+        // Si existe en Supabase, rellenamos el formulario con esos datos reales
+        if (restaurante) {
+            if (inputNombre) inputNombre.value = restaurante.nombre || "";
+            if (inputCocina) inputCocina.value = restaurante.cocina || "";
+            if (inputDescripcion) inputDescripcion.value = restaurante.descripcion || "";
+            if (inputDireccion) inputDireccion.value = restaurante.direccion || "";
+            if (inputDistrito) inputDistrito.value = restaurante.distrito || "";
+            if (inputTelefono) inputTelefono.value = restaurante.telefono || "";
+            if (inputEstado) inputEstado.value = restaurante.estado || "Abierto";
+            
+            // Si decides guardar imágenes en la tabla, las pintamos; si no, dejamos vacío
+            if (restaurante.imagen) mostrarPreview(previewFoto, restaurante.imagen);
+            if (restaurante.logo) mostrarPreview(previewLogo, restaurante.logo);
+        } else {
+            // Si no existe aún en Supabase, dejamos el comportamiento original (Local)
+            let datos = obtenerJSON(CLAVE_INFO);
+            if (!datos) {
+                datos = {
+                    restauranteId: restauranteActual.id,
+                    ownerEmail: restauranteActual.ownerEmail,
+                    nombre: restauranteActual.nombre || "",
+                    cocina: restauranteActual.cocina || "",
+                    descripcion: restauranteActual.descripcion || "",
+                    direccion: restauranteActual.direccion || "",
+                    distrito: restauranteActual.distrito || "",
+                    telefono: restauranteActual.telefono || "",
+                    estado: restauranteActual.estado || "Abierto",
+                    imagen: restauranteActual.imagen || "",
+                    logo: restauranteActual.logo || ""
+                };
+            }
+
+            if (inputNombre) inputNombre.value = datos.nombre || "";
+            if (inputCocina) inputCocina.value = datos.cocina || "";
+            if (inputDescripcion) inputDescripcion.value = datos.descripcion || "";
+            if (inputDireccion) inputDireccion.value = datos.direccion || "";
+            if (inputDistrito) inputDistrito.value = datos.distrito || "";
+            if (inputTelefono) inputTelefono.value = datos.telefono || "";
+            if (inputEstado) inputEstado.value = datos.estado || "Abierto";
+
+            mostrarPreview(previewFoto, datos.imagen);
+            mostrarPreview(previewLogo, datos.logo);
         }
-
-        if (inputCocina) {
-            inputCocina.value =
-                datos.cocina || "";
-        }
-
-        if (inputDescripcion) {
-            inputDescripcion.value =
-                datos.descripcion || "";
-        }
-
-        if (inputDireccion) {
-            inputDireccion.value =
-                datos.direccion || "";
-        }
-
-        if (inputDistrito) {
-            inputDistrito.value =
-                datos.distrito || "";
-        }
-
-        if (inputTelefono) {
-            inputTelefono.value =
-                datos.telefono || "";
-        }
-
-        if (inputEstado) {
-            inputEstado.value =
-                datos.estado || "Abierto";
-        }
-
-        mostrarPreview(
-            previewFoto,
-            datos.imagen
-        );
-
-        mostrarPreview(
-            previewLogo,
-            datos.logo
-        );
     }
 
 
+  
     // =====================
-    // GUARDAR INFORMACIÓN
+    // GUARDAR INFORMACIÓN EN SUPABASE
     // =====================
 
     if (btnGuardarInfo) {
-        btnGuardarInfo.addEventListener("click", function () {
-            const nombre =
-                inputNombre.value.trim();
-
-            const cocina =
-                inputCocina.value.trim();
-
-            const descripcion =
-                inputDescripcion.value.trim();
-
-            const direccion =
-                inputDireccion.value.trim();
-
-            const distrito =
-                inputDistrito.value.trim();
-
-            const telefono =
-                inputTelefono.value.trim();
-
-            const estado =
-                inputEstado.value;
+        // Añadimos 'async' a la función anónima para poder usar 'await' con Supabase
+        btnGuardarInfo.addEventListener("click", async function () {
+            const nombre = inputNombre.value.trim();
+            const cocina = inputCocina.value.trim();
+            const descripcion = inputDescripcion.value.trim();
+            const direccion = inputDireccion.value.trim();
+            const distrito = inputDistrito.value.trim();
+            const telefono = inputTelefono.value.trim();
+            const estado = inputEstado.value;
 
             limpiarErrores();
 
-            let valido =
-                true;
+            let valido = true;
 
             const campos = [
                 { input: inputNombre, valor: nombre },
@@ -458,9 +443,30 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            const datosActuales =
-                obtenerJSON(CLAVE_INFO) || {};
+            // --- CONEXIÓN A SUPABASE ---
+            // Guardamos o actualizamos en la tabla 'restaurantes' usando el usuario_id
+            const { data, error } = await supabaseClient
+                .from("restaurantes")
+                .upsert({
+                    nombre: nombre,
+                    telefono: telefono,
+                    direccion: direccion,
+                    //categoria: cocina, // Mapeado a la columna 'categoria' que creaste
+                    cocina: cocina,
+                    descripcion: descripcion,
+                    distrito: distrito,
+                    estado: estado,
+                    usuario_id: usuarioActivo.id // Enlace con la tabla usuarios
+                }, { onConflict: 'usuario_id' }); // Si ya tiene restaurante, lo sobreescribe
 
+            if (error) {
+                console.error("Error al guardar en Supab:ase", error);
+                mostrarToast("Hubo un error al guardar en la base de datos.");
+                return;
+            }
+
+            // Guardado de respaldo en LocalStorage (para no romper las otras vistas de tus compañeros)
+            const datosActuales = obtenerJSON(CLAVE_INFO) || {};
             const datosInfo = {
                 ...datosActuales,
                 restauranteId: restauranteActual.id,
@@ -474,10 +480,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 estado
             };
 
-            localStorage.setItem(
-                CLAVE_INFO,
-                JSON.stringify(datosInfo)
-            );
+            localStorage.setItem(CLAVE_INFO, JSON.stringify(datosInfo));
 
             actualizarRestauranteEnCatalogo({
                 nombre,
@@ -822,8 +825,24 @@ document.addEventListener("DOMContentLoaded", function () {
     // INICIALIZAR
     // =====================
 
-    cargarInfo();
+    await cargarInfo();
     cargarHorarios();
     configurarNavegacionPanel();
 
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const btnMenuMobile = document.getElementById("btnMenuMobile");
+    const btnCerrarSidebar = document.getElementById("btnCerrarSidebar");
+    const sidebar = document.querySelector(".dashboard_sidebar");
+
+    if (btnMenuMobile && btnCerrarSidebar && sidebar) {
+        btnMenuMobile.addEventListener("click", () => {
+            sidebar.classList.add("activo");
+        });
+
+        btnCerrarSidebar.addEventListener("click", () => {
+            sidebar.classList.remove("activo");
+        });
+    }
 });

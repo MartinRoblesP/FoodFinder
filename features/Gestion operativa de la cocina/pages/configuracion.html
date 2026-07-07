@@ -17,13 +17,9 @@
         alt="Logo FoodFinder">
     </a>
 
-    <button
-        type="button"
-        class="navbar_lupa"
-        id="btn-buscar-panel"
-        style="border: none; cursor: pointer;">
-        <span class="nav_icono">&#128269;</span>
-    </button>
+    <button type="button" class="btn_menu_mobile" id="btnMenuMobile">☰</button>
+
+   
 
     <nav class="dashboard_nav_derecha">
         <button
@@ -56,10 +52,11 @@
 <div class="dashboard_layout">
 
     <aside class="dashboard_sidebar">
+        <button type="button" class="btn_cerrar_sidebar" id="btnCerrarSidebar">Cerrar Menú ✕</button>
         <p class="sidebar_titulo">PANEL DE GESTIÓN</p>
 
         <nav class="sidebar_nav">
-            <a href="pedidos_entrantes.html" class="sidebar_item">
+            <a href="resumen.html" class="sidebar_item">
                 <span class="sidebar_icono">&#127968;</span>
                 Resumen
             </a>
@@ -82,6 +79,11 @@
             <a href="../../Administracion/Pages/Estadisticas.html" class="sidebar_item">
                 <span class="sidebar_icono">&#128202;</span>
                 Estadísticas
+            </a>
+
+            <a href="/features/Asistente_AI/Pages/Asistente_AI.html" class="sidebar_item">
+                <span class="sidebar_icono">&#129302;</span>
+                Asistente IA
             </a>
 
             <a href="configuracion.html" class="sidebar_item sidebar_item_activo">
@@ -298,6 +300,7 @@
 
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../js/configuracion.js" defer></script>
 
 </body>

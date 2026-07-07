@@ -1624,27 +1624,27 @@ html {
     .nav-pedidos {
         gap: 18px;
     }
-    .btn-mis-pedidos {
+    .cabecera-pedidos .btn-mis-pedidos {
         padding: 12px 30px;
     }
-    .btn-icono-nav img {
+    .cabecera-pedidos .btn-icono-nav img {
         width: 36px;
         height: 36px;
     }
     .contenedor-pedidos-cliente {
         padding: 35px 18px;
     }
-    .titulo-seccion-pedido h2 {
+    .contenedor-pedidos-cliente .titulo-seccion-pedido h2 {
         font-size: 26px;
     }
-    .titulo-seccion-pedido p {
+    .contenedor-pedidos-cliente .titulo-seccion-pedido p {
         font-size: 16px;
     }
-    .tarjeta-tabla-pedido {
+    .contenedor-pedidos-cliente .tarjeta-tabla-pedido {
         overflow-x: auto;
     }
 
-    .tabla-pedidos {
+    .contenedor-pedidos-cliente .tabla-pedidos {
     min-width: 950px;
 }
 } 
@@ -5071,7 +5071,7 @@ body{
 
 .sidebar_item:hover{
 
-    background:#F5F5F5;
+    background-color:#E3FCE4;
 
 }
 
@@ -6844,8 +6844,32 @@ body{
 /*==================================================
                 MOBILE
 ==================================================*/
+.btn_menu_mobile,
+.btn_cerrar_sidebar {
+    display: none;
+}
 
 @media (max-width:768px){
+
+.btn_menu_mobile {
+    display: block;
+    font-size: 34px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #0B1F3A;
+}
+
+.btn_cerrar_sidebar {
+    display: block;
+    align-self: flex-end;
+    margin: 20px;
+    background: transparent;
+    color: #5A6A77;
+    font-size: 22px;
+    cursor: pointer;
+}
+
 
 .dashboard_layout{
 
@@ -6858,36 +6882,49 @@ body{
 
 .dashboard_sidebar{
 
-    width:100%;
-
-    min-width:100%;
-
-    min-height:auto;
-
-    border-right:none;
-
-    border-bottom:1px solid #E5E5E5;
-
-    padding:10px 0;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 25%;
+    max-width: 80vw;
+    height: 100vh;
+    min-height: 100vh;
+    z-index: 9999;
+    transition: left 0.3s ease;
+    padding: 0;
+    border-right: none;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.25);
 
 }
 
+.dashboard_sidebar.activo {
+        left: 0;
+    }
+
+    .sidebar_titulo {
+        color: #5A6A77;
+        padding: 0 22px;
+    }
 
 .sidebar_nav{
 
-    flex-direction:row;
-
-    overflow-x:auto;
+    flex-direction:column;
+    overflow-x: visible;
+    gap: 8px;
+    padding: 10px 22px;
 
 }
 
 
 .sidebar_item{
-
+    color: #5A6A77;
     white-space:nowrap;
-
+    background: transparent;
 }
-
+.sidebar_item_activo {
+        background-color: rgba(255,255,255,0.18);
+        color: #4CAF50;
+}
 
 /* Navbar */
 
@@ -7080,6 +7117,103 @@ textarea:focus{
     font-size: 15px;
 }
 
+/*Asistente IA*/
+.imagen_ia_contenedor {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.imagen_ia_preview {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 2px solid #E5E7EB;
+}
+.chat_acciones_container {
+    display: flex; 
+    gap: 8px; 
+    align-items: center;
+}
+
+.chat_botones_grupo {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.chat_acciones_container input {
+    flex-grow: 1;
+}
+
+/* Mejora para asegurar centrado de íconos en los botones */
+.chat_botones_grupo button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+@media (max-width: 768px) {
+    .chat_acciones_container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .chat_acciones_container input {
+        width: 100%; /* Asegura que el input use todo el ancho disponible */
+    }
+    
+    .chat_botones_grupo {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .chat_botones_grupo button {
+        width: 100%;
+        justify-content: center; /* Centra el contenido en pantallas chicas */
+    }
+}
+
+/*==================================================
+        RESUMEN (Dashboard) — nuevos estilos
+ 
+.badge_nuevo{
+    background:#E3F2FD;
+    color:#1565C0;
+    display:inline-block;
+    padding:5px 12px;
+    border-radius:30px;
+    font-size:12px;
+    font-weight:600;
+}
+ 
+.btn_preparar{
+    background:#FF8A00;
+    color:white;
+    border:none;
+    cursor:pointer;
+    transition:.2s;
+    font-weight:600;
+    padding:8px 16px;
+    border-radius:30px;
+}
+ 
+.btn_preparar:hover{
+    background:#E67A00;
+}
+ 
+.icono_check_verde{
+    color:#4CAF50;
+    font-size:18px;
+    font-weight:bold;
+}
+ 
+.resumen_saludo_sub{
+    color:#6B7280;
+    margin-top:4px;
+}
 
 /*Responsive Estadisticas- Robles*/
 main {
