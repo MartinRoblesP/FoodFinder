@@ -3198,11 +3198,9 @@ html {
         width: 100%;
         height: auto;
         max-height: none;
-
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-
+        flex-direction: row;
+        flex-wrap: nowrap;
+        overflow-x: auto;
         padding: 10px;
         gap: 8px;
     }
@@ -3212,11 +3210,11 @@ html {
     }
 
     .btn {
-        width: 100%;
+        min-width: 120px;
         max-width: none;
         height: 42px;
-        justify-content: center;
-        font-size: 12px;
+        flex-shrink: 0;
+        font-size: 11px;
         padding: 0 10px;
     }
 
@@ -7178,7 +7176,8 @@ textarea:focus{
 
 /*==================================================
         RESUMEN (Dashboard) — nuevos estilos
- 
+==================================================*/
+
 .badge_nuevo{
     background:#E3F2FD;
     color:#1565C0;
@@ -7188,7 +7187,7 @@ textarea:focus{
     font-size:12px;
     font-weight:600;
 }
- 
+
 .btn_preparar{
     background:#FF8A00;
     color:white;
@@ -7199,186 +7198,40 @@ textarea:focus{
     padding:8px 16px;
     border-radius:30px;
 }
- 
+
 .btn_preparar:hover{
     background:#E67A00;
 }
- 
+
 .icono_check_verde{
     color:#4CAF50;
     font-size:18px;
     font-weight:bold;
 }
- 
+
 .resumen_saludo_sub{
     color:#6B7280;
     margin-top:4px;
 }
 
-/*Responsive Estadisticas- Robles*/
-main {
-    width: 100%;
-    padding: 20px;
-    overflow-x: hidden;
+
+/* Badges de estado para pedidos entrantes / resumen (entregado y cancelado) */
+.badge_entregado{
+    background:#E8F5E9;
+    color:#4CAF50;
+    display:inline-block;
+    padding:5px 12px;
+    border-radius:30px;
+    font-size:12px;
+    font-weight:600;
 }
 
-.cards_estadisticos {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 18px;
-}
-
-#Ventas_hoy,
-#Pedidos_hoy,
-#Ticket_promedio {
-    width: 100%;
-    max-width: 280.5px;
-    margin: 20px 0 16px 0;
-}
-
-.card_ventasMensuales,
-.card_ventasDiarias {
-    width: 100%;
-    height: auto;
-    display: flex;
-    gap: 18px;
-    justify-content: space-between;
-}
-
-.card_ventasMensuales #card1,
-.card_ventasMensuales #card2,
-.card_ventasDiarias #card1,
-.card_ventasDiarias #card2 {
-    width: 100%;
-    max-width: none;
-    height: auto;
-    min-height: 224px;
-    margin-left: 0;
-    padding: 18px;
-}
-
-.grafico-barras {
-    height: 130px;
-}
-
-.barra {
-    width: 24px;
-}
-
-/* TABLET */
-@media (max-width: 1024px) {
-    #contenedor-principal {
-        display: flex;
-        flex-direction: column;
-    }
-
-    #sidebar {
-        width: 100%;
-    }
-
-    #navPlatos {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 12px;
-        padding: 15px;
-    }
-
-    #navPlatos h5 {
-        width: 100%;
-        text-align: center;
-    }
-
-    #Titulo_Estadistica {
-        margin-left: 0;
-        text-align: center;
-        font-size: 24px;
-    }
-
-    .cards_estadisticos {
-        justify-content: center;
-    }
-
-    .card_ventasMensuales,
-    .card_ventasDiarias {
-        flex-direction: column;
-    }
-}
-
-/* CELULAR */
-@media (max-width: 600px) {
-    .cabecera_plataforma {
-        flex-direction: column;
-        height: auto;
-        gap: 15px;
-        padding: 20px;
-    }
-
-    .usuario_bloque {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    #navPlatos {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    #navPlatos .btn {
-        width: 100%;
-        justify-content: center;
-    }
-
-    main {
-        padding: 16px;
-    }
-
-    #Titulo_Estadistica {
-        font-size: 22px;
-        margin-bottom: 10px;
-    }
-
-    .cards_estadisticos {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    #Ventas_hoy,
-    #Pedidos_hoy,
-    #Ticket_promedio {
-        max-width: 100%;
-        height: auto;
-        min-height: 119px;
-    }
-
-    .card_ventasMensuales,
-    .card_ventasDiarias {
-        flex-direction: column;
-        gap: 16px;
-    }
-
-    .card_ventasMensuales #card1,
-    .card_ventasMensuales #card2,
-    .card_ventasDiarias #card1,
-    .card_ventasDiarias #card2 {
-        min-height: 230px;
-    }
-
-    .grafico-barras {
-        gap: 6px;
-        height: 120px;
-    }
-
-    .barra {
-        width: 18px;
-    }
-
-    .label-barra {
-        font-size: 9px;
-    }
-
-    .info-plato {
-        font-size: 11px;
-    }
+.badge_cancelado{
+    background:#FFEBEE;
+    color:#C62828;
+    display:inline-block;
+    padding:5px 12px;
+    border-radius:30px;
+    font-size:12px;
+    font-weight:600;
 }

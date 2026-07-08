@@ -398,7 +398,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             return "badge_entregado";
         }
 
-        return "badge_preparando";
+        if (estadoNormalizado.includes("preparando")) {
+            return "badge_preparando";
+        }
+
+        return "badge_nuevo";
     }
 
     function obtenerTextoEstado(estado) {
@@ -412,7 +416,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             return "Entregado";
         }
 
-        return "Preparando";
+        if (estadoNormalizado.includes("preparando")) {
+            return "Preparando";
+        }
+
+        return "Nuevo pedido";
     }
 
     function obtenerResumenPlatos(items) {

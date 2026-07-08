@@ -471,7 +471,7 @@ function crearPedidoDesdeGrupo(grupo, indice) {
             cantidadTotal,
 
         estado:
-            "preparando",
+            "confirmado",
 
         hora:
             new Date()
@@ -709,7 +709,7 @@ async function confirmarPedido(btnConfirmar) {
 
     if (transaccionRegistrada) {
         alert(
-            "Pedido confirmado. La venta también fue registrada en Supabase."
+            "Pedido confirmado."
         );
     } else {
         alert(

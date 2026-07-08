@@ -1,4 +1,14 @@
-document.addEventListener("DOMContentLoaded", () => {
+// ==========================================
+// Estadisticas.js
+// Panel de estadísticas del restaurante — Supabase
+// (usa la misma tabla "transacciones" que resumen.js y pedidos_entrantes.js)
+// ==========================================
+
+const SUPABASE_URL = "https://emqlgfmibvxdyipxubul.supabase.co";
+const SUPABASE_KEY = "sb_publishable_sdiAONM5AeOf56mRe78fiw_YkP3uN46";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+document.addEventListener("DOMContentLoaded", async () => {
 
     // =====================
     // RUTAS
@@ -24,40 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // UTILIDADES GENERALES
     // =====================
 
-    function getData(key) {
-        try {
-            return JSON.parse(
-                localStorage.getItem(key)
-            ) || [];
-        } catch (error) {
-            return [];
-        }
-    }
-
-    function saveData(key, data) {
-        localStorage.setItem(
-            key,
-            JSON.stringify(data)
-        );
-    }
-
-    function obtenerUsuarioActivo() {
-        try {
-            return JSON.parse(
-                localStorage.getItem("usuarioActivo")
-            );
-        } catch (error) {
-            return null;
-        }
-    }
-
-    function guardarUsuarioActivo(usuario) {
-        localStorage.setItem(
-            "usuarioActivo",
-            JSON.stringify(usuario)
-        );
-    }
-
     function escaparHTML(texto) {
         return String(texto || "")
             .replaceAll("&", "&amp;")
@@ -77,8 +53,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function obtenerFechaPedido(pedido) {
         const fechaBase =
-            pedido.fechaFinalizado ||
             pedido.fecha ||
+            pedido.created_at ||
             "";
 
         if (!fechaBase) {
@@ -137,8 +113,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // =====================
-    // VALIDACIÓN DE SESIÓN
+    // SESIÓN
     // =====================
+
+    function obtenerUsuarioActivo() {
+        try {
+            return JSON.parse(localStorage.getItem("usuarioActivo"));
+        } catch (error) {
+            return null;
+        }
+    }
 
     const usuarioActivo =
         obtenerUsuarioActivo();
@@ -163,88 +147,87 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // =====================
-    // RESTAURANTE ACTIVO
+    // RESTAURANTE (tabla restaurantes, ligado por usuario_id)
     // =====================
 
-    function obtenerRestauranteActivo() {
-        const restaurantes =
-            getData("foodfinder_restaurantes");
+    async function obtenerRestauranteActivo(usuario) {
+        const { data: restaurante, error } = await supabaseClient
+            .from("restaurantes")
+            .select("*")
+            .eq("usuario_id", usuario.id)
+            .maybeSingle();
 
-        let restaurante =
-            restaurantes.find((item) => {
-                return (
-                    item.id === usuarioActivo.restauranteId ||
-                    item.ownerEmail === usuarioActivo.correo
-                );
-            });
-
-        if (!restaurante) {
-            restaurante = {
-                id: usuarioActivo.restauranteId || "rest_" + usuarioActivo.id,
-                ownerEmail: usuarioActivo.correo,
-                ownerName: usuarioActivo.nombre,
-                nombre: "Restaurante de " + usuarioActivo.nombre.split(" ")[0],
-                cocina: "Emprendimiento gastronómico",
-                descripcion: "Restaurante registrado en FoodFinder.",
-                direccion: usuarioActivo.direccionNegocio || "Dirección pendiente",
-                distrito: "Lima",
-                telefono: usuarioActivo.telefono || "",
-                horario: "Lun–Dom 12:00pm – 10:00pm",
-                estado: "Abierto",
-                rating: 4.8,
-                reviews: 0,
-                imagen: "../../../Assests/Img/El rincon del sabor.jpg",
-                fechaRegistro: new Date().toLocaleDateString()
-            };
-
-            restaurantes.push(restaurante);
-
-            saveData(
-                "foodfinder_restaurantes",
-                restaurantes
-            );
-
-            usuarioActivo.restauranteId =
-                restaurante.id;
-
-            guardarUsuarioActivo(usuarioActivo);
+        if (error) {
+            console.error("Error al buscar restaurante:", error);
         }
 
-        return restaurante;
+        if (restaurante) {
+            return restaurante;
+        }
+
+        const nuevoRestaurante = {
+            nombre: "Restaurante de " + String(usuario.nombre || "Emprendedor").split(" ")[0],
+            telefono: usuario.telefono || "",
+            direccion: usuario.direccion_negocio || "Dirección pendiente",
+            categoria: "Emprendimiento gastronómico",
+            cocina: "Emprendimiento gastronómico",
+            descripcion: "Restaurante registrado en FoodFinder.",
+            distrito: "Lima",
+            estado: "Abierto",
+            usuario_id: usuario.id
+        };
+
+        const { data: creado, error: errorCrear } = await supabaseClient
+            .from("restaurantes")
+            .insert([nuevoRestaurante])
+            .select()
+            .single();
+
+        if (errorCrear) {
+            console.error("Error al crear restaurante:", errorCrear);
+            alert("No se pudo preparar tu restaurante. Intenta recargar la página.");
+            return null;
+        }
+
+        return creado;
     }
 
     const restauranteActual =
-        obtenerRestauranteActivo();
+        await obtenerRestauranteActivo(usuarioActivo);
 
-    function perteneceAlRestaurante(item) {
-        if (!item) {
-            return false;
-        }
-
-        return (
-            item.restauranteId === restauranteActual.id ||
-            item.ownerEmail === restauranteActual.ownerEmail
-        );
+    if (!restauranteActual) {
+        return;
     }
 
 
     // =====================
-    // DATA FILTRADA POR EMPRENDEDOR
+    // DATOS SUPABASE (misma tabla que Resumen / Pedidos entrantes)
     // =====================
 
-    const pedidosHistorial =
-        getData("pedidosHistorial")
-            .filter(perteneceAlRestaurante);
+    async function cargarTransacciones() {
+        const { data, error } = await supabaseClient
+            .from("transacciones")
+            .select("*")
+            .eq("restaurante_id", String(restauranteActual.id))
+            .order("fecha", { ascending: false });
 
+        if (error) {
+            console.error("Error al cargar transacciones:", error);
+            return [];
+        }
+
+        return data || [];
+    }
+
+    const transaccionesRestaurante =
+        await cargarTransacciones();
+
+    // Para estadísticas de ventas solo cuentan los pedidos realmente entregados
+    // (igual criterio que usa pedidos_entrantes.js para mover algo al historial,
+    // excluyendo lo cancelado).
     const pedidosFinalizados =
-        pedidosHistorial.filter((pedido) => {
-            const estado =
-                normalizarTexto(pedido.estado);
-
-            return (
-                estado.includes("finalizado") ||
-                estado.includes("entregado")
-            );
+        transaccionesRestaurante.filter((pedido) => {
+            return normalizarTexto(pedido.estado).includes("entregado");
         });
 
     const pedidosFinalizadosHoy =
