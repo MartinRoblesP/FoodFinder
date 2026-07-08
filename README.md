@@ -6,7 +6,7 @@ FoodFinder es una plataforma web desarrollada por la startup **Sirvo** que conec
 
 ## Enlaces
 
-* 🌐 Aplicación Web: https://foodfinderpe.netlify.app/
+* 🌐 Aplicación Web: https://sirvo-foodfinder.netlify.app 
 
 ## Características
 
